@@ -38,6 +38,19 @@ int game_loop(
 {
     SDL_Event event;
     int quit_requested = 0;
+
+    SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255); // fill with black color
+    SDL_RenderFillRect(window->renderer, NULL);
+
+    SDL_Rect status_rectangle;
+    status_rectangle.x = STATUS_MARGIN;
+    status_rectangle.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
+    status_rectangle.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
+    status_rectangle.h = STATUS_HEIGHT;
+    SDL_SetRenderDrawColor(window->renderer, 26, 95, 180, 255); // fill with blue color
+    SDL_RenderFillRect(window->renderer, &status_rectangle);
+    SDL_RenderPresent(window->renderer);
+
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
