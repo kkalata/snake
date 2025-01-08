@@ -25,11 +25,24 @@ int create_window(
     return 1;
 }
 
+int close_window(
+    SDL_Window *window,
+    SDL_Renderer *renderer
+)
+{
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+}
+
 int main(int argc, char **argv)
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    create_window(window, renderer);
+    if (!create_window(window, renderer))
+    {
+        return 1;
+    }
+    close_window(window, renderer);
 
     return 0;
 }
