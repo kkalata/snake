@@ -1,6 +1,6 @@
 #include "snake.h"
 
-int create_window(
+int CreateGameWindow(
     GameWindow *window
 )
 {
@@ -31,74 +31,74 @@ int create_window(
     return 1;
 }
 
-SDL_Rect get_text_rect(
+SDL_Rect GetTextRect(
     const int x,
     const int y,
-    const int text_width
+    const int textWidth
 )
 {
-    SDL_Rect text_rect;
-    text_rect.x = x;
-    text_rect.y = y;
-    text_rect.w = text_width;
-    text_rect.h = CHAR_SIZE;
-    return text_rect;
+    SDL_Rect TextRect;
+    TextRect.x = x;
+    TextRect.y = y;
+    TextRect.w = textWidth;
+    TextRect.h = CHAR_SIZE;
+    return TextRect;
 }
 
-void draw_string(
+void DrawString(
     GameWindow *window,
     const int x,
     const int y,
     const char *text
 )
 {
-    int text_width = strlen(text) * CHAR_SIZE; 
+    int textWidth = strlen(text) * CHAR_SIZE; 
 
-    SDL_Rect char_src_rect, char_dest_rect;
-    char_dest_rect.x = char_dest_rect.y = 0;
-    char_src_rect.w = char_dest_rect.w = CHAR_SIZE;
-    char_src_rect.h = char_dest_rect.w = CHAR_SIZE;
+    SDL_Rect charSourceRect, charDestRect;
+    charDestRect.x = charDestRect.y = 0;
+    charSourceRect.w = charDestRect.w = CHAR_SIZE;
+    charSourceRect.h = charDestRect.w = CHAR_SIZE;
 
-    SDL_Surface *text_subscreen_cpu = SDL_CreateRGBSurface(
+    SDL_Surface *textSubscreenCPU = SDL_CreateRGBSurface(
         0,
-        text_width, CHAR_SIZE,
+        textWidth, CHAR_SIZE,
         32,
         0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000
     );
 
     while (*text) // copy char by char
     {
-        int char_code = *text & 255; // ASCII has max char code of 255
-        char_src_rect.x = (char_code % FONT_ROW_SIZE) * CHAR_SIZE; // find row of the char
-        char_src_rect.y = (char_code / FONT_ROW_SIZE) * CHAR_SIZE; // find column of the char
-        SDL_BlitSurface(window->font, &char_src_rect, text_subscreen_cpu, &char_dest_rect);
-        char_dest_rect.x += CHAR_SIZE;
+        int charCode = *text & 255; // ASCII has max char code of 255
+        charSourceRect.x = (charCode % FONT_ROW_SIZE) * CHAR_SIZE; // find row of the char
+        charSourceRect.y = (charCode / FONT_ROW_SIZE) * CHAR_SIZE; // find column of the char
+        SDL_BlitSurface(window->font, &charSourceRect, textSubscreenCPU, &charDestRect);
+        charDestRect.x += CHAR_SIZE;
         text++;
     }
 
-    SDL_Texture *text_subscreen_gpu = SDL_CreateTextureFromSurface(window->renderer, text_subscreen_cpu);
-    SDL_Rect text_dest_rect = get_text_rect(x, y, text_width);
-    SDL_RenderCopy(window->renderer, text_subscreen_gpu, NULL, &text_dest_rect);
-    SDL_FreeSurface(text_subscreen_cpu);
-    SDL_DestroyTexture(text_subscreen_gpu);
+    SDL_Texture *textSubscreenGPU = SDL_CreateTextureFromSurface(window->renderer, textSubscreenCPU);
+    SDL_Rect textDestRect = GetTextRect(x, y, textWidth);
+    SDL_RenderCopy(window->renderer, textSubscreenGPU, NULL, &textDestRect);
+    SDL_FreeSurface(textSubscreenCPU);
+    SDL_DestroyTexture(textSubscreenGPU);
 }
 
-void render_status_section(
+void RenderStatusSection(
     GameWindow *window
 )
 {
-    SDL_Rect status_rectangle;
-    status_rectangle.x = STATUS_MARGIN;
-    status_rectangle.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
-    status_rectangle.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
-    status_rectangle.h = STATUS_HEIGHT;
+    SDL_Rect statusSectionRect;
+    statusSectionRect.x = STATUS_MARGIN;
+    statusSectionRect.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
+    statusSectionRect.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
+    statusSectionRect.h = STATUS_HEIGHT;
     
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    SDL_RenderFillRect(window->renderer, &status_rectangle);
-    draw_string(window, 16, SCREEN_HEIGHT - 32, GAME_TITLE);
+    SDL_RenderFillRect(window->renderer, &statusSectionRect);
+    DrawString(window, 16, SCREEN_HEIGHT - 32, GAME_TITLE);
 }
 
-void close_window(
+void CloseGameWindow(
     GameWindow *window
 )
 {
@@ -106,16 +106,16 @@ void close_window(
     SDL_DestroyWindow(window->window);
 }
 
-int game_loop(
+int GameLoop(
     GameWindow *window
 )
 {
     SDL_Event event;
-    int quit_requested = 0;
+    int quitRequested = 0;
 
     SDL_SetRenderDrawColor(window->renderer, 46, 194, 126, 255); // fill with green color
     SDL_RenderFillRect(window->renderer, NULL);
-    render_status_section(window);
+    RenderStatusSection(window);
     SDL_RenderPresent(window->renderer);
 
     while (SDL_PollEvent(&event))
@@ -126,31 +126,31 @@ int game_loop(
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_ESCAPE:
-                        quit_requested = 1;
+                        quitRequested = 1;
                         break;
                 }
                 break;
             case SDL_QUIT:
-                quit_requested = 1;
+                quitRequested = 1;
                 break;
         }
     }
-    return !quit_requested;
+    return !quitRequested;
 }
 
 int main(int argc, char **argv)
 {
     GameWindow window;
     
-    if (!create_window(&window))
+    if (!CreateGameWindow(&window))
     {
-        close_window(&window);
+        CloseGameWindow(&window);
         return 1;
     }
     
-    while (game_loop(&window));
+    while (GameLoop(&window));
 
-    close_window(&window);
+    CloseGameWindow(&window);
 
     return 0;
 }
