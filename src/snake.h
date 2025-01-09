@@ -11,3 +11,14 @@ typedef struct {
     SDL_Renderer *renderer;
     SDL_Surface *font;
 } GameWindow;
+
+typedef struct {
+    Uint32 lastTimeMeasure;
+    Uint32 timeElapsed;
+    Uint32 timeDelta;
+} GameTimer;
+
+GameTimer InitGameTimer();
+Uint32 GetTimeDelta(
+    GameTimer *timer
+);

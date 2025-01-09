@@ -84,7 +84,8 @@ void DrawString(
 }
 
 void RenderStatusSection(
-    GameWindow *window
+    GameWindow *window,
+    GameTimer *timer
 )
 {
     SDL_Rect statusSectionRect;
@@ -92,10 +93,13 @@ void RenderStatusSection(
     statusSectionRect.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
     statusSectionRect.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
     statusSectionRect.h = STATUS_HEIGHT;
+
+    char statusSectionContent[SCREEN_WIDTH];
+    sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
     
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
     SDL_RenderFillRect(window->renderer, &statusSectionRect);
-    DrawString(window, 16, SCREEN_HEIGHT - 32, GAME_TITLE);
+    DrawString(window, 16, SCREEN_HEIGHT - 32, statusSectionContent);
 }
 
 void CloseGameWindow(
@@ -107,15 +111,18 @@ void CloseGameWindow(
 }
 
 int GameLoop(
-    GameWindow *window
+    GameWindow *window,
+    GameTimer *timer
 )
 {
     SDL_Event event;
     int quitRequested = 0;
 
+    GetTimeDelta(timer);
+
     SDL_SetRenderDrawColor(window->renderer, 46, 194, 126, 255); // fill with green color
     SDL_RenderFillRect(window->renderer, NULL);
-    RenderStatusSection(window);
+    RenderStatusSection(window, timer);
     SDL_RenderPresent(window->renderer);
 
     while (SDL_PollEvent(&event))
@@ -147,8 +154,9 @@ int main(int argc, char **argv)
         CloseGameWindow(&window);
         return 1;
     }
-    
-    while (GameLoop(&window));
+
+    GameTimer timer = InitGameTimer();    
+    while (GameLoop(&window, &timer));
 
     CloseGameWindow(&window);
 
