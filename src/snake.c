@@ -111,19 +111,19 @@ void CloseGameWindow(
 }
 
 int GameLoop(
-    GameWindow *window,
-    GameTimer *timer
+    Game *game
 )
 {
     SDL_Event event;
     int quitRequested = 0;
 
-    GetTimeDelta(timer);
+    GetTimeDelta(&game->timer);
 
-    SDL_SetRenderDrawColor(window->renderer, 46, 194, 126, 255); // fill with green color
-    SDL_RenderFillRect(window->renderer, NULL);
-    RenderStatusSection(window, timer);
-    SDL_RenderPresent(window->renderer);
+    SDL_SetRenderDrawColor(game->window.renderer, 46, 194, 126, 255); // fill with green color
+    SDL_RenderFillRect(game->window.renderer, NULL);
+    RenderSnake(&game->window, &game->snake);
+    RenderStatusSection(&game->window, &game->timer);
+    SDL_RenderPresent(game->window.renderer);
 
     while (SDL_PollEvent(&event))
     {
@@ -147,18 +147,19 @@ int GameLoop(
 
 int main(int argc, char **argv)
 {
-    GameWindow window;
+    Game game;
     
-    if (!CreateGameWindow(&window))
+    if (!CreateGameWindow(&game.window))
     {
-        CloseGameWindow(&window);
+        CloseGameWindow(&game.window);
         return 1;
     }
 
-    GameTimer timer = InitGameTimer();    
-    while (GameLoop(&window, &timer));
+    CreateSnake(&game.snake);
+    game.timer = InitGameTimer();    
+    while (GameLoop(&game));
 
-    CloseGameWindow(&window);
+    CloseGameWindow(&game.window);
 
     return 0;
 }

@@ -18,6 +18,30 @@ typedef struct {
     Uint32 timeDelta;
 } GameTimer;
 
+typedef struct SnakeSegment {
+    int x;
+    int y;
+    char turn;
+    struct SnakeSegment *next;
+} SnakeSegment;
+typedef struct {
+    SnakeSegment *segment;
+} Snake;
+
+typedef struct {
+    GameWindow window;
+    GameTimer timer;
+    Snake snake;
+} Game;
+
+void CreateSnake(
+    Snake *const snake
+);
+void RenderSnake(
+    GameWindow *window,
+    const Snake *const snake
+);
+
 GameTimer InitGameTimer();
 Uint32 GetTimeDelta(
     GameTimer *timer
