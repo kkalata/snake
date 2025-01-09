@@ -121,6 +121,7 @@ int GameLoop(
 
     SDL_SetRenderDrawColor(game->window.renderer, 46, 194, 126, 255); // fill with green color
     SDL_RenderFillRect(game->window.renderer, NULL);
+    MoveSnake(&game->snake, game->timer);
     RenderSnake(&game->window, &game->snake);
     RenderStatusSection(&game->window, &game->timer);
     SDL_RenderPresent(game->window.renderer);

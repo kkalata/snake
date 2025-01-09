@@ -5,6 +5,7 @@ void CreateSnake(
 )
 {
     snake->segment = NULL;
+    snake->timeSinceLastMove = 0;
 
     SnakeSegment *snakeSegment = NULL;
     SnakeSegment *previousSnakeSegment = NULL;
@@ -17,8 +18,9 @@ void CreateSnake(
             snake->segment = snakeSegment;
         }
 
-        snakeSegment->x = snakeSegmentI;
-        snakeSegment->y = 0;
+        snakeSegment->x = SNAKE_INIT_POS_X + snakeSegmentI;
+        snakeSegment->y = SNAKE_INIT_POS_Y;
+        snakeSegment->turn = SNAKE_INIT_TURN;
 
         snakeSegment->next = NULL;
         
@@ -27,6 +29,40 @@ void CreateSnake(
             previousSnakeSegment->next = snakeSegment;
         }
         previousSnakeSegment = snakeSegment;
+    }
+}
+
+void MoveSnake(
+    Snake *snake,
+    GameTimer timer
+)
+{
+    snake->timeSinceLastMove += timer.timeDelta;
+    while (snake->timeSinceLastMove >= SNAKE_COOLDOWN)
+    {
+        for (SnakeSegment *snakeSegment = snake->segment; snakeSegment != NULL; snakeSegment = snakeSegment->next)
+        {
+            if (snakeSegment->x == 0 || snakeSegment->y == 0)
+            {
+                break;
+            }
+            switch (snakeSegment->turn)
+            {
+                case 'u':
+                    snakeSegment->y++;
+                    break;
+                case 'd':
+                    snakeSegment->y--;
+                    break;
+                case 'r':
+                    snakeSegment->x++;
+                    break;
+                case 'l':
+                    snakeSegment->x--;
+                    break;
+            }
+        }
+        snake->timeSinceLastMove -= SNAKE_COOLDOWN;
     }
 }
 

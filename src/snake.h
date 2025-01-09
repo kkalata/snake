@@ -26,6 +26,7 @@ typedef struct SnakeSegment {
 } SnakeSegment;
 typedef struct {
     SnakeSegment *segment;
+    Uint32 timeSinceLastMove;
 } Snake;
 
 typedef struct {
@@ -40,6 +41,10 @@ void CreateSnake(
 void RenderSnake(
     GameWindow *window,
     const Snake *const snake
+);
+void MoveSnake(
+    Snake *snake,
+    GameTimer timer
 );
 
 GameTimer InitGameTimer();
