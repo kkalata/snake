@@ -8,7 +8,7 @@
 #define CHAR_SIZE 8 // width and height
 
 #define STATUS_MARGIN 8 // margin between window border and status section border
-#define STATUS_HEIGHT 32
+#define STATUS_HEIGHT 40
 
 #define SNAKE_INIT_POS_X 10
 #define SNAKE_INIT_POS_Y 10

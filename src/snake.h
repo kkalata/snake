@@ -29,6 +29,7 @@ typedef struct SnakeSegment {
 typedef struct {
     SnakeSegment *segment;
     Uint32 timeSinceLastMove;
+    Uint8 killed;
 } Snake;
 
 typedef struct {
@@ -47,6 +48,9 @@ void RenderSnake(
 void TurnSnake(
     Snake *snake,
     Uint32 direction
+);
+void KillSnake(
+    Snake *snake
 );
 void MoveSnake(
     Snake *snake,

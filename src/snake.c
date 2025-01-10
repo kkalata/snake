@@ -85,7 +85,8 @@ void DrawString(
 
 void RenderStatusSection(
     GameWindow *window,
-    GameTimer *timer
+    GameTimer *timer,
+    Uint8 snakeKilled
 )
 {
     SDL_Rect statusSectionRect;
@@ -93,13 +94,19 @@ void RenderStatusSection(
     statusSectionRect.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
     statusSectionRect.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
     statusSectionRect.h = STATUS_HEIGHT;
-
-    char statusSectionContent[SCREEN_WIDTH];
-    sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
     
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
     SDL_RenderFillRect(window->renderer, &statusSectionRect);
-    DrawString(window, 16, SCREEN_HEIGHT - 32, statusSectionContent);
+
+    char statusSectionContent[SCREEN_WIDTH];
+    
+    sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
+    DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
+    if (snakeKilled)
+    {
+        sprintf(statusSectionContent, "Snake killed. Press N to retry or ESC to quit.");
+        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+    }
 }
 
 void CloseGameWindow(
@@ -117,12 +124,15 @@ int GameLoop(
     SDL_Event event;
     int quitRequested = 0;
 
-    GetTimeDelta(&game->timer);
+    if (!game->snake.killed)
+    {
+        GetTimeDelta(&game->timer);
+    }
 
     SDL_SetRenderDrawColor(game->window.renderer, 46, 194, 126, 255); // fill with green color
     SDL_RenderFillRect(game->window.renderer, NULL);
     RenderSnake(&game->window, &game->snake);
-    RenderStatusSection(&game->window, &game->timer);
+    RenderStatusSection(&game->window, &game->timer, game->snake.killed);
     SDL_RenderPresent(game->window.renderer);
 
     while (SDL_PollEvent(&event))
@@ -139,7 +149,10 @@ int GameLoop(
                     case SDLK_DOWN:
                     case SDLK_LEFT:
                     case SDLK_RIGHT:
-                        TurnSnake(&game->snake, event.key.keysym.sym);
+                        if (!game->snake.killed)
+                        {
+                            TurnSnake(&game->snake, event.key.keysym.sym);
+                        }
                         break;
                 }
                 break;
@@ -148,7 +161,11 @@ int GameLoop(
                 break;
         }
     }
-    MoveSnake(&game->snake, game->timer);
+    if (!game->snake.killed)
+    {
+        MoveSnake(&game->snake, game->timer);
+        KillSnake(&game->snake);
+    }
     return !quitRequested;
 }
 

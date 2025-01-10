@@ -5,6 +5,7 @@ void CreateSnake(
 )
 {
     snake->segment = NULL;
+    snake->killed = 0;
     snake->timeSinceLastMove = 0;
 
     SnakeSegment *snakeSegment = NULL;
@@ -61,6 +62,31 @@ void TurnSnake(
     snake->segment->turn = snakeTurn;
 }
 
+void MoveSnakeSegment(
+    SnakeSegment *snakeSegment
+)
+{
+    if (snakeSegment->turn)
+    {
+        snakeSegment->direction = snakeSegment->turn;
+    }
+    switch (snakeSegment->direction)
+    {
+        case 'u':
+            snakeSegment->y--;
+            break;
+        case 'd':
+            snakeSegment->y++;
+            break;
+        case 'l':
+            snakeSegment->x--;
+            break;
+        case 'r':
+            snakeSegment->x++;
+            break;
+    }
+}
+
 void MoveSnake(
     Snake *snake,
     GameTimer timer
@@ -72,25 +98,7 @@ void MoveSnake(
         SnakeSegment *snakeSegment = snake->segment;
         do
         {   
-            if (snakeSegment->turn)
-            {
-                snakeSegment->direction = snakeSegment->turn;
-            }
-            switch (snakeSegment->direction)
-            {
-                case 'u':
-                    snakeSegment->y--;
-                    break;
-                case 'd':
-                    snakeSegment->y++;
-                    break;
-                case 'l':
-                    snakeSegment->x--;
-                    break;
-                case 'r':
-                    snakeSegment->x++;
-                    break;
-            }
+            MoveSnakeSegment(snakeSegment);
             snakeSegment = snakeSegment->next;
         } while (snakeSegment != snake->segment);
 
@@ -106,6 +114,22 @@ void MoveSnake(
     }
 }
 
+void KillSnake(
+    Snake *snake
+)
+{
+    SnakeSegment *firstSnakeSegment = snake->segment;
+    SnakeSegment *snakeSegment = snake->segment->next;
+    do
+    {
+        if (firstSnakeSegment->x == snakeSegment->x && firstSnakeSegment->y == snakeSegment->y)
+        {
+            snake->killed = 1;
+        }
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != firstSnakeSegment);
+}
+
 void RenderSnake(
     GameWindow *window,
     const Snake *const snake
@@ -115,14 +139,13 @@ void RenderSnake(
     snakeSegmentRect.w = SNAKE_SEGMENT_SIZE;
     snakeSegmentRect.h = SNAKE_SEGMENT_SIZE;
     SDL_SetRenderDrawColor(window->renderer, 229, 165, 10, 255); // fill with yellow color
-
-    SnakeSegment *snakeSegment = snake->segment;
+    
+    SnakeSegment *snakeSegment = snake->segment->previous;
     do
     {
         snakeSegmentRect.x = snakeSegment->x * SNAKE_SEGMENT_SIZE;
         snakeSegmentRect.y = snakeSegment->y * SNAKE_SEGMENT_SIZE;
         SDL_RenderFillRect(window->renderer, &snakeSegmentRect);
-
-        snakeSegment = snakeSegment->next;
-    } while (snakeSegment != snake->segment);    
+        snakeSegment = snakeSegment->previous;
+    } while (snakeSegment->next != snake->segment);
 }
