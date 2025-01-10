@@ -21,8 +21,10 @@ typedef struct {
 typedef struct SnakeSegment {
     int x;
     int y;
+    char direction;
     char turn;
     struct SnakeSegment *next;
+    struct SnakeSegment *previous;
 } SnakeSegment;
 typedef struct {
     SnakeSegment *segment;
@@ -41,6 +43,10 @@ void CreateSnake(
 void RenderSnake(
     GameWindow *window,
     const Snake *const snake
+);
+void TurnSnake(
+    Snake *snake,
+    Uint32 direction
 );
 void MoveSnake(
     Snake *snake,

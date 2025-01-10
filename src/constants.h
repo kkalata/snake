@@ -12,7 +12,7 @@
 
 #define SNAKE_INIT_POS_X 10
 #define SNAKE_INIT_POS_Y 10
-#define SNAKE_INIT_TURN 'l' // which direction snake moves just after the game starts
+#define SNAKE_INIT_DIRECTION 'l' // which direction snake moves just after the game starts
 #define SNAKE_INIT_LENGTH 7
 #define SNAKE_SEGMENT_SIZE 20
 #define SNAKE_COOLDOWN 100 // milliseconds

@@ -121,7 +121,6 @@ int GameLoop(
 
     SDL_SetRenderDrawColor(game->window.renderer, 46, 194, 126, 255); // fill with green color
     SDL_RenderFillRect(game->window.renderer, NULL);
-    MoveSnake(&game->snake, game->timer);
     RenderSnake(&game->window, &game->snake);
     RenderStatusSection(&game->window, &game->timer);
     SDL_RenderPresent(game->window.renderer);
@@ -136,6 +135,12 @@ int GameLoop(
                     case SDLK_ESCAPE:
                         quitRequested = 1;
                         break;
+                    case SDLK_UP:
+                    case SDLK_DOWN:
+                    case SDLK_LEFT:
+                    case SDLK_RIGHT:
+                        TurnSnake(&game->snake, event.key.keysym.sym);
+                        break;
                 }
                 break;
             case SDL_QUIT:
@@ -143,6 +148,7 @@ int GameLoop(
                 break;
         }
     }
+    MoveSnake(&game->snake, game->timer);
     return !quitRequested;
 }
 

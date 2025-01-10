@@ -13,23 +13,52 @@ void CreateSnake(
     for (int snakeSegmentI = 0; snakeSegmentI < SNAKE_INIT_LENGTH; snakeSegmentI++)
     {
         snakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
+
+        snakeSegment->next = snake->segment;
         if (snake->segment == NULL)
         {
             snake->segment = snakeSegment;
+            snakeSegment->previous = snakeSegment;
+        }
+        else
+        {
+            previousSnakeSegment->next = snakeSegment;
+            snake->segment->previous = snakeSegment;
+
+            snakeSegment->previous = previousSnakeSegment;
         }
 
         snakeSegment->x = SNAKE_INIT_POS_X + snakeSegmentI;
         snakeSegment->y = SNAKE_INIT_POS_Y;
-        snakeSegment->turn = SNAKE_INIT_TURN;
-
-        snakeSegment->next = NULL;
+        snakeSegment->direction = SNAKE_INIT_DIRECTION;
+        snakeSegment->turn = '\0';
         
-        if (previousSnakeSegment != NULL)
-        {
-            previousSnakeSegment->next = snakeSegment;
-        }
         previousSnakeSegment = snakeSegment;
     }
+}
+
+void TurnSnake(
+    Snake *snake,
+    Uint32 direction
+)
+{
+    char snakeTurn = '\0';
+    switch (direction)
+    {
+        case SDLK_UP:
+            snakeTurn = 'u';
+            break;
+        case SDLK_DOWN:
+            snakeTurn = 'd';
+            break;
+        case SDLK_LEFT:
+            snakeTurn = 'l';
+            break;
+        case SDLK_RIGHT:
+            snakeTurn = 'r';
+            break;
+    }
+    snake->segment->turn = snakeTurn;
 }
 
 void MoveSnake(
@@ -40,28 +69,39 @@ void MoveSnake(
     snake->timeSinceLastMove += timer.timeDelta;
     while (snake->timeSinceLastMove >= SNAKE_COOLDOWN)
     {
-        for (SnakeSegment *snakeSegment = snake->segment; snakeSegment != NULL; snakeSegment = snakeSegment->next)
-        {
-            if (snakeSegment->x == 0 || snakeSegment->y == 0)
+        SnakeSegment *snakeSegment = snake->segment;
+        do
+        {   
+            if (snakeSegment->turn)
             {
-                break;
+                snakeSegment->direction = snakeSegment->turn;
             }
-            switch (snakeSegment->turn)
+            switch (snakeSegment->direction)
             {
                 case 'u':
-                    snakeSegment->y++;
-                    break;
-                case 'd':
                     snakeSegment->y--;
                     break;
-                case 'r':
-                    snakeSegment->x++;
+                case 'd':
+                    snakeSegment->y++;
                     break;
                 case 'l':
                     snakeSegment->x--;
                     break;
+                case 'r':
+                    snakeSegment->x++;
+                    break;
             }
+            snakeSegment = snakeSegment->next;
+        } while (snakeSegment != snake->segment);
+
+        snakeSegment = snake->segment->previous;
+        while (snakeSegment != snake->segment)
+        {
+            snakeSegment->turn = snakeSegment->previous->turn;
+            snakeSegment = snakeSegment->previous;
         }
+        snake->segment->turn = '\0';
+        
         snake->timeSinceLastMove -= SNAKE_COOLDOWN;
     }
 }
@@ -76,11 +116,13 @@ void RenderSnake(
     snakeSegmentRect.h = SNAKE_SEGMENT_SIZE;
     SDL_SetRenderDrawColor(window->renderer, 229, 165, 10, 255); // fill with yellow color
 
-    for (SnakeSegment *snakeSegment = snake->segment; snakeSegment != NULL; snakeSegment = snakeSegment->next)
+    SnakeSegment *snakeSegment = snake->segment;
+    do
     {
         snakeSegmentRect.x = snakeSegment->x * SNAKE_SEGMENT_SIZE;
         snakeSegmentRect.y = snakeSegment->y * SNAKE_SEGMENT_SIZE;
         SDL_RenderFillRect(window->renderer, &snakeSegmentRect);
-    }
-    
+
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != snake->segment);    
 }
