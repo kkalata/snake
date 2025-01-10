@@ -176,6 +176,15 @@ void RenderStatusSection(
     
     sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
     DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
+
+    sprintf(statusSectionContent, IMPLEMENDED_REQUIREMENTS);
+    DrawString(
+        window,
+        SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
+        SCREEN_HEIGHT - 40,
+        statusSectionContent
+    );
+    
     if (snakeKillReason != ALIVE)
     {
         switch (snakeKillReason)
