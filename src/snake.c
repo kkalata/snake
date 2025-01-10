@@ -1,36 +1,5 @@
 #include "snake.h"
 
-int CreateGameWindow(
-    GameWindow *window
-)
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        return 0;
-    }
-
-    if (SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window->window, &window->renderer) != 0)
-    {
-        SDL_Quit();
-        return 0;
-    }
-
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-    SDL_RenderSetLogicalSize(window->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-    SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
-
-    SDL_SetWindowTitle(window->window, GAME_TITLE);
-
-    window->font = SDL_LoadBMP(FONT_FILEPATH);
-    if (window->font == NULL)
-    {
-        return 0;
-    }
-    SDL_SetColorKey(window->font, 1, 0x000000);
-
-    return 1;
-}
-
 SDL_Rect GetTextRect(
     const int x,
     const int y,
@@ -83,38 +52,35 @@ void DrawString(
     SDL_DestroyTexture(textSubscreenGPU);
 }
 
-void RenderStatusSection(
-    GameWindow *window,
-    GameTimer *timer,
-    Uint8 snakeKilled
-)
-{
-    SDL_Rect statusSectionRect;
-    statusSectionRect.x = STATUS_MARGIN;
-    statusSectionRect.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
-    statusSectionRect.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
-    statusSectionRect.h = STATUS_HEIGHT;
-    
-    SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    SDL_RenderFillRect(window->renderer, &statusSectionRect);
-
-    char statusSectionContent[SCREEN_WIDTH];
-    
-    sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
-    DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
-    if (snakeKilled)
-    {
-        sprintf(statusSectionContent, "Snake killed. Press N to retry or ESC to quit.");
-        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
-    }
-}
-
-void CloseGameWindow(
+int CreateGameWindow(
     GameWindow *window
 )
 {
-    SDL_DestroyRenderer(window->renderer);
-    SDL_DestroyWindow(window->window);
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        return 0;
+    }
+
+    if (SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window->window, &window->renderer) != 0)
+    {
+        SDL_Quit();
+        return 0;
+    }
+
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    SDL_RenderSetLogicalSize(window->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
+
+    SDL_SetWindowTitle(window->window, GAME_TITLE);
+
+    window->font = SDL_LoadBMP(FONT_FILEPATH);
+    if (window->font == NULL)
+    {
+        return 0;
+    }
+    SDL_SetColorKey(window->font, 1, 0x000000);
+
+    return 1;
 }
 
 int GameLoop(
@@ -167,6 +133,40 @@ int GameLoop(
         KillSnake(&game->snake);
     }
     return !quitRequested;
+}
+
+void RenderStatusSection(
+    GameWindow *window,
+    GameTimer *timer,
+    Uint8 snakeKilled
+)
+{
+    SDL_Rect statusSectionRect;
+    statusSectionRect.x = STATUS_MARGIN;
+    statusSectionRect.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
+    statusSectionRect.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
+    statusSectionRect.h = STATUS_HEIGHT;
+    
+    SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
+    SDL_RenderFillRect(window->renderer, &statusSectionRect);
+
+    char statusSectionContent[SCREEN_WIDTH];
+    
+    sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
+    DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
+    if (snakeKilled)
+    {
+        sprintf(statusSectionContent, "Snake killed. Press N to retry or ESC to quit.");
+        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+    }
+}
+
+void CloseGameWindow(
+    GameWindow *window
+)
+{
+    SDL_DestroyRenderer(window->renderer);
+    SDL_DestroyWindow(window->window);
 }
 
 int main(int argc, char **argv)

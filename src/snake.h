@@ -38,6 +38,32 @@ typedef struct {
     Snake snake;
 } Game;
 
+SDL_Rect GetTextRect(
+    const int x,
+    const int y,
+    const int textWidth
+);
+void DrawString(
+    GameWindow *window,
+    const int x,
+    const int y,
+    const char *text
+);
+int CreateGameWindow(
+    GameWindow *window
+);
+int GameLoop(
+    Game *game
+);
+void RenderStatusSection(
+    GameWindow *window,
+    GameTimer *timer,
+    Uint8 snakeKilled
+);
+void CloseGameWindow(
+    GameWindow *window
+);
+
 void CreateSnake(
     Snake *const snake
 );
