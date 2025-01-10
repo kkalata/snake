@@ -47,19 +47,30 @@ void TurnSnake(
     switch (direction)
     {
         case SDLK_UP:
-            snakeTurn = 'u';
+            if (snake->segment->direction != 'd')
+            {
+                snake->segment->turn = 'u';
+            }
             break;
         case SDLK_DOWN:
-            snakeTurn = 'd';
+            if (snake->segment->direction != 'u')
+            {
+                snake->segment->turn = 'd';
+            }
             break;
         case SDLK_LEFT:
-            snakeTurn = 'l';
+            if (snake->segment->direction != 'r')
+            {
+                snake->segment->turn = 'l';
+            }
             break;
         case SDLK_RIGHT:
-            snakeTurn = 'r';
+            if (snake->segment->direction != 'l')
+            {
+                snake->segment->turn = 'r';
+            }
             break;
     }
-    snake->segment->turn = snakeTurn;
 }
 
 void MoveSnakeSegment(
