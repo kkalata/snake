@@ -41,6 +41,7 @@ typedef struct {
 
 typedef struct {
     GameWindow window;
+    SDL_Rect boardRect;
     GameTimer timer;
     Snake snake;
 } Game;
@@ -65,6 +66,10 @@ void CreateGame(
 int GameLoop(
     Game *game
 );
+void RenderBoard(
+    GameWindow *window,
+    SDL_Rect *boardRect
+);
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
@@ -82,7 +87,8 @@ void CreateSnake(
 );
 void RenderSnake(
     GameWindow *window,
-    const Snake *const snake
+    const Snake *const snake,
+    const SDL_Rect *const boardRect
 );
 void MoveSnake(
     Snake *snake,

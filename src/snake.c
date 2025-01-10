@@ -103,9 +103,10 @@ int GameLoop(
         GetTimeDelta(&game->timer);
     }
 
-    SDL_SetRenderDrawColor(game->window.renderer, 46, 194, 126, 255); // fill with green color
+    SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
     SDL_RenderFillRect(game->window.renderer, NULL);
-    RenderSnake(&game->window, &game->snake);
+    RenderBoard(&game->window, &game->boardRect);
+    RenderSnake(&game->window, &game->snake, &game->boardRect);
     RenderStatusSection(&game->window, &game->timer, game->snake.killed);
     SDL_RenderPresent(game->window.renderer);
 
@@ -145,6 +146,15 @@ int GameLoop(
         KillSnake(&game->snake);
     }
     return !quitRequested;
+}
+
+void RenderBoard(
+    GameWindow *window,
+    SDL_Rect *boardRect
+)
+{
+    SDL_SetRenderDrawColor(window->renderer, 46, 194, 126, 255); // fill with green color
+    SDL_RenderFillRect(window->renderer, boardRect);
 }
 
 void RenderStatusSection(
@@ -209,6 +219,10 @@ int main(int argc, char **argv)
         CloseGameWindow(&game.window);
         return 1;
     }
+    game.boardRect.w = BOARD_SECTION_WIDTH * SNAKE_SEGMENT_SIZE;
+    game.boardRect.h = BOARD_SECTION_HEIGHT * SNAKE_SEGMENT_SIZE;
+    game.boardRect.x = (SCREEN_WIDTH - game.boardRect.w) / 2;
+    game.boardRect.y = (SCREEN_HEIGHT - game.boardRect.h - STATUS_HEIGHT - STATUS_MARGIN) / 2;
     CreateGame(&game);
     
     while (GameLoop(&game));

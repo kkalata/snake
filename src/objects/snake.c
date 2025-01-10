@@ -78,7 +78,7 @@ void AutoTurnSnakeSegment(
 {
     if (snakeSegment->direction == 'u' && snakeSegment->y == 0)
     {
-        if (snakeSegment->x == BOARD_SECTION_WIDTH)
+        if (snakeSegment->x == BOARD_SECTION_WIDTH - 1)
         {
             snakeSegment->turn = 'l';
         }
@@ -87,7 +87,7 @@ void AutoTurnSnakeSegment(
             snakeSegment->turn = 'r';
         }
     }
-    else if (snakeSegment->direction == 'd' && snakeSegment->y == BOARD_SECTION_HEIGHT)
+    else if (snakeSegment->direction == 'd' && snakeSegment->y == BOARD_SECTION_HEIGHT - 1)
     {
         if (snakeSegment->x == 0)
         {
@@ -109,9 +109,9 @@ void AutoTurnSnakeSegment(
             snakeSegment->turn = 'u';
         }
     }
-    else if (snakeSegment->direction == 'r' && snakeSegment->x == BOARD_SECTION_WIDTH)
+    else if (snakeSegment->direction == 'r' && snakeSegment->x == BOARD_SECTION_WIDTH - 1)
     {
-        if (snakeSegment->y == BOARD_SECTION_HEIGHT)
+        if (snakeSegment->y == BOARD_SECTION_HEIGHT - 1)
         {
             snakeSegment->turn = 'u';
         }
@@ -184,8 +184,8 @@ void KillSnake(
 {
     SnakeSegment *firstSnakeSegment = snake->segment;
     SnakeSegment *snakeSegment = snake->segment->next;
-    if (firstSnakeSegment->x < 0 || firstSnakeSegment->x > BOARD_SECTION_WIDTH ||
-        firstSnakeSegment->y < 0 || firstSnakeSegment->y > BOARD_SECTION_HEIGHT)
+    if (firstSnakeSegment->x < 0 || firstSnakeSegment->x > BOARD_SECTION_WIDTH - 1 ||
+        firstSnakeSegment->y < 0 || firstSnakeSegment->y > BOARD_SECTION_HEIGHT - 1)
     {
         snake->killed = HIT_WALL;
         return;
@@ -203,7 +203,8 @@ void KillSnake(
 
 void RenderSnake(
     GameWindow *window,
-    const Snake *const snake
+    const Snake *const snake,
+    const SDL_Rect *const boardRect
 )
 
 {
@@ -215,8 +216,8 @@ void RenderSnake(
     SnakeSegment *snakeSegment = snake->segment->previous;
     do
     {
-        snakeSegmentRect.x = snakeSegment->x * SNAKE_SEGMENT_SIZE;
-        snakeSegmentRect.y = snakeSegment->y * SNAKE_SEGMENT_SIZE;
+        snakeSegmentRect.x = boardRect->x + snakeSegment->x * SNAKE_SEGMENT_SIZE;
+        snakeSegmentRect.y = boardRect->y + snakeSegment->y * SNAKE_SEGMENT_SIZE;
         SDL_RenderFillRect(window->renderer, &snakeSegmentRect);
         snakeSegment = snakeSegment->previous;
     } while (snakeSegment->next != snake->segment);

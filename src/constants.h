@@ -10,7 +10,7 @@
 #define STATUS_MARGIN 8 // margin between window border and status section border
 #define STATUS_HEIGHT 40
 
-#define BOARD_SECTION_WIDTH 24
+#define BOARD_SECTION_WIDTH 30
 #define BOARD_SECTION_HEIGHT 20
 
 #define SNAKE_INIT_POS_X 10
