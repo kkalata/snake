@@ -5,7 +5,7 @@ void CreateSnake(
 )
 {
     snake->segment = NULL;
-    snake->killed = 0;
+    snake->killed = ALIVE;
     snake->timeSinceLastMove = 0;
 
     SnakeSegment *snakeSegment = NULL;
@@ -184,11 +184,18 @@ void KillSnake(
 {
     SnakeSegment *firstSnakeSegment = snake->segment;
     SnakeSegment *snakeSegment = snake->segment->next;
+    if (firstSnakeSegment->x < 0 || firstSnakeSegment->x > BOARD_SECTION_WIDTH ||
+        firstSnakeSegment->y < 0 || firstSnakeSegment->y > BOARD_SECTION_HEIGHT)
+    {
+        snake->killed = HIT_WALL;
+        return;
+    }
     do
     {
         if (firstSnakeSegment->x == snakeSegment->x && firstSnakeSegment->y == snakeSegment->y)
         {
-            snake->killed = 1;
+            snake->killed = HIT_ITSELF;
+            return;
         }
         snakeSegment = snakeSegment->next;
     } while (snakeSegment != firstSnakeSegment);
@@ -228,6 +235,6 @@ void DestroySnake(
         snakeSegment = nextSnakeSegment;
     } while (snakeSegment != snake->segment);
     snake->segment = NULL;
-    snake->killed = 0;
+    snake->killed = ALIVE;
     snake->timeSinceLastMove = 0;
 }

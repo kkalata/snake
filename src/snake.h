@@ -26,10 +26,17 @@ typedef struct SnakeSegment {
     struct SnakeSegment *next;
     struct SnakeSegment *previous;
 } SnakeSegment;
+
+typedef enum {
+    ALIVE,
+    UNSPECIFIED,
+    HIT_ITSELF,
+    HIT_WALL
+} SnakeKillReason;
 typedef struct {
     SnakeSegment *segment;
     Uint32 timeSinceLastMove;
-    Uint8 killed;
+    SnakeKillReason killed;
 } Snake;
 
 typedef struct {
@@ -61,7 +68,7 @@ int GameLoop(
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
-    Uint8 snakeKilled
+    SnakeKillReason snakeKillReason
 );
 void DestroyGame(
     Game *game

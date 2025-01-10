@@ -150,7 +150,7 @@ int GameLoop(
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
-    Uint8 snakeKilled
+    SnakeKillReason snakeKillReason
 )
 {
     SDL_Rect statusSectionRect;
@@ -166,9 +166,22 @@ void RenderStatusSection(
     
     sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
     DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
-    if (snakeKilled)
+    if (snakeKillReason != ALIVE)
     {
-        sprintf(statusSectionContent, "Snake killed. Press N to retry or ESC to quit.");
+        switch (snakeKillReason)
+        {
+            case UNSPECIFIED:
+                sprintf(statusSectionContent, "Snake killed.");
+                break;
+            case HIT_ITSELF:
+                sprintf(statusSectionContent, "Snake hit itself.");
+                break;
+            case HIT_WALL:
+                sprintf(statusSectionContent, "Snake hit the wall.");
+                break;
+        }
+        strcat(statusSectionContent, " Press N to retry or ESC to quit.");
+        
         DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
     }
 }
@@ -191,16 +204,16 @@ void CloseGameWindow(
 int main(int argc, char **argv)
 {
     Game game;
-    
     if (!CreateGameWindow(&game.window))
     {
         CloseGameWindow(&game.window);
         return 1;
     }
-
-    CreateGame(&game); 
+    CreateGame(&game);
+    
     while (GameLoop(&game));
-
+    
+    DestroyGame(&game);
     CloseGameWindow(&game.window);
 
     return 0;
