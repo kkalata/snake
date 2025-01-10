@@ -52,6 +52,9 @@ void DrawString(
 int CreateGameWindow(
     GameWindow *window
 );
+void CreateGame(
+    Game *game
+);
 int GameLoop(
     Game *game
 );
@@ -59,6 +62,9 @@ void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
     Uint8 snakeKilled
+);
+void DestroyGame(
+    Game *game
 );
 void CloseGameWindow(
     GameWindow *window
@@ -71,6 +77,10 @@ void RenderSnake(
     GameWindow *window,
     const Snake *const snake
 );
+void MoveSnake(
+    Snake *snake,
+    GameTimer timer
+);
 void TurnSnake(
     Snake *snake,
     Uint32 direction
@@ -78,9 +88,8 @@ void TurnSnake(
 void KillSnake(
     Snake *snake
 );
-void MoveSnake(
-    Snake *snake,
-    GameTimer timer
+void DestroySnake(
+    Snake *snake
 );
 
 GameTimer InitGameTimer();

@@ -83,6 +83,14 @@ int CreateGameWindow(
     return 1;
 }
 
+void CreateGame(
+    Game *game
+)
+{
+    CreateSnake(&game->snake);
+    game->timer = InitGameTimer();
+}
+
 int GameLoop(
     Game *game
 )
@@ -111,6 +119,10 @@ int GameLoop(
                     case SDLK_ESCAPE:
                         quitRequested = 1;
                         break;
+                    case SDLK_n:
+                        DestroyGame(game);
+                        CreateGame(game);
+                        return !quitRequested;
                     case SDLK_UP:
                     case SDLK_DOWN:
                     case SDLK_LEFT:
@@ -161,6 +173,13 @@ void RenderStatusSection(
     }
 }
 
+void DestroyGame(
+    Game *game
+)
+{
+    DestroySnake(&game->snake);
+}
+
 void CloseGameWindow(
     GameWindow *window
 )
@@ -179,8 +198,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    CreateSnake(&game.snake);
-    game.timer = InitGameTimer();    
+    CreateGame(&game); 
     while (GameLoop(&game));
 
     CloseGameWindow(&game.window);

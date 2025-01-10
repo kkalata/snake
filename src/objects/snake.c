@@ -145,6 +145,7 @@ void RenderSnake(
     GameWindow *window,
     const Snake *const snake
 )
+
 {
     SDL_Rect snakeSegmentRect;
     snakeSegmentRect.w = SNAKE_SEGMENT_SIZE;
@@ -159,4 +160,21 @@ void RenderSnake(
         SDL_RenderFillRect(window->renderer, &snakeSegmentRect);
         snakeSegment = snakeSegment->previous;
     } while (snakeSegment->next != snake->segment);
+}
+
+void DestroySnake(
+    Snake *snake
+)
+{
+    SnakeSegment *snakeSegment = snake->segment;
+    SnakeSegment *nextSnakeSegment;
+    do
+    {
+        nextSnakeSegment = snakeSegment->next;
+        free(snakeSegment);
+        snakeSegment = nextSnakeSegment;
+    } while (snakeSegment != snake->segment);
+    snake->segment = NULL;
+    snake->killed = 0;
+    snake->timeSinceLastMove = 0;
 }
