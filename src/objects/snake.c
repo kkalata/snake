@@ -43,7 +43,6 @@ void TurnSnake(
     Uint32 direction
 )
 {
-    char snakeTurn = '\0';
     switch (direction)
     {
         case SDLK_UP:
@@ -73,10 +72,64 @@ void TurnSnake(
     }
 }
 
+void AutoTurnSnakeSegment(
+    SnakeSegment *snakeSegment
+)
+{
+    if (snakeSegment->direction == 'u' && snakeSegment->y == 0)
+    {
+        if (snakeSegment->x == BOARD_SECTION_WIDTH)
+        {
+            snakeSegment->turn = 'l';
+        }
+        else
+        {
+            snakeSegment->turn = 'r';
+        }
+    }
+    else if (snakeSegment->direction == 'd' && snakeSegment->y == BOARD_SECTION_HEIGHT)
+    {
+        if (snakeSegment->x == 0)
+        {
+            snakeSegment->turn = 'r';
+        }
+        else
+        {
+            snakeSegment->turn = 'l';
+        }
+    }
+    else if (snakeSegment->direction == 'l' && snakeSegment->x == 0)
+    {
+        if (snakeSegment->y == 0)
+        {
+            snakeSegment->turn = 'd';
+        }
+        else
+        {
+            snakeSegment->turn = 'u';
+        }
+    }
+    else if (snakeSegment->direction == 'r' && snakeSegment->x == BOARD_SECTION_WIDTH)
+    {
+        if (snakeSegment->y == BOARD_SECTION_HEIGHT)
+        {
+            snakeSegment->turn = 'u';
+        }
+        else
+        {
+            snakeSegment->turn = 'd';
+        }
+    }
+}
+
 void MoveSnakeSegment(
     SnakeSegment *snakeSegment
 )
 {
+    if (!snakeSegment->turn)
+    {
+        AutoTurnSnakeSegment(snakeSegment);
+    }
     if (snakeSegment->turn)
     {
         snakeSegment->direction = snakeSegment->turn;

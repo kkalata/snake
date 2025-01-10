@@ -85,6 +85,9 @@ void TurnSnake(
     Snake *snake,
     Uint32 direction
 );
+void AutoTurnSnakeSegment(
+    SnakeSegment *snakeSegment
+);
 void KillSnake(
     Snake *snake
 );
