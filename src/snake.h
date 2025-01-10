@@ -10,6 +10,7 @@ typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Surface *font;
+    SDL_Texture *snakeSkin;
 } GameWindow;
 
 typedef struct {

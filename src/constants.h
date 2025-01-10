@@ -7,6 +7,8 @@
 #define FONT_ROW_SIZE 16
 #define CHAR_SIZE 8 // width and height
 
+#define SNAKE_SKIN_FILEPATH "./snakeskin.bmp"
+
 #define STATUS_MARGIN 8 // margin between window border and status section border
 #define STATUS_HEIGHT 40
 

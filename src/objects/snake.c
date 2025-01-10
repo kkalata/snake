@@ -211,14 +211,13 @@ void RenderSnake(
     SDL_Rect snakeSegmentRect;
     snakeSegmentRect.w = SNAKE_SEGMENT_SIZE;
     snakeSegmentRect.h = SNAKE_SEGMENT_SIZE;
-    SDL_SetRenderDrawColor(window->renderer, 229, 165, 10, 255); // fill with yellow color
     
     SnakeSegment *snakeSegment = snake->segment->previous;
     do
     {
         snakeSegmentRect.x = boardRect->x + snakeSegment->x * SNAKE_SEGMENT_SIZE;
         snakeSegmentRect.y = boardRect->y + snakeSegment->y * SNAKE_SEGMENT_SIZE;
-        SDL_RenderFillRect(window->renderer, &snakeSegmentRect);
+        SDL_RenderCopy(window->renderer, window->snakeSkin, NULL, &snakeSegmentRect);
         snakeSegment = snakeSegment->previous;
     } while (snakeSegment->next != snake->segment);
 }

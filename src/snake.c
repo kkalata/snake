@@ -80,6 +80,14 @@ int CreateGameWindow(
     }
     SDL_SetColorKey(window->font, 1, 0x000000);
 
+    SDL_Surface *snakeSkinCPU = SDL_LoadBMP(SNAKE_SKIN_FILEPATH);
+    if (window->font == NULL)
+    {
+        return 0;
+    }
+    window->snakeSkin = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
+    SDL_FreeSurface(snakeSkinCPU);
+
     return 1;
 }
 
@@ -216,6 +224,8 @@ void CloseGameWindow(
     GameWindow *window
 )
 {
+    SDL_FreeSurface(window->font);
+    SDL_DestroyTexture(window->snakeSkin);
     SDL_DestroyRenderer(window->renderer);
     SDL_DestroyWindow(window->window);
 }
