@@ -5,10 +5,10 @@ Game written in C using SDL2 library.
 The game is being written as a part of basics of computer programming classes at Gdańsk University of Technology, Faculty of Electronics, Telecommunications and Informatics. The requirements are listed below:
 
 1. Mandatory (5 pts)
-    - [ ] Graphic design of the game
-    - [ ] Basic movement of the snake
-    - [ ] Detection of the snake hitting itself
-    - [ ] Display elapsed time and fulfilled requirements
+    - [x] Graphic design of the game
+    - [x] Basic movement of the snake
+    - [x] Detection of the snake hitting itself
+    - [x] Display elapsed time and fulfilled requirements
 2. Optional
     - [ ] A. Lengthening of the snake (1 pt)
     - [ ] B. Speedup (1 pt)
