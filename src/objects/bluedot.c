@@ -5,9 +5,10 @@ void PlaceBlueDot(
     Snake *snake
 )
 {
-    int dotOutsideOfSnake = 1;
+    int dotOutsideOfSnake;
     do
-    {
+    {   
+        dotOutsideOfSnake = 1;
         blueDot->x = rand() % BOARD_SECTION_WIDTH; // random number between 0 and board width
         blueDot->y = rand() % BOARD_SECTION_HEIGHT; // random number between 0 and board height
         
