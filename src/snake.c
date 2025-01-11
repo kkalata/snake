@@ -6,12 +6,12 @@ SDL_Rect GetTextRect(
     const int textWidth
 )
 {
-    SDL_Rect TextRect;
-    TextRect.x = x;
-    TextRect.y = y;
-    TextRect.w = textWidth;
-    TextRect.h = CHAR_SIZE;
-    return TextRect;
+    SDL_Rect textRect;
+    textRect.x = x;
+    textRect.y = y;
+    textRect.w = textWidth;
+    textRect.h = CHAR_SIZE;
+    return textRect;
 }
 
 void DrawString(
