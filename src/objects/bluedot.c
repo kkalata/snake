@@ -19,6 +19,7 @@ void PlaceBlueDot(
                 dotOutsideOfSnake = 0;
                 break;
             }
+            snakeSegment = snakeSegment->next;
         } while (snakeSegment != snake->segment);
     } while (!dotOutsideOfSnake);
 }
