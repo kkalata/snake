@@ -8,10 +8,11 @@ Uint32 RedDotAppearDelay()
 void PlaceRedDot(
     RedDot *redDot,
     Snake *snake,
+    BlueDot *blueDot,
     GameTimer timer
 )
 {
-    redDot->pos = PlaceDot(snake);
+    redDot->pos = PlaceDot(snake, blueDot->pos);
     redDot->appearTime = timer.timeElapsed + RedDotAppearDelay();
 }
 

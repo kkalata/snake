@@ -174,6 +174,7 @@ void MoveSnakeSegment(
 void MoveSnake(
     Snake *snake,
     BlueDot *blueDot,
+    RedDot *redDot,
     GameTimer timer
 )
 {
@@ -182,6 +183,10 @@ void MoveSnake(
     while (snake->timeSinceLastMove >= snake->cooldown)
     {
         int blueDotEaten = EatBlueDot(snake, blueDot);
+        if (blueDotEaten)
+        {
+            PlaceBlueDot(blueDot, snake, redDot);
+        }
         KillSnake(snake);
         if (!snake->killed)
         {
@@ -226,7 +231,6 @@ int EatBlueDot(
 {
     if (snake->segment->pos.x == blueDot->pos.x && snake->segment->pos.y == blueDot->pos.y)
     {
-        PlaceBlueDot(blueDot, snake);
         SnakeSegment *newSnakeSegment = GetSnakeSegment(snake->segment->previous, 0);
         switch (newSnakeSegment->direction)
         {

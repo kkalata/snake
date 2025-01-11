@@ -132,6 +132,7 @@ void RenderSnake(
 void MoveSnake(
     Snake *snake,
     BlueDot *blueDot,
+    RedDot *redDot,
     GameTimer timer
 );
 void TurnSnake(
@@ -160,7 +161,8 @@ void DestroySnake(
 );
 
 Position PlaceDot(
-    Snake *snake
+    Snake *snake,
+    Position otherDotPos
 );
 void RenderDot(
     GameWindow *window,
@@ -170,7 +172,8 @@ void RenderDot(
 
 void PlaceBlueDot(
     BlueDot *blueDot,
-    Snake *snake
+    Snake *snake,
+    RedDot *redDot
 );
 void RenderBlueDot(
     GameWindow *window,
@@ -181,6 +184,7 @@ void RenderBlueDot(
 void PlaceRedDot(
     RedDot *redDot,
     Snake *snake,
+    BlueDot *blueDot,
     GameTimer timer
 );
 int RedDotVisible(

@@ -98,8 +98,8 @@ void CreateGame(
 {
     game->timer = InitGameTimer();
     CreateSnake(&game->snake);
-    PlaceBlueDot(&game->blueDot, &game->snake);
-    PlaceRedDot(&game->redDot, &game->snake, game->timer);
+    PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
+    PlaceRedDot(&game->redDot, &game->snake, &game->blueDot, game->timer);
 }
 
 int GameLoop(
@@ -148,7 +148,7 @@ int GameLoop(
     }
     if (!game->snake.killed)
     {
-        MoveSnake(&game->snake, &game->blueDot, game->timer);
+        MoveSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
     }
     SDL_Delay(1);
     return !quitRequested;
