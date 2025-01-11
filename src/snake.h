@@ -135,6 +135,9 @@ int EatBlueDot(
 void KillSnake(
     Snake *snake
 );
+void DetachLastSnakeSegment(
+    Snake *snake
+);
 void DestroySnake(
     Snake *snake
 );

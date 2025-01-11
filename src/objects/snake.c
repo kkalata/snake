@@ -178,26 +178,16 @@ void MoveSnake(
     snake->timeSinceLastMove += timer.timeDelta;
     while (snake->timeSinceLastMove >= SNAKE_COOLDOWN)
     {
+        EatBlueDot(snake, blueDot);
         KillSnake(snake);
         if (!snake->killed)
         {
-            int blueDotEaten = EatBlueDot(snake, blueDot);
             SnakeSegment *snakeSegment = snake->segment;
-            SnakeSegment *newSnakeSegment = NULL;
-            if (blueDotEaten)
-            {
-                newSnakeSegment = GetSnakeSegment(snake->segment->previous, 0);
-            }
             do
             {   
                 MoveSnakeSegment(snakeSegment);
                 snakeSegment = snakeSegment->next;
             } while (snakeSegment != snake->segment);
-
-            if (blueDotEaten)
-            {
-                AttachSnakeSegment(snake, newSnakeSegment);
-            }
 
             snakeSegment = snake->segment->previous;
             while (snakeSegment != snake->segment)
@@ -211,6 +201,7 @@ void MoveSnake(
         }
         else
         {
+            DetachLastSnakeSegment(snake);
             break;
         }
     }
@@ -224,6 +215,24 @@ int EatBlueDot(
     if (snake->segment->x == blueDot->x && snake->segment->y == blueDot->y)
     {
         PlaceBlueDot(blueDot, snake);
+        SnakeSegment *newSnakeSegment = GetSnakeSegment(snake->segment->previous, 0);
+        switch (newSnakeSegment->direction)
+        {
+            case 'u':
+                newSnakeSegment->y++;
+                break;
+            case 'd':
+                newSnakeSegment->y--;
+                break;
+            case 'l':
+                newSnakeSegment->x++;
+                break;
+            case 'r':
+                newSnakeSegment->x--;
+                break;
+        }
+        newSnakeSegment->turn = '\0';
+        AttachSnakeSegment(snake, newSnakeSegment);
         return 1;
     }
     return 0;
@@ -315,18 +324,25 @@ void RenderSnake(
     } while (snakeSegment->next != snake->segment);
 }
 
+void DetachLastSnakeSegment(
+    Snake *snake
+)
+{
+    SnakeSegment *lastSnakeSegment = snake->segment->previous;
+    lastSnakeSegment->previous->next = snake->segment;
+    snake->segment->previous = lastSnakeSegment->previous;
+    free(lastSnakeSegment);
+}
+
 void DestroySnake(
     Snake *snake
 )
 {
-    SnakeSegment *snakeSegment = snake->segment;
-    SnakeSegment *nextSnakeSegment;
     do
     {
-        nextSnakeSegment = snakeSegment->next;
-        free(snakeSegment);
-        snakeSegment = nextSnakeSegment;
-    } while (snakeSegment != snake->segment);
+        DetachLastSnakeSegment(snake);
+    } while (snake->segment->next != snake->segment);
+    free(snake->segment);
     snake->segment = NULL;
     snake->killed = ALIVE;
     snake->timeSinceLastMove = 0;
