@@ -112,17 +112,7 @@ int GameLoop(
         GetTimeDelta(&game->timer);
     }
     
-    if (game->window.timeSinceLastRender > 1000 / FRAMES_PER_SECOND || game->window.timeSinceLastRender == 0)
-    {
-        SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
-        SDL_RenderFillRect(game->window.renderer, NULL);
-        RenderBoard(&game->window, &game->boardRect);
-        RenderSnake(&game->window, &game->snake, &game->boardRect);
-        RenderStatusSection(&game->window, &game->timer, game->snake.killed);
-        SDL_RenderPresent(game->window.renderer);
-        game->window.timeSinceLastRender = 0;
-    }
-    game->window.timeSinceLastRender += game->timer.timeDelta;
+    RenderGameWindow(game);
 
     while (SDL_PollEvent(&event))
     {
@@ -160,6 +150,23 @@ int GameLoop(
     }
     SDL_Delay(1);
     return !quitRequested;
+}
+
+void RenderGameWindow(
+    Game *game
+)
+{
+    if (game->window.timeSinceLastRender > 1000 / FRAMES_PER_SECOND || game->window.timeSinceLastRender == 0)
+    {
+        SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
+        SDL_RenderFillRect(game->window.renderer, NULL);
+        RenderBoard(&game->window, &game->boardRect);
+        RenderSnake(&game->window, &game->snake, &game->boardRect);
+        RenderStatusSection(&game->window, &game->timer, game->snake.killed);
+        SDL_RenderPresent(game->window.renderer);
+        game->window.timeSinceLastRender = 0;
+    }
+    game->window.timeSinceLastRender += game->timer.timeDelta;
 }
 
 void RenderBoard(

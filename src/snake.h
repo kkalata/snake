@@ -68,6 +68,9 @@ void CreateGame(
 int GameLoop(
     Game *game
 );
+void RenderGameWindow(
+    Game *game
+);
 void RenderBoard(
     GameWindow *window,
     SDL_Rect *boardRect
