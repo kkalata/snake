@@ -97,6 +97,7 @@ void CreateGame(
 )
 {
     CreateSnake(&game->snake);
+    PlaceBlueDot(&game->blueDot, &game->snake);
     game->timer = InitGameTimer();
 }
 
@@ -161,6 +162,7 @@ void RenderGameWindow(
         SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
         SDL_RenderFillRect(game->window.renderer, NULL);
         RenderBoard(&game->window, &game->boardRect);
+        RenderBlueDot(&game->window, &game->blueDot, &game->boardRect);
         RenderSnake(&game->window, &game->snake, &game->boardRect);
         RenderStatusSection(&game->window, &game->timer, game->snake.killed);
         SDL_RenderPresent(game->window.renderer);
@@ -247,6 +249,7 @@ void CloseGameWindow(
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
     Game game;
     if (!CreateGameWindow(&game.window))
     {

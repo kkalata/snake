@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 // maybe there is a better way to include SDL
 #include"../SDL2-2.0.10/include/SDL.h"
@@ -42,10 +43,16 @@ typedef struct {
 } Snake;
 
 typedef struct {
+    int x;
+    int y;
+} BlueDot;
+
+typedef struct {
     GameWindow window;
     SDL_Rect boardRect;
     GameTimer timer;
     Snake snake;
+    BlueDot blueDot;
 } Game;
 
 SDL_Rect GetTextRect(
@@ -114,6 +121,16 @@ void KillSnake(
 );
 void DestroySnake(
     Snake *snake
+);
+
+void PlaceBlueDot(
+    BlueDot *blueDot,
+    Snake *snake
+);
+void RenderBlueDot(
+    GameWindow *window,
+    BlueDot *blueDot,
+    const SDL_Rect *const boardRect
 );
 
 GameTimer InitGameTimer();
