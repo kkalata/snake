@@ -193,6 +193,7 @@ SnakeSegment *GetMovedSnakeSegment(
     SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
     memcpy(movedSnakeSegment, snakeSegment, sizeof(SnakeSegment));
     MoveSnakeSegment(movedSnakeSegment);
+    return movedSnakeSegment;
 }
 
 void KillSnake(
