@@ -96,7 +96,13 @@ void RenderBoard(
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
-    SnakeKillReason snakeKillReason
+    SnakeKillReason snakeKillReason,
+    Uint32 redDotAppearTime
+);
+void RenderRedDotAppearTimeBar(
+    GameWindow *window,
+    const int descriptionWidth,
+    const float timeLeft
 );
 void DestroyGame(
     Game *game
@@ -176,6 +182,10 @@ void PlaceRedDot(
     RedDot *redDot,
     Snake *snake,
     GameTimer timer
+);
+int RedDotVisible(
+    Uint32 appearTime,
+    const GameTimer timer
 );
 void RenderRedDot(
     GameWindow *window,

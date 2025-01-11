@@ -164,9 +164,12 @@ void RenderGameWindow(
         SDL_RenderFillRect(game->window.renderer, NULL);
         RenderBoard(&game->window, &game->boardRect);
         RenderBlueDot(&game->window, &game->blueDot, &game->boardRect);
-        RenderRedDot(&game->window, &game->redDot, &game->boardRect);
+        if (RedDotVisible(game->redDot.appearTime, game->timer))
+        {
+            RenderRedDot(&game->window, &game->redDot, &game->boardRect);
+        }
         RenderSnake(&game->window, &game->snake, &game->boardRect);
-        RenderStatusSection(&game->window, &game->timer, game->snake.killed);
+        RenderStatusSection(&game->window, &game->timer, game->snake.killed, game->redDot.appearTime);
         SDL_RenderPresent(game->window.renderer);
         game->window.timeSinceLastRender = 0;
     }
@@ -185,7 +188,8 @@ void RenderBoard(
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
-    SnakeKillReason snakeKillReason
+    SnakeKillReason snakeKillReason,
+    Uint32 redDotAppearTime
 )
 {
     SDL_Rect statusSectionRect;
@@ -228,6 +232,31 @@ void RenderStatusSection(
         
         DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
     }
+    else if (RedDotVisible(redDotAppearTime, *timer))
+    {
+        sprintf(statusSectionContent, "RED DOT");
+        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+        RenderRedDotAppearTimeBar(
+            window,
+            strlen(statusSectionContent) * CHAR_SIZE,
+            (float)(redDotAppearTime - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
+        );
+    }
+}
+
+void RenderRedDotAppearTimeBar(
+    GameWindow *window,
+    const int descriptionWidth,
+    const float timeLeft
+)
+{
+    SDL_Rect redDotAppearTimeBar;
+    redDotAppearTimeBar.x = 2 * STATUS_MARGIN + descriptionWidth + CHAR_SIZE;
+    redDotAppearTimeBar.y = SCREEN_HEIGHT - 2 * STATUS_MARGIN - CHAR_SIZE;
+    redDotAppearTimeBar.w = (SCREEN_WIDTH - 4 * STATUS_MARGIN - descriptionWidth - CHAR_SIZE) * timeLeft;
+    redDotAppearTimeBar.h = CHAR_SIZE;
+    SDL_SetRenderDrawColor(window->renderer, 255, 255, 255, 255); // fill with white color
+    SDL_RenderFillRect(window->renderer, &redDotAppearTimeBar);
 }
 
 void DestroyGame(

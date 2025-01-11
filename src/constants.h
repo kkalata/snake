@@ -29,3 +29,5 @@
 
 #define RED_DOT_MIN_APPEAR_DELAY 30000 // milliseconds
 #define RED_DOT_MAX_APPEAR_DELAY 60000 // milliseconds
+
+#define RED_DOT_DISPLAY_TIME 15000 // milliseconds

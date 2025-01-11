@@ -15,6 +15,14 @@ void PlaceRedDot(
     redDot->appearTime = timer.timeElapsed + RedDotAppearDelay();
 }
 
+int RedDotVisible(
+    Uint32 appearTime,
+    const GameTimer timer
+)
+{
+    return appearTime >= timer.timeElapsed && appearTime < timer.timeElapsed + RED_DOT_DISPLAY_TIME;
+}
+
 void RenderRedDot(
     GameWindow *window,
     RedDot *redDot,
