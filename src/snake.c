@@ -242,6 +242,7 @@ void CloseGameWindow(
     SDL_DestroyTexture(window->snakeSkin);
     SDL_DestroyRenderer(window->renderer);
     SDL_DestroyWindow(window->window);
+    SDL_Quit();
 }
 
 int main(int argc, char **argv)
