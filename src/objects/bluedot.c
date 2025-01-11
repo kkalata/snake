@@ -9,13 +9,13 @@ void PlaceBlueDot(
     do
     {   
         dotOutsideOfSnake = 1;
-        blueDot->x = rand() % BOARD_SECTION_WIDTH; // random number between 0 and board width
-        blueDot->y = rand() % BOARD_SECTION_HEIGHT; // random number between 0 and board height
+        blueDot->pos.x = rand() % BOARD_SECTION_WIDTH; // random number between 0 and board width
+        blueDot->pos.y = rand() % BOARD_SECTION_HEIGHT; // random number between 0 and board height
         
         SnakeSegment *snakeSegment = snake->segment;
         do
         {
-            if (snakeSegment->x == blueDot->x && snakeSegment->y == blueDot->y)
+            if (snakeSegment->pos.x == blueDot->pos.x && snakeSegment->pos.y == blueDot->pos.y)
             {
                 dotOutsideOfSnake = 0;
                 break;
@@ -32,8 +32,8 @@ void RenderBlueDot(
 )
 {
     SDL_Rect blueDotRect;
-    blueDotRect.x = boardRect->x + blueDot->x * SNAKE_SEGMENT_SIZE;
-    blueDotRect.y = boardRect->y + blueDot->y * SNAKE_SEGMENT_SIZE;
+    blueDotRect.x = boardRect->x + blueDot->pos.x * SNAKE_SEGMENT_SIZE;
+    blueDotRect.y = boardRect->y + blueDot->pos.y * SNAKE_SEGMENT_SIZE;
     blueDotRect.w = SNAKE_SEGMENT_SIZE;
     blueDotRect.h = SNAKE_SEGMENT_SIZE;
 

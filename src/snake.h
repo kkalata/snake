@@ -21,9 +21,13 @@ typedef struct {
     Uint32 timeDelta;
 } GameTimer;
 
-typedef struct SnakeSegment {
+typedef struct {
     int x;
     int y;
+} Position;
+
+typedef struct SnakeSegment {
+    Position pos;
     char direction;
     char turn;
     struct SnakeSegment *next;
@@ -45,8 +49,7 @@ typedef struct {
 } Snake;
 
 typedef struct {
-    int x;
-    int y;
+    Position pos;
 } BlueDot;
 
 typedef struct {
