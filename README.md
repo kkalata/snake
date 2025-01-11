@@ -10,7 +10,7 @@ The game is being written as a part of basics of computer programming classes at
     - [x] Detection of the snake hitting itself
     - [x] Display elapsed time and fulfilled requirements
 2. Optional
-    - [ ] A. Lengthening of the snake (1 pt)
+    - [x] A. Lengthening of the snake (1 pt)
     - [ ] B. Speedup (1 pt)
     - [ ] C. Red dot bonus (2 pts, requires A-B)
     - [ ] D. Points (1 pt, requires A-C)
