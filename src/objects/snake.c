@@ -181,7 +181,7 @@ void MoveSnake(
     snake->timeSinceLastSpeedup += timer.timeDelta;
     while (snake->timeSinceLastMove >= snake->cooldown)
     {
-        EatBlueDot(snake, blueDot);
+        int blueDotEaten = EatBlueDot(snake, blueDot);
         KillSnake(snake);
         if (!snake->killed)
         {
@@ -210,7 +210,10 @@ void MoveSnake(
         }
         else
         {
-            DetachLastSnakeSegment(snake);
+            if (blueDotEaten)
+            {
+                DetachLastSnakeSegment(snake);
+            }
             break;
         }
     }
