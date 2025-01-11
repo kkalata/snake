@@ -103,6 +103,9 @@ void TurnSnake(
 void AutoTurnSnakeSegment(
     SnakeSegment *snakeSegment
 );
+SnakeSegment *GetMovedSnakeSegment(
+    SnakeSegment *snakeSegment
+);
 void KillSnake(
     Snake *snake
 );

@@ -157,7 +157,6 @@ int GameLoop(
     if (!game->snake.killed)
     {
         MoveSnake(&game->snake, game->timer);
-        KillSnake(&game->snake);
     }
     SDL_Delay(1);
     return !quitRequested;

@@ -159,46 +159,91 @@ void MoveSnake(
     snake->timeSinceLastMove += timer.timeDelta;
     while (snake->timeSinceLastMove >= SNAKE_COOLDOWN)
     {
-        SnakeSegment *snakeSegment = snake->segment;
-        do
-        {   
-            MoveSnakeSegment(snakeSegment);
-            snakeSegment = snakeSegment->next;
-        } while (snakeSegment != snake->segment);
-
-        snakeSegment = snake->segment->previous;
-        while (snakeSegment != snake->segment)
+        KillSnake(snake);
+        if (!snake->killed)
         {
-            snakeSegment->turn = snakeSegment->previous->turn;
-            snakeSegment = snakeSegment->previous;
+            SnakeSegment *snakeSegment = snake->segment;
+            do
+            {   
+                MoveSnakeSegment(snakeSegment);
+                snakeSegment = snakeSegment->next;
+            } while (snakeSegment != snake->segment);
+
+            snakeSegment = snake->segment->previous;
+            while (snakeSegment != snake->segment)
+            {
+                snakeSegment->turn = snakeSegment->previous->turn;
+                snakeSegment = snakeSegment->previous;
+            }
+            snake->segment->turn = '\0';
+            
+            snake->timeSinceLastMove -= SNAKE_COOLDOWN;
         }
-        snake->segment->turn = '\0';
-        
-        snake->timeSinceLastMove -= SNAKE_COOLDOWN;
+        else
+        {
+            break;
+        }
     }
+}
+
+SnakeSegment *GetMovedSnakeSegment(
+    SnakeSegment *snakeSegment
+)
+{
+    SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
+    memcpy(movedSnakeSegment, snakeSegment, sizeof(SnakeSegment));
+    MoveSnakeSegment(movedSnakeSegment);
 }
 
 void KillSnake(
     Snake *snake
 )
 {
-    SnakeSegment *firstSnakeSegment = snake->segment;
-    SnakeSegment *snakeSegment = snake->segment->next;
-    if (firstSnakeSegment->x < 0 || firstSnakeSegment->x > BOARD_SECTION_WIDTH - 1 ||
-        firstSnakeSegment->y < 0 || firstSnakeSegment->y > BOARD_SECTION_HEIGHT - 1)
+    // The kill conditions are checked prospectively,
+    // therefore move the snake segments indepedently from the rest of the snake
+    SnakeSegment *firstSnakeSegmentMoved = GetMovedSnakeSegment(snake->segment);
+    
+    if (firstSnakeSegmentMoved->x < 0 || firstSnakeSegmentMoved->x > BOARD_SECTION_WIDTH - 1 ||
+        firstSnakeSegmentMoved->y < 0 || firstSnakeSegmentMoved->y > BOARD_SECTION_HEIGHT - 1)
     {
         snake->killed = HIT_WALL;
-        return;
     }
-    do
-    {
-        if (firstSnakeSegment->x == snakeSegment->x && firstSnakeSegment->y == snakeSegment->y)
+    else {
+        SnakeSegment *snakeSegment = snake->segment->next;
+        do
         {
-            snake->killed = HIT_ITSELF;
-            return;
-        }
-        snakeSegment = snakeSegment->next;
-    } while (snakeSegment != firstSnakeSegment);
+            if (
+                firstSnakeSegmentMoved->x == snakeSegment->x
+                && firstSnakeSegmentMoved->y == snakeSegment->y
+            )
+            {
+                // There is a chance that the head of the snake occupies the space just freed by its tails
+                if (snakeSegment->next == snake->segment)
+                {   
+                    SnakeSegment *lastSnakeSegmentMoved = GetMovedSnakeSegment(snakeSegment);
+                    if (
+                        firstSnakeSegmentMoved->x == lastSnakeSegmentMoved->x
+                        && firstSnakeSegmentMoved->y == lastSnakeSegmentMoved->y
+                    )
+                    {
+                        snake->killed = HIT_ITSELF;
+                    }
+                    free(lastSnakeSegmentMoved);
+                }
+                else
+                {
+                    snake->killed = HIT_ITSELF;
+                }
+            }
+            if (snake->killed)
+            {
+                break;
+            }
+            snakeSegment = snakeSegment->next;
+        } while (snakeSegment != snake->segment);
+    }
+
+    free(firstSnakeSegmentMoved);
 }
 
 void RenderSnake(
