@@ -97,6 +97,16 @@ void CloseGameWindow(
 void CreateSnake(
     Snake *const snake
 );
+void CreateSnakeSegment(
+    Snake *const snake,
+    const int x,
+    const int y,
+    const int direction
+);
+void AttachSnakeSegment(
+    Snake *const snake,
+    SnakeSegment *snakeSegment
+);
 void RenderSnake(
     GameWindow *window,
     const Snake *const snake,
@@ -114,10 +124,11 @@ void TurnSnake(
 void AutoTurnSnakeSegment(
     SnakeSegment *snakeSegment
 );
-SnakeSegment *GetMovedSnakeSegment(
-    SnakeSegment *snakeSegment
+SnakeSegment *GetSnakeSegment(
+    SnakeSegment *snakeSegment,
+    int moveSnakeSegment
 );
-void EatBlueDot(
+int EatBlueDot(
     Snake *snake,
     BlueDot *blueDot
 );

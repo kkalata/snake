@@ -8,33 +8,51 @@ void CreateSnake(
     snake->killed = ALIVE;
     snake->timeSinceLastMove = 0;
 
-    SnakeSegment *snakeSegment = NULL;
-    SnakeSegment *previousSnakeSegment = NULL;
-
     for (int snakeSegmentI = 0; snakeSegmentI < SNAKE_INIT_LENGTH; snakeSegmentI++)
     {
-        snakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
+        CreateSnakeSegment(
+            snake,
+            SNAKE_INIT_POS_X + snakeSegmentI,
+            SNAKE_INIT_POS_Y,
+            SNAKE_INIT_DIRECTION
+        );
+    }
+}
 
-        snakeSegment->next = snake->segment;
-        if (snake->segment == NULL)
-        {
-            snake->segment = snakeSegment;
-            snakeSegment->previous = snakeSegment;
-        }
-        else
-        {
-            previousSnakeSegment->next = snakeSegment;
-            snake->segment->previous = snakeSegment;
+void CreateSnakeSegment(
+    Snake *const snake,
+    const int x,
+    const int y,
+    const int direction
+)
+{
+    SnakeSegment *snakeSegment = NULL;
 
-            snakeSegment->previous = previousSnakeSegment;
-        }
+    snakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
 
-        snakeSegment->x = SNAKE_INIT_POS_X + snakeSegmentI;
-        snakeSegment->y = SNAKE_INIT_POS_Y;
-        snakeSegment->direction = SNAKE_INIT_DIRECTION;
-        snakeSegment->turn = '\0';
-        
-        previousSnakeSegment = snakeSegment;
+    AttachSnakeSegment(snake, snakeSegment);
+    snakeSegment->x = x;
+    snakeSegment->y = y;
+    snakeSegment->direction = direction;
+    snakeSegment->turn = '\0';
+}
+
+void AttachSnakeSegment(
+    Snake *const snake,
+    SnakeSegment *snakeSegment
+)
+{
+    snakeSegment->next = snake->segment;
+    if (snake->segment == NULL)
+    {
+        snake->segment = snakeSegment;
+        snakeSegment->previous = snakeSegment;
+    }
+    else
+    {
+        snakeSegment->previous = snake->segment->previous;
+        snake->segment->previous->next = snakeSegment;
+        snake->segment->previous = snakeSegment;
     }
 }
 
@@ -163,13 +181,23 @@ void MoveSnake(
         KillSnake(snake);
         if (!snake->killed)
         {
-            EatBlueDot(snake, blueDot);
+            int blueDotEaten = EatBlueDot(snake, blueDot);
             SnakeSegment *snakeSegment = snake->segment;
+            SnakeSegment *newSnakeSegment = NULL;
+            if (blueDotEaten)
+            {
+                newSnakeSegment = GetSnakeSegment(snake->segment->previous, 0);
+            }
             do
             {   
                 MoveSnakeSegment(snakeSegment);
                 snakeSegment = snakeSegment->next;
             } while (snakeSegment != snake->segment);
+
+            if (blueDotEaten)
+            {
+                AttachSnakeSegment(snake, newSnakeSegment);
+            }
 
             snakeSegment = snake->segment->previous;
             while (snakeSegment != snake->segment)
@@ -188,7 +216,7 @@ void MoveSnake(
     }
 }
 
-void EatBlueDot(
+int EatBlueDot(
     Snake *snake,
     BlueDot *blueDot
 )
@@ -196,16 +224,22 @@ void EatBlueDot(
     if (snake->segment->x == blueDot->x && snake->segment->y == blueDot->y)
     {
         PlaceBlueDot(blueDot, snake);
+        return 1;
     }
+    return 0;
 }
 
-SnakeSegment *GetMovedSnakeSegment(
-    SnakeSegment *snakeSegment
+SnakeSegment *GetSnakeSegment(
+    SnakeSegment *snakeSegment,
+    int moveSnakeSegment
 )
 {
     SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
     memcpy(movedSnakeSegment, snakeSegment, sizeof(SnakeSegment));
-    MoveSnakeSegment(movedSnakeSegment);
+    if (moveSnakeSegment)
+    {
+        MoveSnakeSegment(movedSnakeSegment);
+    }
     return movedSnakeSegment;
 }
 
@@ -215,7 +249,7 @@ void KillSnake(
 {
     // The kill conditions are checked prospectively,
     // therefore move the snake segments indepedently from the rest of the snake
-    SnakeSegment *firstSnakeSegmentMoved = GetMovedSnakeSegment(snake->segment);
+    SnakeSegment *firstSnakeSegmentMoved = GetSnakeSegment(snake->segment, 1);
     
     if (firstSnakeSegmentMoved->x < 0 || firstSnakeSegmentMoved->x > BOARD_SECTION_WIDTH - 1 ||
         firstSnakeSegmentMoved->y < 0 || firstSnakeSegmentMoved->y > BOARD_SECTION_HEIGHT - 1)
@@ -234,7 +268,7 @@ void KillSnake(
                 // There is a chance that the head of the snake occupies the space just freed by its tails
                 if (snakeSegment->next == snake->segment)
                 {   
-                    SnakeSegment *lastSnakeSegmentMoved = GetMovedSnakeSegment(snakeSegment);
+                    SnakeSegment *lastSnakeSegmentMoved = GetSnakeSegment(snakeSegment, 1);
                     if (
                         firstSnakeSegmentMoved->x == lastSnakeSegmentMoved->x
                         && firstSnakeSegmentMoved->y == lastSnakeSegmentMoved->y
