@@ -23,4 +23,6 @@
 #define SNAKE_INIT_DIRECTION 'l' // which direction snake moves just after the game starts
 #define SNAKE_INIT_LENGTH 3
 #define SNAKE_SEGMENT_SIZE 20
-#define SNAKE_COOLDOWN 100 // milliseconds
+#define SNAKE_INIT_COOLDOWN 200 // milliseconds
+#define SNAKE_SPEEDUP_INTERVAL 60000 // milliseconds
+#define SNAKE_COOLDOWN_CHANGE_RATE 0.8 // 20% faster

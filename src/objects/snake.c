@@ -7,6 +7,8 @@ void CreateSnake(
     snake->segment = NULL;
     snake->killed = ALIVE;
     snake->timeSinceLastMove = 0;
+    snake->timeSinceLastSpeedup = 0;
+    snake->cooldown = SNAKE_INIT_COOLDOWN;
 
     for (int snakeSegmentI = 0; snakeSegmentI < SNAKE_INIT_LENGTH; snakeSegmentI++)
     {
@@ -176,7 +178,8 @@ void MoveSnake(
 )
 {
     snake->timeSinceLastMove += timer.timeDelta;
-    while (snake->timeSinceLastMove >= SNAKE_COOLDOWN)
+    snake->timeSinceLastSpeedup += timer.timeDelta;
+    while (snake->timeSinceLastMove >= snake->cooldown)
     {
         EatBlueDot(snake, blueDot);
         KillSnake(snake);
@@ -197,7 +200,13 @@ void MoveSnake(
             }
             snake->segment->turn = '\0';
             
-            snake->timeSinceLastMove -= SNAKE_COOLDOWN;
+            snake->timeSinceLastMove -= snake->cooldown;
+
+            if (snake->timeSinceLastSpeedup >= SNAKE_SPEEDUP_INTERVAL)
+            {
+                snake->cooldown *= SNAKE_COOLDOWN_CHANGE_RATE;
+                snake->timeSinceLastSpeedup -= SNAKE_SPEEDUP_INTERVAL;
+            }
         }
         else
         {
@@ -346,4 +355,6 @@ void DestroySnake(
     snake->segment = NULL;
     snake->killed = ALIVE;
     snake->timeSinceLastMove = 0;
+    snake->timeSinceLastSpeedup = 0;
+    snake->cooldown = SNAKE_INIT_COOLDOWN;
 }

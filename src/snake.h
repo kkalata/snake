@@ -39,6 +39,8 @@ typedef enum {
 typedef struct {
     SnakeSegment *segment;
     Uint32 timeSinceLastMove;
+    Uint32 timeSinceLastSpeedup;
+    float cooldown;
     SnakeKillReason killed;
 } Snake;
 
