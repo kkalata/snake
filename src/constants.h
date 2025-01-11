@@ -1,5 +1,6 @@
 #define SCREEN_WIDTH 640 // pixels
 #define SCREEN_HEIGHT 480 // pixels
+#define FRAMES_PER_SECOND 30
 
 #define GAME_TITLE "Snake" // displayed in the title bar
 

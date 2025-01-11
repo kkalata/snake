@@ -9,6 +9,7 @@
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    Uint32 timeSinceLastRender;
     SDL_Surface *font;
     SDL_Texture *snakeSkin;
 } GameWindow;

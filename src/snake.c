@@ -66,6 +66,7 @@ int CreateGameWindow(
         SDL_Quit();
         return 0;
     }
+    window->timeSinceLastRender = 0;
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(window->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -110,13 +111,18 @@ int GameLoop(
     {
         GetTimeDelta(&game->timer);
     }
-
-    SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
-    SDL_RenderFillRect(game->window.renderer, NULL);
-    RenderBoard(&game->window, &game->boardRect);
-    RenderSnake(&game->window, &game->snake, &game->boardRect);
-    RenderStatusSection(&game->window, &game->timer, game->snake.killed);
-    SDL_RenderPresent(game->window.renderer);
+    
+    if (game->window.timeSinceLastRender > 1000 / FRAMES_PER_SECOND || game->window.timeSinceLastRender == 0)
+    {
+        SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
+        SDL_RenderFillRect(game->window.renderer, NULL);
+        RenderBoard(&game->window, &game->boardRect);
+        RenderSnake(&game->window, &game->snake, &game->boardRect);
+        RenderStatusSection(&game->window, &game->timer, game->snake.killed);
+        SDL_RenderPresent(game->window.renderer);
+        game->window.timeSinceLastRender = 0;
+    }
+    game->window.timeSinceLastRender += game->timer.timeDelta;
 
     while (SDL_PollEvent(&event))
     {
@@ -153,6 +159,7 @@ int GameLoop(
         MoveSnake(&game->snake, game->timer);
         KillSnake(&game->snake);
     }
+    SDL_Delay(1);
     return !quitRequested;
 }
 
@@ -217,6 +224,7 @@ void DestroyGame(
     Game *game
 )
 {
+    game->window.timeSinceLastRender = 0;
     DestroySnake(&game->snake);
 }
 
