@@ -26,3 +26,6 @@
 #define SNAKE_INIT_COOLDOWN 200 // milliseconds
 #define SNAKE_SPEEDUP_INTERVAL 60000 // milliseconds
 #define SNAKE_COOLDOWN_CHANGE_RATE 0.8 // 20% faster
+
+#define RED_DOT_MIN_APPEAR_DELAY 30000 // milliseconds
+#define RED_DOT_MAX_APPEAR_DELAY 60000 // milliseconds

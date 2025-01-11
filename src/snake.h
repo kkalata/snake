@@ -53,11 +53,17 @@ typedef struct {
 } BlueDot;
 
 typedef struct {
+    Position pos;
+    Uint32 appearTime;
+} RedDot;
+
+typedef struct {
     GameWindow window;
     SDL_Rect boardRect;
     GameTimer timer;
     Snake snake;
     BlueDot blueDot;
+    RedDot redDot;
 } Game;
 
 SDL_Rect GetTextRect(
@@ -147,6 +153,15 @@ void DestroySnake(
     Snake *snake
 );
 
+Position PlaceDot(
+    Snake *snake
+);
+void RenderDot(
+    GameWindow *window,
+    const Position pos,
+    const SDL_Rect *const boardRect
+);
+
 void PlaceBlueDot(
     BlueDot *blueDot,
     Snake *snake
@@ -154,6 +169,17 @@ void PlaceBlueDot(
 void RenderBlueDot(
     GameWindow *window,
     BlueDot *blueDot,
+    const SDL_Rect *const boardRect
+);
+
+void PlaceRedDot(
+    RedDot *redDot,
+    Snake *snake,
+    GameTimer timer
+);
+void RenderRedDot(
+    GameWindow *window,
+    RedDot *redDot,
     const SDL_Rect *const boardRect
 );
 

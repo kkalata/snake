@@ -96,9 +96,10 @@ void CreateGame(
     Game *game
 )
 {
+    game->timer = InitGameTimer();
     CreateSnake(&game->snake);
     PlaceBlueDot(&game->blueDot, &game->snake);
-    game->timer = InitGameTimer();
+    PlaceRedDot(&game->redDot, &game->snake, game->timer);
 }
 
 int GameLoop(
@@ -163,6 +164,7 @@ void RenderGameWindow(
         SDL_RenderFillRect(game->window.renderer, NULL);
         RenderBoard(&game->window, &game->boardRect);
         RenderBlueDot(&game->window, &game->blueDot, &game->boardRect);
+        RenderRedDot(&game->window, &game->redDot, &game->boardRect);
         RenderSnake(&game->window, &game->snake, &game->boardRect);
         RenderStatusSection(&game->window, &game->timer, game->snake.killed);
         SDL_RenderPresent(game->window.renderer);
