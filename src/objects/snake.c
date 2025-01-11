@@ -153,6 +153,7 @@ void MoveSnakeSegment(
 
 void MoveSnake(
     Snake *snake,
+    BlueDot *blueDot,
     GameTimer timer
 )
 {
@@ -162,6 +163,7 @@ void MoveSnake(
         KillSnake(snake);
         if (!snake->killed)
         {
+            EatBlueDot(snake, blueDot);
             SnakeSegment *snakeSegment = snake->segment;
             do
             {   
@@ -183,6 +185,17 @@ void MoveSnake(
         {
             break;
         }
+    }
+}
+
+void EatBlueDot(
+    Snake *snake,
+    BlueDot *blueDot
+)
+{
+    if (snake->segment->x == blueDot->x && snake->segment->y == blueDot->y)
+    {
+        PlaceBlueDot(blueDot, snake);
     }
 }
 

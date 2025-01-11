@@ -104,6 +104,7 @@ void RenderSnake(
 );
 void MoveSnake(
     Snake *snake,
+    BlueDot *blueDot,
     GameTimer timer
 );
 void TurnSnake(
@@ -115,6 +116,10 @@ void AutoTurnSnakeSegment(
 );
 SnakeSegment *GetMovedSnakeSegment(
     SnakeSegment *snakeSegment
+);
+void EatBlueDot(
+    Snake *snake,
+    BlueDot *blueDot
 );
 void KillSnake(
     Snake *snake
