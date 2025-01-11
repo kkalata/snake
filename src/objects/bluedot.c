@@ -10,6 +10,16 @@ void PlaceBlueDot(
     {
         blueDot->x = rand() % BOARD_SECTION_WIDTH; // random number between 0 and board width
         blueDot->y = rand() % BOARD_SECTION_HEIGHT; // random number between 0 and board height
+        
+        SnakeSegment *snakeSegment = snake->segment;
+        do
+        {
+            if (snakeSegment->x == blueDot->x && snakeSegment->y == blueDot->y)
+            {
+                dotOutsideOfSnake = 0;
+                break;
+            }
+        } while (snakeSegment != snake->segment);
     } while (!dotOutsideOfSnake);
 }
 
