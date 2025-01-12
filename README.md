@@ -13,7 +13,7 @@ The game is being written as a part of basics of computer programming classes at
     - [x] A. Lengthening of the snake (1 pt)
     - [x] B. Speedup (1 pt)
     - [x] C. Red dot bonus (2 pts, requires A-B)
-    - [ ] D. Points (1 pt, requires A-C)
+    - [x] D. Points (1 pt, requires A-C)
     - [ ] E. Saving and loading the game (2 pts, requires A-D)
     - [ ] F. Best scores (1 pt, requires A-D)
     - [ ] G. Fancy graphics effects (1 pt, requires A-C)
