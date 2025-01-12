@@ -69,6 +69,7 @@ typedef struct {
     GameWindow window;
     SDL_Rect boardRect;
     GameTimer timer;
+    Uint32 pointsScored;
     Snake snake;
     BlueDot blueDot;
     RedDot redDot;
@@ -104,7 +105,8 @@ void RenderBoard(
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
-    SnakeKillReason snakeKillReason,
+    Uint32 pointsScored,
+    SnakeKillReason snakeKillReason,    
     const RedDot *redDot
 );
 void RenderRedDotAppearTimeBar(
@@ -140,7 +142,7 @@ void RenderSnake(
 void MoveSnake(
     Snake *snake
 );
-void AdvanceSnake(
+Uint32 AdvanceSnake(
     Snake *snake,
     BlueDot *blueDot,
     RedDot *redDot,

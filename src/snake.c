@@ -97,6 +97,7 @@ void CreateGame(
 )
 {
     game->timer = InitGameTimer();
+    game->pointsScored = 0;
     CreateSnake(&game->snake);
     PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
     SetRedDotParams(&game->redDot, game->timer);
@@ -150,7 +151,7 @@ int GameLoop(
     }
     if (!game->snake.killed)
     {
-        AdvanceSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
+        game->pointsScored += AdvanceSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
     }
     SDL_Delay(1);
     return !quitRequested;
@@ -171,7 +172,7 @@ void RenderGameWindow(
             RenderRedDot(&game->window, &game->redDot, &game->boardRect);
         }
         RenderSnake(&game->window, &game->snake, &game->boardRect);
-        RenderStatusSection(&game->window, &game->timer, game->snake.killed, &game->redDot);
+        RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot);
         SDL_RenderPresent(game->window.renderer);
         game->window.timeSinceLastRender = 0;
     }
@@ -190,6 +191,7 @@ void RenderBoard(
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
+    Uint32 pointsScored,
     SnakeKillReason snakeKillReason,
     const RedDot *redDot
 )
@@ -243,6 +245,11 @@ void RenderStatusSection(
             strlen(statusSectionContent) * CHAR_SIZE,
             (float)(redDot->appearTime + RED_DOT_DISPLAY_TIME - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
         );
+    }
+    else
+    {
+        sprintf(statusSectionContent, "Points: %u", pointsScored);
+        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
     }
 }
 

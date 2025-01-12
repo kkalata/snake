@@ -216,13 +216,15 @@ void MoveSnake(
     snake->segment->turn = '\0';
 }
 
-void AdvanceSnake(
+Uint32 AdvanceSnake(
     Snake *snake,
     BlueDot *blueDot,
     RedDot *redDot,
     GameTimer timer
 )
 {
+    Uint32 pointsScored = 0;
+
     snake->timeSinceLastMove += timer.timeDelta;
     snake->timeSinceLastSpeedup += timer.timeDelta;
     while (snake->timeSinceLastMove >= snake->cooldown)
@@ -231,11 +233,13 @@ void AdvanceSnake(
         int blueDotEaten = EatBlueDot(snake, blueDot);
         if (blueDotEaten)
         {
+            pointsScored += BLUE_DOT_POINTS;
             PlaceBlueDot(blueDot, snake, redDot);
         }
         int redDotEaten = EatRedDot(snake, redDot);
         if (redDotEaten)
         {
+            pointsScored += RED_DOT_POINTS;
             SetRedDotParams(redDot, timer);
         }
         AutoTurnSnake(snake);
@@ -259,6 +263,7 @@ void AdvanceSnake(
             break;
         }
     }
+    return pointsScored;
 }
 
 int EatBlueDot(
