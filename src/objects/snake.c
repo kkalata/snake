@@ -186,7 +186,7 @@ void MoveSnake(
         int blueDotEaten = EatBlueDot(snake, blueDot);
         if (blueDotEaten)
         {
-            PlaceDot(&blueDot->pos, snake, redDot->pos);
+            PlaceBlueDot(blueDot, snake, redDot);
         }
         int redDotEaten = EatRedDot(snake, redDot);
         if (redDotEaten)

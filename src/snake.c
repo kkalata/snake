@@ -98,7 +98,7 @@ void CreateGame(
 {
     game->timer = InitGameTimer();
     CreateSnake(&game->snake);
-    PlaceDot(&game->blueDot.pos, &game->snake, game->redDot.pos);
+    PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
     SetRedDotParams(&game->redDot, game->timer);
 }
 
