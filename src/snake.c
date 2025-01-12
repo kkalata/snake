@@ -150,7 +150,7 @@ int GameLoop(
     }
     if (!game->snake.killed)
     {
-        MoveSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
+        AdvanceSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
     }
     SDL_Delay(1);
     return !quitRequested;

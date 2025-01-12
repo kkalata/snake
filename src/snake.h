@@ -138,6 +138,9 @@ void RenderSnake(
     const SDL_Rect *const boardRect
 );
 void MoveSnake(
+    Snake *snake
+);
+void AdvanceSnake(
     Snake *snake,
     BlueDot *blueDot,
     RedDot *redDot,

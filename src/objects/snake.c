@@ -172,6 +172,26 @@ void MoveSnakeSegment(
 }
 
 void MoveSnake(
+    Snake *snake
+)
+{
+    SnakeSegment *snakeSegment = snake->segment;
+    do
+    {   
+        MoveSnakeSegment(snakeSegment);
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != snake->segment);
+
+    snakeSegment = snake->segment->previous;
+    while (snakeSegment != snake->segment)
+    {
+        snakeSegment->turn = snakeSegment->previous->turn;
+        snakeSegment = snakeSegment->previous;
+    }
+    snake->segment->turn = '\0';
+}
+
+void AdvanceSnake(
     Snake *snake,
     BlueDot *blueDot,
     RedDot *redDot,
@@ -196,20 +216,7 @@ void MoveSnake(
         KillSnake(snake);
         if (!snake->killed)
         {
-            SnakeSegment *snakeSegment = snake->segment;
-            do
-            {   
-                MoveSnakeSegment(snakeSegment);
-                snakeSegment = snakeSegment->next;
-            } while (snakeSegment != snake->segment);
-
-            snakeSegment = snake->segment->previous;
-            while (snakeSegment != snake->segment)
-            {
-                snakeSegment->turn = snakeSegment->previous->turn;
-                snakeSegment = snakeSegment->previous;
-            }
-            snake->segment->turn = '\0';
+            MoveSnake(snake);
 
             if (snake->timeSinceLastSpeedup >= SNAKE_SPEEDUP_INTERVAL)
             {
