@@ -12,17 +12,31 @@ void PlaceRedDot(
     GameTimer timer
 )
 {
-    redDot->pos = PlaceDot(snake, blueDot->pos);
-    redDot->appearTime = timer.timeElapsed + RedDotAppearDelay();
-    redDot->snakeBehavior = (SnakeBehavior) (rand() % BEHAVIOR_COUNT);
+    if (!redDot->visible)
+    {
+        if (timer.timeElapsed >= redDot->appearTime)
+        {
+            redDot->visible = 1;
+            PlaceDot(&redDot->pos, snake, blueDot->pos);
+        }
+    }
+    else
+    {
+        if (timer.timeElapsed >= redDot->appearTime + RED_DOT_DISPLAY_TIME)
+        {
+            SetRedDotParams(redDot, timer);
+        }
+    }
 }
 
-int RedDotVisible(
-    Uint32 appearTime,
-    const GameTimer timer
+void SetRedDotParams(
+    RedDot *redDot,
+    GameTimer timer
 )
 {
-    return appearTime >= timer.timeElapsed && appearTime < timer.timeElapsed + RED_DOT_DISPLAY_TIME;
+    redDot->appearTime = timer.timeElapsed + RedDotAppearDelay();;
+    redDot->visible = 0;
+    redDot->snakeBehavior = (SnakeBehavior) (rand() % BEHAVIOR_COUNT);
 }
 
 void RenderRedDot(

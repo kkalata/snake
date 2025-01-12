@@ -98,8 +98,8 @@ void CreateGame(
 {
     game->timer = InitGameTimer();
     CreateSnake(&game->snake);
-    PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
-    PlaceRedDot(&game->redDot, &game->snake, &game->blueDot, game->timer);
+    PlaceDot(&game->blueDot.pos, &game->snake, game->redDot.pos);
+    SetRedDotParams(&game->redDot, game->timer);
 }
 
 int GameLoop(
@@ -113,6 +113,8 @@ int GameLoop(
     {
         GetTimeDelta(&game->timer);
     }
+
+    PlaceRedDot(&game->redDot, &game->snake, &game->blueDot, game->timer);
     
     RenderGameWindow(game);
 
@@ -164,12 +166,12 @@ void RenderGameWindow(
         SDL_RenderFillRect(game->window.renderer, NULL);
         RenderBoard(&game->window, &game->boardRect);
         RenderBlueDot(&game->window, &game->blueDot, &game->boardRect);
-        if (RedDotVisible(game->redDot.appearTime, game->timer))
+        if (game->redDot.visible)
         {
             RenderRedDot(&game->window, &game->redDot, &game->boardRect);
         }
         RenderSnake(&game->window, &game->snake, &game->boardRect);
-        RenderStatusSection(&game->window, &game->timer, game->snake.killed, game->redDot.appearTime);
+        RenderStatusSection(&game->window, &game->timer, game->snake.killed, &game->redDot);
         SDL_RenderPresent(game->window.renderer);
         game->window.timeSinceLastRender = 0;
     }
@@ -189,7 +191,7 @@ void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
     SnakeKillReason snakeKillReason,
-    Uint32 redDotAppearTime
+    const RedDot *redDot
 )
 {
     SDL_Rect statusSectionRect;
@@ -232,14 +234,14 @@ void RenderStatusSection(
         
         DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
     }
-    else if (RedDotVisible(redDotAppearTime, *timer))
+    else if (redDot->visible)
     {
         sprintf(statusSectionContent, "RED DOT");
         DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
         RenderRedDotAppearTimeBar(
             window,
             strlen(statusSectionContent) * CHAR_SIZE,
-            (float)(redDotAppearTime - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
+            (float)(redDot->appearTime + RED_DOT_DISPLAY_TIME - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
         );
     }
 }

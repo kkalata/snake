@@ -61,6 +61,7 @@ typedef enum {
 typedef struct {
     Position pos;
     Uint32 appearTime;
+    Uint8 visible;
     SnakeBehavior snakeBehavior;
 } RedDot;
 
@@ -104,7 +105,7 @@ void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
     SnakeKillReason snakeKillReason,
-    Uint32 redDotAppearTime
+    const RedDot *redDot
 );
 void RenderRedDotAppearTimeBar(
     GameWindow *window,
@@ -171,7 +172,8 @@ void DestroySnake(
     Snake *snake
 );
 
-Position PlaceDot(
+void PlaceDot(
+    Position *dotPos,
     Snake *snake,
     Position otherDotPos
 );
@@ -198,9 +200,9 @@ void PlaceRedDot(
     BlueDot *blueDot,
     GameTimer timer
 );
-int RedDotVisible(
-    Uint32 appearTime,
-    const GameTimer timer
+void SetRedDotParams(
+    RedDot *redDot,
+    GameTimer timer
 );
 void RenderRedDot(
     GameWindow *window,

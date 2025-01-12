@@ -186,12 +186,12 @@ void MoveSnake(
         int blueDotEaten = EatBlueDot(snake, blueDot);
         if (blueDotEaten)
         {
-            PlaceBlueDot(blueDot, snake, redDot);
+            PlaceDot(&blueDot->pos, snake, redDot->pos);
         }
         int redDotEaten = EatRedDot(snake, redDot);
         if (redDotEaten)
         {
-            PlaceRedDot(redDot, snake, blueDot, timer);
+            SetRedDotParams(redDot, timer);
         }
         KillSnake(snake);
         if (!snake->killed)
@@ -263,7 +263,7 @@ int EatRedDot(
     RedDot *redDot
 )
 {
-    if (snake->segment->pos.x == redDot->pos.x && snake->segment->pos.y == redDot->pos.y)
+    if (redDot->visible && snake->segment->pos.x == redDot->pos.x && snake->segment->pos.y == redDot->pos.y)
     {
         switch (redDot->snakeBehavior)
         {

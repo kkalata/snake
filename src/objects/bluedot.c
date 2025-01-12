@@ -1,23 +1,22 @@
 #include "../snake.h"
 
-Position PlaceDot(
+void PlaceDot(
+    Position *dotPos,
     Snake *snake,
     Position otherDotPos
 )
 {
-    Position pos;
-
     int dotUnderSomeObject;
     do
     {   
         dotUnderSomeObject = 0;
-        pos.x = rand() % BOARD_SECTION_WIDTH; // random number between 0 and board width
-        pos.y = rand() % BOARD_SECTION_HEIGHT; // random number between 0 and board height
+        dotPos->x = rand() % BOARD_SECTION_WIDTH; // random number between 0 and board width
+        dotPos->y = rand() % BOARD_SECTION_HEIGHT; // random number between 0 and board height
         
         SnakeSegment *snakeSegment = snake->segment;
         do
         {
-            if (snakeSegment->pos.x == pos.x && snakeSegment->pos.y == pos.y)
+            if (snakeSegment->pos.x == dotPos->x && snakeSegment->pos.y == dotPos->y)
             {
                 dotUnderSomeObject = 1;
                 break;
@@ -25,13 +24,11 @@ Position PlaceDot(
             snakeSegment = snakeSegment->next;
         } while (snakeSegment != snake->segment);
 
-        if (otherDotPos.x == pos.x && otherDotPos.y == pos.y)
+        if (otherDotPos.x == dotPos->x && otherDotPos.y == dotPos->y)
         {
             dotUnderSomeObject = 1;
         }
     } while (dotUnderSomeObject);
-
-    return pos;
 }
 
 void PlaceBlueDot(
@@ -40,7 +37,7 @@ void PlaceBlueDot(
     RedDot *redDot
 )
 {
-    blueDot->pos = PlaceDot(snake, redDot->pos);
+    PlaceDot(&blueDot->pos, snake, redDot->pos);
 }
 
 void RenderDot(
