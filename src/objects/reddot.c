@@ -14,6 +14,7 @@ void PlaceRedDot(
 {
     redDot->pos = PlaceDot(snake, blueDot->pos);
     redDot->appearTime = timer.timeElapsed + RedDotAppearDelay();
+    redDot->snakeBehavior = (SnakeBehavior) (rand() % BEHAVIOR_COUNT);
 }
 
 int RedDotVisible(

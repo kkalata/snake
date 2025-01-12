@@ -52,9 +52,16 @@ typedef struct {
     Position pos;
 } BlueDot;
 
+typedef enum {
+    SNAKE_SHORTENING,
+    SNAKE_SLOWING_DOWN,
+    BEHAVIOR_COUNT // this one is for easy counting of behaviors
+} SnakeBehavior;
+
 typedef struct {
     Position pos;
     Uint32 appearTime;
+    SnakeBehavior snakeBehavior;
 } RedDot;
 
 typedef struct {
@@ -149,6 +156,10 @@ SnakeSegment *GetSnakeSegment(
 int EatBlueDot(
     Snake *snake,
     BlueDot *blueDot
+);
+int EatRedDot(
+    Snake *snake,
+    RedDot *redDot
 );
 void KillSnake(
     Snake *snake

@@ -31,3 +31,4 @@
 #define RED_DOT_MAX_APPEAR_DELAY 60000 // milliseconds
 
 #define RED_DOT_DISPLAY_TIME 15000 // milliseconds
+#define RED_DOT_SNAKE_SEGMENT_DETACH_COUNT 3

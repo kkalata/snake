@@ -182,10 +182,16 @@ void MoveSnake(
     snake->timeSinceLastSpeedup += timer.timeDelta;
     while (snake->timeSinceLastMove >= snake->cooldown)
     {
+        snake->timeSinceLastMove -= snake->cooldown;
         int blueDotEaten = EatBlueDot(snake, blueDot);
         if (blueDotEaten)
         {
             PlaceBlueDot(blueDot, snake, redDot);
+        }
+        int redDotEaten = EatRedDot(snake, redDot);
+        if (redDotEaten)
+        {
+            PlaceRedDot(redDot, snake, blueDot, timer);
         }
         KillSnake(snake);
         if (!snake->killed)
@@ -204,8 +210,6 @@ void MoveSnake(
                 snakeSegment = snakeSegment->previous;
             }
             snake->segment->turn = '\0';
-            
-            snake->timeSinceLastMove -= snake->cooldown;
 
             if (snake->timeSinceLastSpeedup >= SNAKE_SPEEDUP_INTERVAL)
             {
@@ -249,6 +253,41 @@ int EatBlueDot(
         }
         newSnakeSegment->turn = '\0';
         AttachSnakeSegment(snake, newSnakeSegment);
+        return 1;
+    }
+    return 0;
+}
+
+int EatRedDot(
+    Snake *snake,
+    RedDot *redDot
+)
+{
+    if (snake->segment->pos.x == redDot->pos.x && snake->segment->pos.y == redDot->pos.y)
+    {
+        switch (redDot->snakeBehavior)
+        {
+            case SNAKE_SLOWING_DOWN:
+                snake->cooldown /= SNAKE_COOLDOWN_CHANGE_RATE;
+                break;
+            case SNAKE_SHORTENING:
+                int snakeSegmentCount = 0;
+                int snakeSegmentMinCount = SNAKE_INIT_LENGTH + RED_DOT_SNAKE_SEGMENT_DETACH_COUNT;
+                SnakeSegment *snakeSegment = snake->segment;
+                do
+                {
+                    snakeSegmentCount++;
+                    snakeSegment = snakeSegment->next;
+                } while (snakeSegment != snake->segment && snakeSegmentCount < snakeSegmentMinCount);
+                if (snakeSegmentCount >= snakeSegmentMinCount)
+                {
+                    for (int snakeSegmentI = 0; snakeSegmentI < RED_DOT_SNAKE_SEGMENT_DETACH_COUNT; snakeSegmentI++)
+                    {
+                        DetachLastSnakeSegment(snake);
+                    }
+                }
+                break;
+        }
         return 1;
     }
     return 0;
