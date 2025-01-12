@@ -11,6 +11,7 @@
 #define SNAKE_SKIN_FILEPATH "./snakeskin.bmp"
 
 #define STATUS_MARGIN 8 // margin between window border and status section border
+#define STATUS_LINES 2
 #define STATUS_HEIGHT 40
 
 #define IMPLEMENTED_REQUIREMENTS_HEADER "Implemented requirements:"

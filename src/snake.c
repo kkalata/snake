@@ -208,37 +208,27 @@ void RenderStatusSection(
     char statusSectionContent[SCREEN_WIDTH];
     
     sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
-    DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
+    RenderStatusSectionInfo(window, statusSectionContent, 0, LEFT);
 
     if (snakeKillReason != ALIVE || !redDot->visible)
     {
         sprintf(statusSectionContent, "Points: %u", pointsScored);
-        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+        RenderStatusSectionInfo(window, statusSectionContent, 1, LEFT);
     }
 
     if (snakeKillReason == ALIVE && !redDot->visible)
     {
         sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS_HEADER);
-        DrawString(
-            window,
-            SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
-            SCREEN_HEIGHT - 40,
-            statusSectionContent
-        );
+        RenderStatusSectionInfo(window, statusSectionContent, 0, RIGHT);
 
         sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS);
-        DrawString(
-            window,
-            SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
-            SCREEN_HEIGHT - 24,
-            statusSectionContent
-        );   
+        RenderStatusSectionInfo(window, statusSectionContent, 1, RIGHT);
     }
 
     if (snakeKillReason == ALIVE && redDot->visible)
     {
         sprintf(statusSectionContent, "RED DOT");
-        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+        RenderStatusSectionInfo(window, statusSectionContent, 1, LEFT);
         RenderRedDotAppearTimeBar(
             window,
             strlen(statusSectionContent) * CHAR_SIZE,
@@ -261,14 +251,29 @@ void RenderStatusSection(
                 break;
         }
         strcat(statusSectionContent, " Press N to retry or ESC to quit.");
-        
-        DrawString(
-            window,
-            SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
-            SCREEN_HEIGHT - 24,
-            statusSectionContent
-        );
+        RenderStatusSectionInfo(window, statusSectionContent, 1, RIGHT);
     }   
+}
+
+void RenderStatusSectionInfo(
+    GameWindow *window,
+    char *content,
+    int line,
+    StatusSectionAlignment alignment
+)
+{
+    int xOffset;
+    int yOffset = SCREEN_HEIGHT - (STATUS_LINES - line + 1) * STATUS_MARGIN - (STATUS_LINES - line) * CHAR_SIZE;
+    switch (alignment)
+    {
+        case LEFT:
+            xOffset = 2 * STATUS_MARGIN;
+            break;
+        case RIGHT:
+            xOffset = SCREEN_WIDTH - strlen(content) * CHAR_SIZE - 2 * STATUS_MARGIN;
+            break;
+    }
+    DrawString(window, xOffset, yOffset, content);
 }
 
 void RenderRedDotAppearTimeBar(

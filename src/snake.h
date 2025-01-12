@@ -65,6 +65,11 @@ typedef struct {
     SnakeBehavior snakeBehavior;
 } RedDot;
 
+typedef enum {
+    LEFT,
+    RIGHT
+} StatusSectionAlignment;
+
 typedef struct {
     GameWindow window;
     SDL_Rect boardRect;
@@ -108,6 +113,12 @@ void RenderStatusSection(
     Uint32 pointsScored,
     SnakeKillReason snakeKillReason,    
     const RedDot *redDot
+);
+void RenderStatusSectionInfo(
+    GameWindow *window,
+    char *content,
+    int line,
+    StatusSectionAlignment alignment
 );
 void RenderRedDotAppearTimeBar(
     GameWindow *window,
