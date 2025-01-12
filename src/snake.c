@@ -210,14 +210,42 @@ void RenderStatusSection(
     sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
     DrawString(window, 16, SCREEN_HEIGHT - 40, statusSectionContent);
 
-    sprintf(statusSectionContent, IMPLEMENDED_REQUIREMENTS);
-    DrawString(
-        window,
-        SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
-        SCREEN_HEIGHT - 40,
-        statusSectionContent
-    );
-    
+    if (snakeKillReason != ALIVE || !redDot->visible)
+    {
+        sprintf(statusSectionContent, "Points: %u", pointsScored);
+        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+    }
+
+    if (snakeKillReason == ALIVE && !redDot->visible)
+    {
+        sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS_HEADER);
+        DrawString(
+            window,
+            SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
+            SCREEN_HEIGHT - 40,
+            statusSectionContent
+        );
+
+        sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS);
+        DrawString(
+            window,
+            SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
+            SCREEN_HEIGHT - 24,
+            statusSectionContent
+        );   
+    }
+
+    if (snakeKillReason == ALIVE && redDot->visible)
+    {
+        sprintf(statusSectionContent, "RED DOT");
+        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
+        RenderRedDotAppearTimeBar(
+            window,
+            strlen(statusSectionContent) * CHAR_SIZE,
+            (float)(redDot->appearTime + RED_DOT_DISPLAY_TIME - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
+        );
+    } 
+
     if (snakeKillReason != ALIVE)
     {
         switch (snakeKillReason)
@@ -234,23 +262,13 @@ void RenderStatusSection(
         }
         strcat(statusSectionContent, " Press N to retry or ESC to quit.");
         
-        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
-    }
-    else if (redDot->visible)
-    {
-        sprintf(statusSectionContent, "RED DOT");
-        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
-        RenderRedDotAppearTimeBar(
+        DrawString(
             window,
-            strlen(statusSectionContent) * CHAR_SIZE,
-            (float)(redDot->appearTime + RED_DOT_DISPLAY_TIME - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
+            SCREEN_WIDTH - strlen(statusSectionContent) * CHAR_SIZE - 16, // align to the right
+            SCREEN_HEIGHT - 24,
+            statusSectionContent
         );
-    }
-    else
-    {
-        sprintf(statusSectionContent, "Points: %u", pointsScored);
-        DrawString(window, 16, SCREEN_HEIGHT - 24, statusSectionContent);
-    }
+    }   
 }
 
 void RenderRedDotAppearTimeBar(

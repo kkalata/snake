@@ -13,7 +13,8 @@
 #define STATUS_MARGIN 8 // margin between window border and status section border
 #define STATUS_HEIGHT 40
 
-#define IMPLEMENDED_REQUIREMENTS "Implemented requirements: all mandatory, some optional (A-C)"
+#define IMPLEMENTED_REQUIREMENTS_HEADER "Implemented requirements:"
+#define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-C)"
 
 #define BOARD_SECTION_WIDTH 30
 #define BOARD_SECTION_HEIGHT 20
