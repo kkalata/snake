@@ -92,52 +92,81 @@ void TurnSnake(
     }
 }
 
-void AutoTurnSnakeSegment(
-    SnakeSegment *snakeSegment
+int IsSnakeHere(
+    Snake *snake,
+    Position pos
 )
 {
-    if (snakeSegment->direction == 'u' && snakeSegment->pos.y == 0)
+    SnakeSegment *snakeSegment = snake->segment;
+    do
     {
-        if (snakeSegment->pos.x == BOARD_SECTION_WIDTH - 1)
+        if (snakeSegment->pos.x == pos.x && snakeSegment->pos.y == pos.y)
         {
-            snakeSegment->turn = 'l';
+            return 1;
+        }
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != snake->segment);
+    return 0;
+}
+
+void AutoTurnSnake(
+    Snake *snake
+)
+{
+    if (snake->segment->turn)
+    {
+        return;
+    }
+
+    Position possibleSnakePos;
+    possibleSnakePos.x = snake->segment->pos.x;
+    possibleSnakePos.y = snake->segment->pos.y;
+    if (snake->segment->direction == 'u' && snake->segment->pos.y == 0)
+    {
+        possibleSnakePos.x++;
+        if (snake->segment->pos.x == BOARD_SECTION_WIDTH - 1 || IsSnakeHere(snake, possibleSnakePos))
+        {
+            snake->segment->turn = 'l';
         }
         else
         {
-            snakeSegment->turn = 'r';
+            snake->segment->turn = 'r';
         }
     }
-    else if (snakeSegment->direction == 'd' && snakeSegment->pos.y == BOARD_SECTION_HEIGHT - 1)
+    else if (snake->segment->direction == 'd' && snake->segment->pos.y == BOARD_SECTION_HEIGHT - 1)
     {
-        if (snakeSegment->pos.x == 0)
+        possibleSnakePos.x--;
+        if (snake->segment->pos.x == 0  || IsSnakeHere(snake, possibleSnakePos))
         {
-            snakeSegment->turn = 'r';
+            snake->segment->turn = 'r';
         }
         else
         {
-            snakeSegment->turn = 'l';
+            snake->segment->turn = 'l';
         }
     }
-    else if (snakeSegment->direction == 'l' && snakeSegment->pos.x == 0)
+    else if (snake->segment->direction == 'l' && snake->segment->pos.x == 0)
     {
-        if (snakeSegment->pos.y == 0)
+        possibleSnakePos.y--;
+        if (snake->segment->pos.y == 0  || IsSnakeHere(snake, possibleSnakePos))
         {
-            snakeSegment->turn = 'd';
+            snake->segment->turn = 'd';
         }
         else
         {
-            snakeSegment->turn = 'u';
+            snake->segment->turn = 'u';
         }
     }
-    else if (snakeSegment->direction == 'r' && snakeSegment->pos.x == BOARD_SECTION_WIDTH - 1)
+    else if (snake->segment->direction == 'r' && snake->segment->pos.x == BOARD_SECTION_WIDTH - 1)
     {
-        if (snakeSegment->pos.y == BOARD_SECTION_HEIGHT - 1)
+        possibleSnakePos.y++;
+        if (snake->segment->pos.y == BOARD_SECTION_HEIGHT - 1  || IsSnakeHere(snake, possibleSnakePos))
         {
-            snakeSegment->turn = 'u';
+            snake->segment->turn = 'u';
         }
         else
         {
-            snakeSegment->turn = 'd';
+            snake->segment->turn = 'd';
         }
     }
 }
@@ -146,10 +175,6 @@ void MoveSnakeSegment(
     SnakeSegment *snakeSegment
 )
 {
-    if (!snakeSegment->turn)
-    {
-        AutoTurnSnakeSegment(snakeSegment);
-    }
     if (snakeSegment->turn)
     {
         snakeSegment->direction = snakeSegment->turn;
@@ -213,6 +238,7 @@ void AdvanceSnake(
         {
             SetRedDotParams(redDot, timer);
         }
+        AutoTurnSnake(snake);
         KillSnake(snake);
         if (!snake->killed)
         {

@@ -150,8 +150,12 @@ void TurnSnake(
     Snake *snake,
     Uint32 direction
 );
-void AutoTurnSnakeSegment(
-    SnakeSegment *snakeSegment
+int IsSnakeHere(
+    Snake *snake,
+    Position pos
+);
+void AutoTurnSnake(
+    Snake *snake
 );
 SnakeSegment *GetSnakeSegment(
     SnakeSegment *snakeSegment,
