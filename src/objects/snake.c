@@ -279,13 +279,16 @@ int EatRedDot(
                     snakeSegmentCount++;
                     snakeSegment = snakeSegment->next;
                 } while (snakeSegment != snake->segment && snakeSegmentCount < snakeSegmentMinCount);
-                if (snakeSegmentCount >= snakeSegmentMinCount)
+                int snakeSegmentDetachCount = RED_DOT_SNAKE_SEGMENT_DETACH_COUNT;
+                if (snakeSegmentCount < snakeSegmentMinCount)
                 {
-                    for (int snakeSegmentI = 0; snakeSegmentI < RED_DOT_SNAKE_SEGMENT_DETACH_COUNT; snakeSegmentI++)
-                    {
-                        DetachLastSnakeSegment(snake);
-                    }
+                    snakeSegmentDetachCount = snakeSegmentCount - RED_DOT_SNAKE_SEGMENT_DETACH_COUNT;
                 }
+                for (int snakeSegmentI = 0; snakeSegmentI < snakeSegmentDetachCount; snakeSegmentI++)
+                {
+                    DetachLastSnakeSegment(snake);
+                }
+                
                 break;
         }
         return 1;
