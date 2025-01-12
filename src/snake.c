@@ -133,6 +133,13 @@ int GameLoop(
                         DestroyGame(game);
                         CreateGame(game);
                         return !quitRequested;
+                    case SDLK_s:
+                        SaveGame(game);
+                        break;
+                    case SDLK_l:
+                        DestroyGame(game);
+                        LoadGame(game);
+                        return !quitRequested;
                     case SDLK_UP:
                     case SDLK_DOWN:
                     case SDLK_LEFT:

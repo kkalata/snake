@@ -37,3 +37,5 @@
 
 #define BLUE_DOT_POINTS 100
 #define RED_DOT_POINTS 300
+
+#define SAVE_FILENAME "save.txt"

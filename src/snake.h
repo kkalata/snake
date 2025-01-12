@@ -234,3 +234,10 @@ GameTimer InitGameTimer();
 Uint32 GetTimeDelta(
     GameTimer *timer
 );
+
+void SaveGame(
+    Game *game
+);
+int LoadGame(
+    Game *game
+);
