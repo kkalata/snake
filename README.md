@@ -14,7 +14,7 @@ The game is being written as a part of basics of computer programming classes at
     - [x] B. Speedup (1 pt)
     - [x] C. Red dot bonus (2 pts, requires A-B)
     - [x] D. Points (1 pt, requires A-C)
-    - [ ] E. Saving and loading the game (2 pts, requires A-D)
+    - [x] E. Saving and loading the game (2 pts, requires A-D)
     - [ ] F. Best scores (1 pt, requires A-D)
     - [ ] G. Fancy graphics effects (1 pt, requires A-C)
     - [ ] H. Teleportation (1 pt, requires A-G)
