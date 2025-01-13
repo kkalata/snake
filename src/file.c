@@ -14,10 +14,11 @@ void SaveGame(
     fprintf(saveFile, "%u %u\n", game->timer.timeElapsed, game->pointsScored);
     fprintf(
         saveFile,
-        "%f %u %u\n",
+        "%f %u %u %u\n",
         game->snake.cooldown,
         game->snake.timeSinceLastSpeedup,
-        game->snake.timeSinceLastMove
+        game->snake.timeSinceLastMove,
+        game->snake.killed
     );
     SnakeSegment *snakeSegment = game->snake.segment;
     Uint32 snakeSegmentCount = 0;
@@ -78,10 +79,11 @@ void LoadGame(
     fscanf(saveFile, "%u %u\n", &game->timer.timeElapsed, &game->pointsScored);
     fscanf(
         saveFile,
-        "%f %u %u\n",
+        "%f %u %u %u\n",
         &game->snake.cooldown,
         &game->snake.timeSinceLastSpeedup,
-        &game->snake.timeSinceLastMove
+        &game->snake.timeSinceLastMove,
+        (int *) &game->snake.killed
     );
     Uint32 snakeSegmentCount;
     fscanf(saveFile, "%u\n", &snakeSegmentCount);
@@ -108,7 +110,7 @@ void LoadGame(
         "%hhd %d %d\n",
         &game->redDot.visible,
         &game->redDot.appearTime,
-        &game->redDot.snakeBehavior
+        (int *) &game->redDot.snakeBehavior
     );
     if (game->redDot.visible)
     {
