@@ -71,6 +71,8 @@ void LoadGame(
     }
 
     DestroyGame(game);
+    game->window.timeSinceLastRender = 0; // force render
+
     fscanf(saveFile, "%d\n", &game->seed);
     srand(game->seed);
     fscanf(saveFile, "%u %u\n", &game->timer.timeElapsed, &game->pointsScored);
