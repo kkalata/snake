@@ -111,13 +111,6 @@ int GameLoop(
 {
     SDL_Event event;
     int quitRequested = 0;
-
-    if (!game->snake.killed)
-    {
-        GetTimeDelta(&game->timer);
-    }
-
-    PlaceRedDot(&game->redDot, &game->snake, &game->blueDot, game->timer);
     
     RenderGameWindow(game);
 
@@ -134,13 +127,13 @@ int GameLoop(
                     case SDLK_n:
                         DestroyGame(game);
                         CreateGame(game);
-                        return !quitRequested;
+                        break;
                     case SDLK_s:
                         SaveGame(game);
                         break;
                     case SDLK_l:
                         LoadGame(game);
-                        return !quitRequested;
+                        break;
                     case SDLK_UP:
                     case SDLK_DOWN:
                     case SDLK_LEFT:
@@ -159,6 +152,8 @@ int GameLoop(
     }
     if (!game->snake.killed)
     {
+        GetTimeDelta(&game->timer);
+        PlaceRedDot(&game->redDot, &game->snake, &game->blueDot, game->timer);
         game->pointsScored += AdvanceSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
     }
     SDL_Delay(1);
