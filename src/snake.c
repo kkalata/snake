@@ -96,6 +96,8 @@ void CreateGame(
     Game *game
 )
 {
+    game->seed = time(NULL);
+    srand(game->seed);
     game->timer = InitGameTimer();
     game->pointsScored = 0;
     CreateSnake(&game->snake);
@@ -319,7 +321,6 @@ void CloseGameWindow(
 
 int main(int argc, char **argv)
 {
-    srand(time(NULL));
     Game game;
     if (!CreateGameWindow(&game.window))
     {

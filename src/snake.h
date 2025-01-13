@@ -74,6 +74,7 @@ typedef struct {
     GameWindow window;
     SDL_Rect boardRect;
     GameTimer timer;
+    int seed;
     Uint32 pointsScored;
     Snake snake;
     BlueDot blueDot;

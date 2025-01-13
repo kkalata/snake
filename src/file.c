@@ -10,6 +10,7 @@ void SaveGame(
         return;
     }
 
+    fprintf(saveFile, "%d\n", game->seed);
     fprintf(saveFile, "%u %u\n", game->timer.timeElapsed, game->pointsScored);
     fprintf(
         saveFile,
@@ -69,6 +70,8 @@ int LoadGame(
         return 0;
     }
 
+    fscanf(saveFile, "%d\n", &game->seed);
+    srand(game->seed);
     fscanf(saveFile, "%u %u\n", &game->timer.timeElapsed, &game->pointsScored);
     fscanf(
         saveFile,
