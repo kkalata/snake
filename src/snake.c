@@ -139,7 +139,6 @@ int GameLoop(
                         SaveGame(game);
                         break;
                     case SDLK_l:
-                        DestroyGame(game);
                         LoadGame(game);
                         return !quitRequested;
                     case SDLK_UP:

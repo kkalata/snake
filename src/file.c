@@ -60,16 +60,17 @@ void SaveGame(
     fclose(saveFile);
 }
 
-int LoadGame(
+void LoadGame(
     Game *game
 )
 {
     FILE *saveFile = fopen(SAVE_FILENAME, "r");
     if (saveFile == NULL)
     {
-        return 0;
+        return;
     }
 
+    DestroyGame(game);
     fscanf(saveFile, "%d\n", &game->seed);
     srand(game->seed);
     fscanf(saveFile, "%u %u\n", &game->timer.timeElapsed, &game->pointsScored);
@@ -117,6 +118,4 @@ int LoadGame(
         );
     }
     fclose(saveFile);
-
-    return 1;
 }

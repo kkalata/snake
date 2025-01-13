@@ -239,6 +239,6 @@ Uint32 GetTimeDelta(
 void SaveGame(
     Game *game
 );
-int LoadGame(
+void LoadGame(
     Game *game
 );
