@@ -13,6 +13,7 @@ typedef struct {
     Uint32 timeSinceLastRender;
     SDL_Surface *font;
     SDL_Texture *snakeSkin;
+    int textInputActive;
 } GameWindow;
 
 typedef struct {
@@ -71,11 +72,23 @@ typedef enum {
 } StatusSectionAlignment;
 
 typedef struct {
+    Uint32 pointsScored;
+    char *playerName;
+} BestPlayer;
+
+typedef struct {
+    BestPlayer list[BEST_PLAYER_COUNT];
+    int newBestPlayerI;
+    int listUpdated;
+} BestPlayers;
+
+typedef struct {
     GameWindow window;
     SDL_Rect boardRect;
     GameTimer timer;
     int seed;
     Uint32 pointsScored;
+    BestPlayers bestPlayers;
     Snake snake;
     BlueDot blueDot;
     RedDot redDot;
@@ -99,6 +112,17 @@ void CreateGame(
     Game *game
 );
 int GameLoop(
+    Game *game
+);
+int ProcessGameKeydowns(
+    Game *game,
+    SDL_Keycode pressedKey
+);
+void ConfirmNewBestPlayerName(
+    BestPlayers *bestPlayers,
+    SDL_Keycode pressedKey
+);
+void ProcessGameLogic(
     Game *game
 );
 void RenderGameWindow(
@@ -125,6 +149,11 @@ void RenderRedDotAppearTimeBar(
     GameWindow *window,
     const int descriptionWidth,
     const float timeLeft
+);
+void RenderLeaderboard(
+    GameWindow *window,
+    SDL_Rect *boardRect,
+    BestPlayers *bestPlayers
 );
 void DestroyGame(
     Game *game
@@ -239,6 +268,21 @@ Uint32 GetTimeDelta(
 void SaveGame(
     Game *game
 );
+void SaveBestPlayers(
+    BestPlayer bestPlayers[]
+);
 void LoadGame(
     Game *game
+);
+void LoadBestPlayers(
+    BestPlayer bestPlayers[]
+);
+
+void PrepareNewBestPlayer(
+    BestPlayers *bestPlayers,
+    Uint32 pointsScored
+);
+void AppendNewBestPlayerName(
+    BestPlayers *bestPlayers,
+    char *text
 );

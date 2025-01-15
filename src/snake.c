@@ -89,6 +89,9 @@ int CreateGameWindow(
     window->snakeSkin = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
     SDL_FreeSurface(snakeSkinCPU);
 
+    SDL_StopTextInput(); // it appears that the text input is enabled by default
+    window->textInputActive = 0;
+
     return 1;
 }
 
@@ -103,6 +106,9 @@ void CreateGame(
     CreateSnake(&game->snake);
     PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
     SetRedDotParams(&game->redDot, game->timer);
+    LoadBestPlayers(game->bestPlayers.list);
+    game->bestPlayers.newBestPlayerI = BEST_PLAYER_COUNT;
+    game->bestPlayers.listUpdated = 0;
 }
 
 int GameLoop(
@@ -118,31 +124,20 @@ int GameLoop(
     {
         switch (event.type)
         {
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.sym)
+            case SDL_TEXTINPUT:
+                if (game->window.textInputActive)
                 {
-                    case SDLK_ESCAPE:
-                        quitRequested = 1;
-                        break;
-                    case SDLK_n:
-                        DestroyGame(game);
-                        CreateGame(game);
-                        break;
-                    case SDLK_s:
-                        SaveGame(game);
-                        break;
-                    case SDLK_l:
-                        LoadGame(game);
-                        break;
-                    case SDLK_UP:
-                    case SDLK_DOWN:
-                    case SDLK_LEFT:
-                    case SDLK_RIGHT:
-                        if (!game->snake.killed)
-                        {
-                            TurnSnake(&game->snake, event.key.keysym.sym);
-                        }
-                        break;
+                    AppendNewBestPlayerName(&game->bestPlayers, event.text.text);
+                }
+                break;
+            case SDL_KEYDOWN:
+                if (!game->window.textInputActive)
+                {
+                    quitRequested = ProcessGameKeydowns(game, event.key.keysym.sym);
+                }
+                else
+                {
+                    ConfirmNewBestPlayerName(&game->bestPlayers, event.key.keysym.sym);
                 }
                 break;
             case SDL_QUIT:
@@ -150,14 +145,114 @@ int GameLoop(
                 break;
         }
     }
+
+    ProcessGameLogic(game);
+
+    SDL_Delay(1);
+    return !quitRequested;
+}
+
+int ProcessGameKeydowns(
+    Game *game,
+    SDL_Keycode pressedKey
+)
+{
+    int quitRequested = 0;
+    switch (pressedKey)
+    {
+        case SDLK_ESCAPE:
+            quitRequested = 1;
+            break;
+        case SDLK_n:
+            DestroyGame(game);
+            CreateGame(game);
+            break;
+        case SDLK_s:
+            SaveGame(game);
+            break;
+        case SDLK_l:
+            LoadGame(game);
+            break;
+        case SDLK_UP:
+        case SDLK_DOWN:
+        case SDLK_LEFT:
+        case SDLK_RIGHT:
+            if (!game->snake.killed)
+            {
+                TurnSnake(&game->snake, pressedKey);
+            }
+            break;
+    }
+    return quitRequested;
+}
+
+void ConfirmNewBestPlayerName(
+    BestPlayers *bestPlayers,
+    SDL_Keycode pressedKey
+)
+{
+    char *bestPlayerName = bestPlayers->list[bestPlayers->newBestPlayerI].playerName;
+    switch (pressedKey)
+    {
+        case SDLK_ESCAPE:
+        case SDLK_RETURN:
+            if (pressedKey == SDLK_ESCAPE)
+            {
+                strcpy(bestPlayerName, "Player");
+            }
+            SaveBestPlayers(bestPlayers->list);
+            bestPlayers->listUpdated = 1;
+            break;
+        case SDLK_BACKSPACE:
+            if (strlen(bestPlayerName) > 0)
+            {
+                bestPlayerName[strlen(bestPlayerName) - 1] = '\0';
+            }
+            break;
+    }
+}
+
+void ProcessGameLogic(
+    Game *game
+)
+{
     if (!game->snake.killed)
     {
         GetTimeDelta(&game->timer);
         PlaceRedDot(&game->redDot, &game->snake, &game->blueDot, game->timer);
         game->pointsScored += AdvanceSnake(&game->snake, &game->blueDot, &game->redDot, game->timer);
     }
-    SDL_Delay(1);
-    return !quitRequested;
+    else
+    {
+        if (game->pointsScored != 0)
+        {
+            if (!game->bestPlayers.listUpdated)
+            {
+                if (!game->window.textInputActive)
+                {
+                    PrepareNewBestPlayer(&game->bestPlayers, game->pointsScored);
+                    if (game->bestPlayers.newBestPlayerI == BEST_PLAYER_COUNT)
+                    {
+                        game->bestPlayers.listUpdated = 1;
+                    }
+                    else
+                    {
+                        SDL_StartTextInput();
+                        game->window.textInputActive = 1;
+                    }
+                }
+            }
+            else
+            {
+                SDL_StopTextInput();
+                game->window.textInputActive = 0;
+            }
+        }
+        else
+        {
+            game->bestPlayers.listUpdated = 1;
+        }
+    }
 }
 
 void RenderGameWindow(
@@ -176,6 +271,10 @@ void RenderGameWindow(
         }
         RenderSnake(&game->window, &game->snake, &game->boardRect);
         RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot);
+        if (game->snake.killed)
+        {
+            RenderLeaderboard(&game->window, &game->boardRect, &game->bestPlayers);
+        }
         SDL_RenderPresent(game->window.renderer);
         game->window.timeSinceLastRender = 0;
     }
@@ -294,12 +393,64 @@ void RenderRedDotAppearTimeBar(
     SDL_RenderFillRect(window->renderer, &redDotAppearTimeBar);
 }
 
+void RenderLeaderboard(
+    GameWindow *window,
+    SDL_Rect *boardRect,
+    BestPlayers *bestPlayers
+)
+{
+    // render background
+    SDL_Rect leaderboardSection;
+    leaderboardSection.w = boardRect->w;
+    leaderboardSection.h = (BEST_PLAYER_COUNT + 1) * (CHAR_SIZE + STATUS_MARGIN) + STATUS_MARGIN;
+    leaderboardSection.x = boardRect->x;
+    leaderboardSection.y = boardRect->y + (boardRect->h - leaderboardSection.h) / 2;
+    SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
+    SDL_RenderFillRect(window->renderer, &leaderboardSection);
+
+    // render text
+    int lineX = leaderboardSection.x + STATUS_MARGIN;
+    int lineY = leaderboardSection.y + STATUS_MARGIN;
+    char leaderboardContent[SCREEN_WIDTH];
+
+    DrawString(window, lineX, lineY, "LEADERBOARD");
+    for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
+    {
+        lineY += CHAR_SIZE + STATUS_MARGIN;
+        
+        if (bestPlayers->list[bestPlayerI].playerName != NULL)
+        {
+            sprintf(
+                leaderboardContent,
+                "%d. %u - %s",
+                bestPlayerI + 1,
+                bestPlayers->list[bestPlayerI].pointsScored,
+                bestPlayers->list[bestPlayerI].playerName
+            );
+            if (!bestPlayers->listUpdated && bestPlayerI == bestPlayers->newBestPlayerI)
+            {
+                strcat(leaderboardContent, TEXT_CURSOR);
+            }
+        }
+        else
+        {
+            sprintf(leaderboardContent, "%d.", bestPlayerI + 1);
+        }
+        DrawString(window, lineX, lineY, leaderboardContent);
+    }
+}
+
 void DestroyGame(
     Game *game
 )
 {
     game->window.timeSinceLastRender = 0;
     DestroySnake(&game->snake);
+
+    for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
+    {
+        free(game->bestPlayers.list[bestPlayerI].playerName);
+    }
 }
 
 void CloseGameWindow(

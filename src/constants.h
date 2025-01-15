@@ -39,3 +39,9 @@
 #define RED_DOT_POINTS 300
 
 #define SAVE_FILENAME "save.txt"
+
+#define BEST_PLAYERS_FILEPATH "bestplayers.txt"
+#define BEST_PLAYER_COUNT 3
+#define BEST_PLAYER_NAME_MAX_LENGTH 640
+
+#define TEXT_CURSOR "_"
