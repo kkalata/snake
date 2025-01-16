@@ -15,7 +15,7 @@
 #define STATUS_HEIGHT 40
 
 #define IMPLEMENTED_REQUIREMENTS_HEADER "Implemented requirements:"
-#define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-E)"
+#define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-F)"
 
 #define BOARD_SECTION_WIDTH 30
 #define BOARD_SECTION_HEIGHT 20
