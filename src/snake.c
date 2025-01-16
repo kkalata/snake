@@ -270,7 +270,7 @@ void RenderGameWindow(
             RenderRedDot(&game->window, &game->redDot, &game->boardRect);
         }
         RenderSnake(&game->window, &game->snake, &game->boardRect);
-        RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot);
+        RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot, game->bestPlayers.listUpdated);
         if (game->snake.killed)
         {
             RenderLeaderboard(&game->window, &game->boardRect, &game->bestPlayers);
@@ -295,7 +295,8 @@ void RenderStatusSection(
     GameTimer *timer,
     Uint32 pointsScored,
     SnakeKillReason snakeKillReason,
-    const RedDot *redDot
+    const RedDot *redDot,
+    const int bestPlayersListUpdated
 )
 {
     SDL_Rect statusSectionRect;
@@ -352,7 +353,16 @@ void RenderStatusSection(
                 sprintf(statusSectionContent, "Snake hit the wall.");
                 break;
         }
-        strcat(statusSectionContent, " Press N to retry or ESC to quit.");
+        RenderStatusSectionInfo(window, statusSectionContent, 0, RIGHT);
+
+        if (bestPlayersListUpdated)
+        {
+            sprintf(statusSectionContent, "Press N to retry or ESC to quit.");
+        }
+        else
+        {
+            sprintf(statusSectionContent, "Press ENTER to confirm the name or ESC to refuse.");
+        }
         RenderStatusSectionInfo(window, statusSectionContent, 1, RIGHT);
     }   
 }
