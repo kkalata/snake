@@ -1,14 +1,23 @@
 #include "snake.h"
 
-void LoadBestPlayers(
+void UnsetBestPlayers(
     BestPlayers *bestPlayers
 )
 {
+    bestPlayers->newBestPlayerI = BEST_PLAYER_COUNT;
+    bestPlayers->listUpdated = 0;
     for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
     {
         bestPlayers->list[bestPlayerI].pointsScored = 0;
         bestPlayers->list[bestPlayerI].playerName = NULL;
     }
+}
+
+void LoadBestPlayers(
+    BestPlayers *bestPlayers
+)
+{
+    UnsetBestPlayers(bestPlayers);
 
     FILE *bestPlayersFile = fopen(BEST_PLAYERS_FILEPATH, "r");
 
@@ -39,9 +48,6 @@ void LoadBestPlayers(
     }
 
     fclose(bestPlayersFile);
-
-    bestPlayers->newBestPlayerI = BEST_PLAYER_COUNT;
-    bestPlayers->listUpdated = 0;
 }
 
 void SaveBestPlayers(

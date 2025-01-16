@@ -275,6 +275,9 @@ void SaveBestPlayers(
 void LoadGame(
     Game *game
 );
+void UnsetBestPlayers(
+    BestPlayers *bestPlayers
+);
 void LoadBestPlayers(
     BestPlayers *bestPlayers
 );
