@@ -22,7 +22,7 @@ void LoadBestPlayers(
         fclose(bestPlayersFile);
         return;
     }
-    fseek(bestPlayersFile, SEEK_CUR, SEEK_SET);
+    rewind(bestPlayersFile);
     for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
     {
         if (feof(bestPlayersFile))
