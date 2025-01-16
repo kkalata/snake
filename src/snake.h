@@ -35,7 +35,6 @@ typedef struct {
 typedef struct SnakeSegment {
     Position pos;
     char direction;
-    char turn;
     struct SnakeSegment *next;
     struct SnakeSegment *previous;
 } SnakeSegment;
@@ -51,6 +50,7 @@ typedef struct {
     Uint32 timeSinceLastMove;
     Uint32 timeSinceLastSpeedup;
     float cooldown;
+    char turn;
     SnakeKillReason killed;
 } Snake;
 
@@ -207,7 +207,8 @@ void AutoTurnSnake(
 );
 SnakeSegment *GetSnakeSegment(
     SnakeSegment *snakeSegment,
-    int moveSnakeSegment
+    int moveSnakeSegment,
+    char snakeTurn
 );
 int EatBlueDot(
     Snake *snake,
