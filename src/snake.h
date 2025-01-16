@@ -276,7 +276,7 @@ void LoadGame(
     Game *game
 );
 void LoadBestPlayers(
-    BestPlayer bestPlayers[]
+    BestPlayers *bestPlayers
 );
 
 void PrepareNewBestPlayer(

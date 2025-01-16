@@ -68,9 +68,7 @@ void CreateGame(
     CreateSnake(&game->snake);
     PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
     SetRedDotParams(&game->redDot, game->timer);
-    LoadBestPlayers(game->bestPlayers.list);
-    game->bestPlayers.newBestPlayerI = BEST_PLAYER_COUNT;
-    game->bestPlayers.listUpdated = 0;
+    LoadBestPlayers(&game->bestPlayers);
 }
 
 int GameLoop(
