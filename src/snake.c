@@ -168,10 +168,16 @@ int ProcessGameKeydowns(
             CreateGame(game);
             break;
         case SDLK_s:
-            SaveGame(game);
+            if (!game->snake.killed)
+            {
+                SaveGame(game);
+            }
             break;
         case SDLK_l:
-            LoadGame(game);
+            if (!game->snake.killed)
+            {
+                LoadGame(game);
+            }
             break;
         case SDLK_UP:
         case SDLK_DOWN:
