@@ -46,17 +46,17 @@ void RenderGameWindow(
     {
         SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
         SDL_RenderFillRect(game->window.renderer, NULL);
-        RenderBoard(&game->window, &game->boardRect);
-        RenderBlueDot(&game->window, &game->blueDot, &game->boardRect);
+        RenderBoard(&game->window, &game->window.rect.board);
+        RenderBlueDot(&game->window, &game->blueDot, &game->window.rect.board);
         if (game->redDot.visible)
         {
-            RenderRedDot(&game->window, &game->redDot, &game->boardRect);
+            RenderRedDot(&game->window, &game->redDot, &game->window.rect.board);
         }
-        RenderSnake(&game->window, &game->snake, &game->boardRect);
+        RenderSnake(&game->window, &game->snake, &game->window.rect.board);
         RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot, game->bestPlayers.listUpdated);
         if (game->snake.killed)
         {
-            RenderLeaderboard(&game->window, &game->boardRect, &game->bestPlayers);
+            RenderLeaderboard(&game->window, &game->window.rect.board, &game->bestPlayers);
         }
         SDL_RenderPresent(game->window.renderer);
         game->window.timeSinceLastRender = 0;

@@ -51,6 +51,11 @@ int CreateGameWindow(
     window->snakeSkin = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
     SDL_FreeSurface(snakeSkinCPU);
 
+    window->rect.board.w = BOARD_SECTION_WIDTH * SNAKE_SEGMENT_SIZE;
+    window->rect.board.h = BOARD_SECTION_HEIGHT * SNAKE_SEGMENT_SIZE;
+    window->rect.board.x = (SCREEN_WIDTH - window->rect.board.w) / 2;
+    window->rect.board.y = (SCREEN_HEIGHT - window->rect.board.h - STATUS_HEIGHT - STATUS_MARGIN) / 2;
+
     SDL_StopTextInput(); // it appears that the text input is enabled by default
     window->textInputActive = 0;
 
@@ -254,10 +259,6 @@ int main(int argc, char **argv)
         CloseGameWindow(&game.window);
         return 1;
     }
-    game.boardRect.w = BOARD_SECTION_WIDTH * SNAKE_SEGMENT_SIZE;
-    game.boardRect.h = BOARD_SECTION_HEIGHT * SNAKE_SEGMENT_SIZE;
-    game.boardRect.x = (SCREEN_WIDTH - game.boardRect.w) / 2;
-    game.boardRect.y = (SCREEN_HEIGHT - game.boardRect.h - STATUS_HEIGHT - STATUS_MARGIN) / 2;
     CreateGame(&game);
     
     while (GameLoop(&game));

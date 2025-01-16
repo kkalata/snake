@@ -13,6 +13,9 @@ typedef struct {
     Uint32 timeSinceLastRender;
     SDL_Surface *font;
     SDL_Texture *snakeSkin;
+    struct {
+        SDL_Rect board;
+    } rect;
     int textInputActive;
 } GameWindow;
 
@@ -84,7 +87,6 @@ typedef struct {
 
 typedef struct {
     GameWindow window;
-    SDL_Rect boardRect;
     GameTimer timer;
     int seed;
     Uint32 pointsScored;
