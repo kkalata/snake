@@ -466,6 +466,8 @@ void DestroyGame(
     for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
     {
         free(game->bestPlayers.list[bestPlayerI].playerName);
+        game->bestPlayers.list[bestPlayerI].pointsScored = 0;
+        game->bestPlayers.list[bestPlayerI].playerName = NULL;
     }
 }
 

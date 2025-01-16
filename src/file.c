@@ -122,4 +122,8 @@ void LoadGame(
         );
     }
     fclose(saveFile);
+
+    LoadBestPlayers(game->bestPlayers.list);
+    game->bestPlayers.newBestPlayerI = BEST_PLAYER_COUNT;
+    game->bestPlayers.listUpdated = 0;
 }
