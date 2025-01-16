@@ -131,8 +131,7 @@ void RenderGameWindow(
     Game *game
 );
 void RenderBoard(
-    GameWindow *window,
-    SDL_Rect *boardRect
+    GameWindow *window
 );
 void RenderStatusSection(
     GameWindow *window,
@@ -155,7 +154,6 @@ void RenderRedDotAppearTimeBar(
 );
 void RenderLeaderboard(
     GameWindow *window,
-    SDL_Rect *boardRect,
     BestPlayers *bestPlayers
 );
 void DestroyGame(
@@ -180,8 +178,7 @@ void AttachSnakeSegment(
 );
 void RenderSnake(
     GameWindow *window,
-    const Snake *const snake,
-    const SDL_Rect *const boardRect
+    const Snake *const snake
 );
 void MoveSnake(
     Snake *snake
@@ -232,8 +229,7 @@ void PlaceDot(
 );
 void RenderDot(
     GameWindow *window,
-    const Position pos,
-    const SDL_Rect *const boardRect
+    const Position pos
 );
 
 void PlaceBlueDot(
@@ -243,8 +239,7 @@ void PlaceBlueDot(
 );
 void RenderBlueDot(
     GameWindow *window,
-    BlueDot *blueDot,
-    const SDL_Rect *const boardRect
+    BlueDot *blueDot
 );
 
 void PlaceRedDot(
@@ -259,8 +254,7 @@ void SetRedDotParams(
 );
 void RenderRedDot(
     GameWindow *window,
-    RedDot *redDot,
-    const SDL_Rect *const boardRect
+    RedDot *redDot
 );
 
 GameTimer InitGameTimer();

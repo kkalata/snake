@@ -41,10 +41,9 @@ void SetRedDotParams(
 
 void RenderRedDot(
     GameWindow *window,
-    RedDot *redDot,
-    const SDL_Rect *const boardRect
+    RedDot *redDot
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    RenderDot(window, redDot->pos, boardRect);
+    RenderDot(window, redDot->pos);
 }

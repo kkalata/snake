@@ -46,17 +46,17 @@ void RenderGameWindow(
     {
         SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
         SDL_RenderFillRect(game->window.renderer, NULL);
-        RenderBoard(&game->window, &game->window.rect.board);
-        RenderBlueDot(&game->window, &game->blueDot, &game->window.rect.board);
+        RenderBoard(&game->window);
+        RenderBlueDot(&game->window, &game->blueDot);
         if (game->redDot.visible)
         {
-            RenderRedDot(&game->window, &game->redDot, &game->window.rect.board);
+            RenderRedDot(&game->window, &game->redDot);
         }
-        RenderSnake(&game->window, &game->snake, &game->window.rect.board);
+        RenderSnake(&game->window, &game->snake);
         RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot, game->bestPlayers.listUpdated);
         if (game->snake.killed)
         {
-            RenderLeaderboard(&game->window, &game->window.rect.board, &game->bestPlayers);
+            RenderLeaderboard(&game->window, &game->bestPlayers);
         }
         SDL_RenderPresent(game->window.renderer);
         game->window.timeSinceLastRender = 0;
@@ -65,12 +65,11 @@ void RenderGameWindow(
 }
 
 void RenderBoard(
-    GameWindow *window,
-    SDL_Rect *boardRect
+    GameWindow *window
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 46, 194, 126, 255); // fill with green color
-    SDL_RenderFillRect(window->renderer, boardRect);
+    SDL_RenderFillRect(window->renderer, &window->rect.board);
 }
 
 void RenderStatusSection(
@@ -188,16 +187,15 @@ void RenderRedDotAppearTimeBar(
 
 void RenderLeaderboard(
     GameWindow *window,
-    SDL_Rect *boardRect,
     BestPlayers *bestPlayers
 )
 {
     // render background
     SDL_Rect leaderboardSection;
-    leaderboardSection.w = boardRect->w;
+    leaderboardSection.w = window->rect.board.w;
     leaderboardSection.h = (BEST_PLAYER_COUNT + 1) * (CHAR_SIZE + STATUS_MARGIN) + STATUS_MARGIN;
-    leaderboardSection.x = boardRect->x;
-    leaderboardSection.y = boardRect->y + (boardRect->h - leaderboardSection.h) / 2;
+    leaderboardSection.x = window->rect.board.x;
+    leaderboardSection.y = window->rect.board.y + (window->rect.board.h - leaderboardSection.h) / 2;
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
     SDL_RenderFillRect(window->renderer, &leaderboardSection);
 

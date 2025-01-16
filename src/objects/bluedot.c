@@ -42,13 +42,12 @@ void PlaceBlueDot(
 
 void RenderDot(
     GameWindow *window,
-    const Position pos,
-    const SDL_Rect *const boardRect
+    const Position pos
 )
 {
     SDL_Rect dotRect;
-    dotRect.x = boardRect->x + pos.x * SNAKE_SEGMENT_SIZE;
-    dotRect.y = boardRect->y + pos.y * SNAKE_SEGMENT_SIZE;
+    dotRect.x = window->rect.board.x + pos.x * SNAKE_SEGMENT_SIZE;
+    dotRect.y = window->rect.board.y + pos.y * SNAKE_SEGMENT_SIZE;
     dotRect.w = SNAKE_SEGMENT_SIZE;
     dotRect.h = SNAKE_SEGMENT_SIZE;
     SDL_RenderFillRect(window->renderer, &dotRect);
@@ -56,10 +55,9 @@ void RenderDot(
 
 void RenderBlueDot(
     GameWindow *window,
-    BlueDot *blueDot,
-    const SDL_Rect *const boardRect
+    BlueDot *blueDot
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 26, 95, 180, 255); // fill with blue color
-    RenderDot(window, blueDot->pos, boardRect);
+    RenderDot(window, blueDot->pos);
 }
