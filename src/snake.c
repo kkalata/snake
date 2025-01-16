@@ -51,6 +51,18 @@ int CreateGameWindow(
     window->snakeSkin = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
     SDL_FreeSurface(snakeSkinCPU);
 
+    SetSectionRects(window);
+
+    SDL_StopTextInput(); // it appears that the text input is enabled by default
+    window->textInputActive = 0;
+
+    return 1;
+}
+
+void SetSectionRects(
+    GameWindow *window
+)
+{
     window->rect.board.w = BOARD_SECTION_WIDTH * SNAKE_SEGMENT_SIZE;
     window->rect.board.h = BOARD_SECTION_HEIGHT * SNAKE_SEGMENT_SIZE;
     window->rect.board.x = (SCREEN_WIDTH - window->rect.board.w) / 2;
@@ -65,11 +77,6 @@ int CreateGameWindow(
     window->rect.leaderboard.h = (BEST_PLAYER_COUNT + 1) * (CHAR_SIZE + STATUS_MARGIN) + STATUS_MARGIN;
     window->rect.leaderboard.x = window->rect.board.x;
     window->rect.leaderboard.y = window->rect.board.y + (window->rect.board.h - window->rect.leaderboard.h) / 2;
-
-    SDL_StopTextInput(); // it appears that the text input is enabled by default
-    window->textInputActive = 0;
-
-    return 1;
 }
 
 void CreateGame(

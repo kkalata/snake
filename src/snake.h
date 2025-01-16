@@ -112,6 +112,9 @@ void DrawString(
 int CreateGameWindow(
     GameWindow *window
 );
+void SetSectionRects(
+    GameWindow *window
+);
 void CreateGame(
     Game *game
 );
