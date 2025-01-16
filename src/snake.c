@@ -56,6 +56,11 @@ int CreateGameWindow(
     window->rect.board.x = (SCREEN_WIDTH - window->rect.board.w) / 2;
     window->rect.board.y = (SCREEN_HEIGHT - window->rect.board.h - STATUS_HEIGHT - STATUS_MARGIN) / 2;
 
+    window->rect.statusSection.x = STATUS_MARGIN;
+    window->rect.statusSection.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
+    window->rect.statusSection.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
+    window->rect.statusSection.h = STATUS_HEIGHT;
+
     window->rect.leaderboard.w = window->rect.board.w;
     window->rect.leaderboard.h = (BEST_PLAYER_COUNT + 1) * (CHAR_SIZE + STATUS_MARGIN) + STATUS_MARGIN;
     window->rect.leaderboard.x = window->rect.board.x;

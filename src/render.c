@@ -81,14 +81,8 @@ void RenderStatusSection(
     const int bestPlayersListUpdated
 )
 {
-    SDL_Rect statusSectionRect;
-    statusSectionRect.x = STATUS_MARGIN;
-    statusSectionRect.y = SCREEN_HEIGHT - STATUS_HEIGHT - STATUS_MARGIN;
-    statusSectionRect.w = SCREEN_WIDTH - 2 * STATUS_MARGIN;
-    statusSectionRect.h = STATUS_HEIGHT;
-    
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    SDL_RenderFillRect(window->renderer, &statusSectionRect);
+    SDL_RenderFillRect(window->renderer, &window->rect.statusSection);
 
     char statusSectionContent[SCREEN_WIDTH];
     
