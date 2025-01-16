@@ -15,6 +15,7 @@ typedef struct {
     SDL_Texture *snakeSkin;
     struct {
         SDL_Rect board;
+        SDL_Rect leaderboard;
     } rect;
     int textInputActive;
 } GameWindow;

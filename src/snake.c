@@ -56,6 +56,11 @@ int CreateGameWindow(
     window->rect.board.x = (SCREEN_WIDTH - window->rect.board.w) / 2;
     window->rect.board.y = (SCREEN_HEIGHT - window->rect.board.h - STATUS_HEIGHT - STATUS_MARGIN) / 2;
 
+    window->rect.leaderboard.w = window->rect.board.w;
+    window->rect.leaderboard.h = (BEST_PLAYER_COUNT + 1) * (CHAR_SIZE + STATUS_MARGIN) + STATUS_MARGIN;
+    window->rect.leaderboard.x = window->rect.board.x;
+    window->rect.leaderboard.y = window->rect.board.y + (window->rect.board.h - window->rect.leaderboard.h) / 2;
+
     SDL_StopTextInput(); // it appears that the text input is enabled by default
     window->textInputActive = 0;
 

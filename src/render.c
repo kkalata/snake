@@ -191,17 +191,12 @@ void RenderLeaderboard(
 )
 {
     // render background
-    SDL_Rect leaderboardSection;
-    leaderboardSection.w = window->rect.board.w;
-    leaderboardSection.h = (BEST_PLAYER_COUNT + 1) * (CHAR_SIZE + STATUS_MARGIN) + STATUS_MARGIN;
-    leaderboardSection.x = window->rect.board.x;
-    leaderboardSection.y = window->rect.board.y + (window->rect.board.h - leaderboardSection.h) / 2;
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    SDL_RenderFillRect(window->renderer, &leaderboardSection);
+    SDL_RenderFillRect(window->renderer, &window->rect.leaderboard);
 
     // render text
-    int lineX = leaderboardSection.x + STATUS_MARGIN;
-    int lineY = leaderboardSection.y + STATUS_MARGIN;
+    int lineX = window->rect.leaderboard.x + STATUS_MARGIN;
+    int lineY = window->rect.leaderboard.y + STATUS_MARGIN;
     char leaderboardContent[SCREEN_WIDTH];
 
     DrawString(window, lineX, lineY, "LEADERBOARD");
