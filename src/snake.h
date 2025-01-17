@@ -32,9 +32,17 @@ typedef struct {
     int y;
 } Position;
 
+typedef enum {
+    SNAKE_NO_TURN = 0,
+    SNAKE_UP = 4,
+    SNAKE_DOWN = 2,
+    SNAKE_LEFT = 3,
+    SNAKE_RIGHT = 1
+} SnakeDirection;
+
 typedef struct SnakeSegment {
     Position pos;
-    char direction;
+    SnakeDirection direction;
     struct SnakeSegment *next;
     struct SnakeSegment *previous;
 } SnakeSegment;
@@ -50,7 +58,7 @@ typedef struct {
     Uint32 timeSinceLastMove;
     Uint32 timeSinceLastSpeedup;
     float cooldown;
-    char turn;
+    SnakeDirection turn;
     SnakeKillReason killed;
 } Snake;
 
@@ -72,8 +80,8 @@ typedef struct {
 } RedDot;
 
 typedef enum {
-    LEFT,
-    RIGHT
+    ALIGN_LEFT,
+    ALIGN_RIGHT
 } StatusSectionAlignment;
 
 typedef struct {
@@ -183,7 +191,7 @@ void CreateSnakeSegment(
     Snake *const snake,
     const int x,
     const int y,
-    const int direction
+    const SnakeDirection direction
 );
 void AttachSnakeSegment(
     Snake *const snake,
@@ -216,7 +224,7 @@ void AutoTurnSnake(
 SnakeSegment *GetSnakeSegment(
     SnakeSegment *snakeSegment,
     int moveSnakeSegment,
-    char snakeTurn
+    SnakeDirection snakeTurn
 );
 int EatBlueDot(
     Snake *snake,

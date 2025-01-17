@@ -25,7 +25,7 @@ void CreateSnakeSegment(
     Snake *const snake,
     const int x,
     const int y,
-    const int direction
+    const SnakeDirection direction
 )
 {
     SnakeSegment *snakeSegment = NULL;
@@ -65,27 +65,27 @@ void TurnSnake(
     switch (direction)
     {
         case SDLK_UP:
-            if (snake->segment->direction != 'd')
+            if (snake->segment->direction != SNAKE_DOWN)
             {
-                snake->turn = 'u';
+                snake->turn = SNAKE_UP;
             }
             break;
         case SDLK_DOWN:
-            if (snake->segment->direction != 'u')
+            if (snake->segment->direction != SNAKE_UP)
             {
-                snake->turn = 'd';
+                snake->turn = SNAKE_DOWN;
             }
             break;
         case SDLK_LEFT:
-            if (snake->segment->direction != 'r')
+            if (snake->segment->direction != SNAKE_RIGHT)
             {
-                snake->turn = 'l';
+                snake->turn = SNAKE_LEFT;
             }
             break;
         case SDLK_RIGHT:
-            if (snake->segment->direction != 'l')
+            if (snake->segment->direction != SNAKE_LEFT)
             {
-                snake->turn = 'r';
+                snake->turn = SNAKE_RIGHT;
             }
             break;
     }
@@ -120,59 +120,59 @@ void AutoTurnSnake(
     Position possibleSnakePos;
     possibleSnakePos.x = snake->segment->pos.x;
     possibleSnakePos.y = snake->segment->pos.y;
-    if (snake->segment->direction == 'u' && snake->segment->pos.y == 0)
+    if (snake->segment->direction == SNAKE_UP && snake->segment->pos.y == 0)
     {
         possibleSnakePos.x++;
         if (snake->segment->pos.x == BOARD_SECTION_WIDTH - 1 || IsSnakeHere(snake, possibleSnakePos))
         {
-            snake->turn = 'l';
+            snake->turn = SNAKE_LEFT;
         }
         else
         {
-            snake->turn = 'r';
+            snake->turn = SNAKE_RIGHT;
         }
     }
-    else if (snake->segment->direction == 'd' && snake->segment->pos.y == BOARD_SECTION_HEIGHT - 1)
+    else if (snake->segment->direction == SNAKE_DOWN && snake->segment->pos.y == BOARD_SECTION_HEIGHT - 1)
     {
         possibleSnakePos.x--;
         if (snake->segment->pos.x == 0  || IsSnakeHere(snake, possibleSnakePos))
         {
-            snake->turn = 'r';
+            snake->turn = SNAKE_RIGHT;
         }
         else
         {
-            snake->turn = 'l';
+            snake->turn = SNAKE_LEFT;
         }
     }
-    else if (snake->segment->direction == 'l' && snake->segment->pos.x == 0)
+    else if (snake->segment->direction == SNAKE_LEFT && snake->segment->pos.x == 0)
     {
         possibleSnakePos.y--;
         if (snake->segment->pos.y == 0  || IsSnakeHere(snake, possibleSnakePos))
         {
-            snake->turn = 'd';
+            snake->turn = SNAKE_DOWN;
         }
         else
         {
-            snake->turn = 'u';
+            snake->turn = SNAKE_UP;
         }
     }
-    else if (snake->segment->direction == 'r' && snake->segment->pos.x == BOARD_SECTION_WIDTH - 1)
+    else if (snake->segment->direction == SNAKE_RIGHT && snake->segment->pos.x == BOARD_SECTION_WIDTH - 1)
     {
         possibleSnakePos.y++;
         if (snake->segment->pos.y == BOARD_SECTION_HEIGHT - 1  || IsSnakeHere(snake, possibleSnakePos))
         {
-            snake->turn = 'u';
+            snake->turn = SNAKE_UP;
         }
         else
         {
-            snake->turn = 'd';
+            snake->turn = SNAKE_DOWN;
         }
     }
 }
 
 void MoveSnakeSegment(
     SnakeSegment *snakeSegment,
-    char snakeTurn
+    SnakeDirection snakeTurn
 )
 {
     if (snakeTurn)
@@ -181,16 +181,16 @@ void MoveSnakeSegment(
     }
     switch (snakeSegment->direction)
     {
-        case 'u':
+        case SNAKE_UP:
             snakeSegment->pos.y--;
             break;
-        case 'd':
+        case SNAKE_DOWN:
             snakeSegment->pos.y++;
             break;
-        case 'l':
+        case SNAKE_LEFT:
             snakeSegment->pos.x--;
             break;
-        case 'r':
+        case SNAKE_RIGHT:
             snakeSegment->pos.x++;
             break;
     }
@@ -204,7 +204,7 @@ void MoveSnake(
     do
     {   
         MoveSnakeSegment(snakeSegment, snake->turn);
-        snake->turn = '\0';
+        snake->turn = SNAKE_NO_TURN;
         snakeSegment = snakeSegment->next;
     } while (snakeSegment != snake->segment);
 
@@ -273,19 +273,19 @@ int EatBlueDot(
 {
     if (snake->segment->pos.x == blueDot->pos.x && snake->segment->pos.y == blueDot->pos.y)
     {
-        SnakeSegment *newSnakeSegment = GetSnakeSegment(snake->segment->previous, 0, '\0');
+        SnakeSegment *newSnakeSegment = GetSnakeSegment(snake->segment->previous, 0, SNAKE_NO_TURN);
         switch (newSnakeSegment->direction)
         {
-            case 'u':
+            case SNAKE_UP:
                 newSnakeSegment->pos.y++;
                 break;
-            case 'd':
+            case SNAKE_DOWN:
                 newSnakeSegment->pos.y--;
                 break;
-            case 'l':
+            case SNAKE_LEFT:
                 newSnakeSegment->pos.x++;
                 break;
-            case 'r':
+            case SNAKE_RIGHT:
                 newSnakeSegment->pos.x--;
                 break;
         }
@@ -336,7 +336,7 @@ int EatRedDot(
 SnakeSegment *GetSnakeSegment(
     SnakeSegment *snakeSegment,
     int moveSnakeSegment,
-    char snakeTurn
+    SnakeDirection snakeTurn
 )
 {
     SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));

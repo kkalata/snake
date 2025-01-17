@@ -141,27 +141,27 @@ void RenderStatusSection(
     char statusSectionContent[SCREEN_WIDTH];
     
     sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
-    RenderStatusSectionInfo(window, statusSectionContent, 0, LEFT);
+    RenderStatusSectionInfo(window, statusSectionContent, 0, ALIGN_LEFT);
 
     if (snakeKillReason != ALIVE || !redDot->visible)
     {
         sprintf(statusSectionContent, "Points: %u", pointsScored);
-        RenderStatusSectionInfo(window, statusSectionContent, 1, LEFT);
+        RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_LEFT);
     }
 
     if (snakeKillReason == ALIVE && !redDot->visible)
     {
         sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS_HEADER);
-        RenderStatusSectionInfo(window, statusSectionContent, 0, RIGHT);
+        RenderStatusSectionInfo(window, statusSectionContent, 0, ALIGN_RIGHT);
 
         sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS);
-        RenderStatusSectionInfo(window, statusSectionContent, 1, RIGHT);
+        RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_RIGHT);
     }
 
     if (snakeKillReason == ALIVE && redDot->visible)
     {
         sprintf(statusSectionContent, RED_DOT_APPEAR_BAR_DESCRIPTION);
-        RenderStatusSectionInfo(window, statusSectionContent, 1, LEFT);
+        RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_LEFT);
         RenderRedDotAppearTimeBar(
             window,
             strlen(statusSectionContent) * CHAR_SIZE,
@@ -172,10 +172,10 @@ void RenderStatusSection(
     if (snakeKillReason != ALIVE)
     {
         GetSnakeKillReasonInfo(statusSectionContent, snakeKillReason);
-        RenderStatusSectionInfo(window, statusSectionContent, 0, RIGHT);
+        RenderStatusSectionInfo(window, statusSectionContent, 0, ALIGN_RIGHT);
 
         GetGameKeyGuide(statusSectionContent, bestPlayersListUpdated);
-        RenderStatusSectionInfo(window, statusSectionContent, 1, RIGHT);
+        RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_RIGHT);
     }   
 }
 
@@ -190,10 +190,10 @@ void RenderStatusSectionInfo(
     int yOffset = window->rect.statusSection.y + STATUS_SECTION_MARGIN + line * (STATUS_SECTION_MARGIN + CHAR_SIZE);
     switch (alignment)
     {
-        case LEFT:
+        case ALIGN_LEFT:
             xOffset = 2 * STATUS_SECTION_MARGIN;
             break;
-        case RIGHT:
+        case ALIGN_RIGHT:
             xOffset = SCREEN_WIDTH - strlen(content) * CHAR_SIZE - 2 * STATUS_SECTION_MARGIN;
             break;
     }

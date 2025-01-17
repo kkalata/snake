@@ -30,7 +30,7 @@
 
 #define SNAKE_INIT_POS_X 10 // square
 #define SNAKE_INIT_POS_Y 10 // square
-#define SNAKE_INIT_DIRECTION 'l' // which direction snake moves just after the game starts
+#define SNAKE_INIT_DIRECTION SNAKE_LEFT // which direction snake moves just after the game starts
 #define SNAKE_INIT_LENGTH 3 // segments
 #define SNAKE_SEGMENT_SIZE 20 // pixels
 #define SNAKE_INIT_COOLDOWN 200 // milliseconds
