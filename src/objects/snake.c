@@ -439,8 +439,4 @@ void DestroySnake(
     } while (snake->segment->next != snake->segment);
     free(snake->segment);
     snake->segment = NULL;
-    snake->killed = ALIVE;
-    snake->timeSinceLastMove = 0;
-    snake->timeSinceLastSpeedup = 0;
-    snake->cooldown = SNAKE_INIT_COOLDOWN;
 }

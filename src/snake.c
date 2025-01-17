@@ -86,11 +86,13 @@ void CreateGame(
     game->seed = time(NULL);
     srand(game->seed);
     game->timer = InitGameTimer();
+
     game->pointsScored = 0;
+    LoadBestPlayers(&game->bestPlayers);
+
     CreateSnake(&game->snake);
     PlaceBlueDot(&game->blueDot, &game->snake, &game->redDot);
     SetRedDotParams(&game->redDot, game->timer);
-    LoadBestPlayers(&game->bestPlayers);
 }
 
 int GameLoop(
@@ -249,12 +251,7 @@ void DestroyGame(
 {
     game->window.timeSinceLastRender = 0;
     DestroySnake(&game->snake);
-
-    for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
-    {
-        free(game->bestPlayers.list[bestPlayerI].playerName);
-    }
-    UnsetBestPlayers(&game->bestPlayers);
+    DestroyBestPlayersList(game->bestPlayers.list);
 }
 
 void CloseGameWindow(

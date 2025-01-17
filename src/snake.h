@@ -292,3 +292,6 @@ void AppendNewBestPlayerName(
     BestPlayers *bestPlayers,
     char *text
 );
+void DestroyBestPlayersList(
+    BestPlayer bestPlayers[]
+);

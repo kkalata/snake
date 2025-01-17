@@ -122,3 +122,12 @@ void AppendNewBestPlayerName(
     );
 }
 
+void DestroyBestPlayersList(
+    BestPlayer bestPlayers[]
+)
+{
+    for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
+    {
+        free(bestPlayers[bestPlayerI].playerName);
+    }
+}
