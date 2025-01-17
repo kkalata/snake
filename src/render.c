@@ -160,7 +160,7 @@ void RenderStatusSection(
 
     if (snakeKillReason == ALIVE && redDot->visible)
     {
-        sprintf(statusSectionContent, "RED DOT");
+        sprintf(statusSectionContent, RED_DOT_APPEAR_BAR_DESCRIPTION);
         RenderStatusSectionInfo(window, statusSectionContent, 1, LEFT);
         RenderRedDotAppearTimeBar(
             window,
@@ -208,13 +208,13 @@ void GetSnakeKillReasonInfo(
     switch (snakeKillReason)
     {
         case UNSPECIFIED:
-            sprintf(statusSectionContent, "Snake killed.");
+            sprintf(statusSectionContent, SNAKE_DEATH_UNSPECIFIED_INFO);
             break;
         case HIT_ITSELF:
-            sprintf(statusSectionContent, "Snake hit itself.");
+            sprintf(statusSectionContent, SNAKE_HIT_ITSELF_INFO);
             break;
         case HIT_WALL:
-            sprintf(statusSectionContent, "Snake hit the wall.");
+            sprintf(statusSectionContent, SNAKE_HIT_WALL_INFO);
             break;
     }
 }
@@ -226,11 +226,11 @@ void GetGameKeyGuide(
 {
     if (bestPlayersListUpdated)
     {
-        sprintf(statusSectionContent, "Press N to retry or ESC to quit.");
+        sprintf(statusSectionContent, SNAKE_DEATH_KEY_GUIDE);
     }
     else
     {
-        sprintf(statusSectionContent, "Press ENTER to confirm the name or ESC to refuse.");
+        sprintf(statusSectionContent, LEADERBOARD_KEY_GUIDE);
     }
 }
 
@@ -263,7 +263,7 @@ void RenderLeaderboard(
     int lineY = window->rect.leaderboard.y + STATUS_SECTION_MARGIN;
     char leaderboardContent[SCREEN_WIDTH];
 
-    DrawString(window, lineX, lineY, "LEADERBOARD");
+    DrawString(window, lineX, lineY, LEADERBOARD_HEADER);
     for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
     {
         lineY += CHAR_SIZE + STATUS_SECTION_MARGIN;

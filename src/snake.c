@@ -188,7 +188,7 @@ void ConfirmNewBestPlayerName(
         case SDLK_RETURN:
             if (pressedKey == SDLK_ESCAPE)
             {
-                strcpy(bestPlayerName, "Player");
+                strcpy(bestPlayerName, BEST_PLAYER_DEFAULT_NAME);
             }
             SaveBestPlayers(bestPlayers->list);
             bestPlayers->listUpdated = 1;

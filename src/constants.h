@@ -16,8 +16,17 @@
 #define STATUS_SECTION_MARGIN 8 // margin between window border and status section border in pixels
 #define STATUS_SECTION_LINES 2
 
+// these strings are displayed in the status section
 #define IMPLEMENTED_REQUIREMENTS_HEADER "Implemented requirements:"
 #define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-F)"
+#define RED_DOT_APPEAR_BAR_DESCRIPTION "RED DOT"
+#define SNAKE_DEATH_UNSPECIFIED_INFO "Snake killed."
+#define SNAKE_HIT_ITSELF_INFO "Snake hit itself."
+#define SNAKE_HIT_WALL_INFO "Snake hit the wall."
+#define SNAKE_DEATH_KEY_GUIDE "Press N to retry or ESC to quit."
+#define LEADERBOARD_KEY_GUIDE "Press ENTER to confirm the name or ESC to refuse."
+
+#define LEADERBOARD_HEADER "LEADERBOARD"
 
 #define SNAKE_INIT_POS_X 10 // square
 #define SNAKE_INIT_POS_Y 10 // square
@@ -41,5 +50,6 @@
 #define BEST_PLAYERS_FILEPATH "bestplayers.txt"
 #define BEST_PLAYER_COUNT 3 // how much players are listed
 #define BEST_PLAYER_NAME_MAX_LENGTH 640 // chars (-1 for \0)
+#define BEST_PLAYER_DEFAULT_NAME "Player" // passed when the player refuses to enter their name
 
 #define TEXT_CURSOR "_"
