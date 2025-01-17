@@ -38,12 +38,3 @@ void SetRedDotParams(
     redDot->visible = 0;
     redDot->snakeBehavior = (SnakeBehavior) (rand() % BEHAVIOR_COUNT);
 }
-
-void RenderRedDot(
-    GameWindow *window,
-    RedDot *redDot
-)
-{
-    SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    RenderDot(window, redDot->pos);
-}

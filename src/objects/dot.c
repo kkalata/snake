@@ -30,16 +30,3 @@ void PlaceDot(
         }
     } while (dotUnderSomeObject);
 }
-
-void RenderDot(
-    GameWindow *window,
-    const Position pos
-)
-{
-    SDL_Rect dotRect;
-    dotRect.x = window->rect.board.x + pos.x * SNAKE_SEGMENT_SIZE;
-    dotRect.y = window->rect.board.y + pos.y * SNAKE_SEGMENT_SIZE;
-    dotRect.w = SNAKE_SEGMENT_SIZE;
-    dotRect.h = SNAKE_SEGMENT_SIZE;
-    SDL_RenderFillRect(window->renderer, &dotRect);
-}

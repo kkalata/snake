@@ -399,26 +399,6 @@ void KillSnake(
     free(firstSnakeSegmentMoved);
 }
 
-void RenderSnake(
-    GameWindow *window,
-    const Snake *const snake
-)
-
-{
-    SDL_Rect snakeSegmentRect;
-    snakeSegmentRect.w = SNAKE_SEGMENT_SIZE;
-    snakeSegmentRect.h = SNAKE_SEGMENT_SIZE;
-    
-    SnakeSegment *snakeSegment = snake->segment->previous;
-    do
-    {
-        snakeSegmentRect.x = window->rect.board.x + snakeSegment->pos.x * SNAKE_SEGMENT_SIZE;
-        snakeSegmentRect.y = window->rect.board.y + snakeSegment->pos.y * SNAKE_SEGMENT_SIZE;
-        SDL_RenderCopy(window->renderer, window->snakeSkin, NULL, &snakeSegmentRect);
-        snakeSegment = snakeSegment->previous;
-    } while (snakeSegment->next != snake->segment);
-}
-
 void DetachLastSnakeSegment(
     Snake *snake
 )

@@ -75,6 +75,57 @@ void RenderBoard(
     SDL_RenderFillRect(window->renderer, &window->rect.board);
 }
 
+void RenderSnake(
+    GameWindow *window,
+    const Snake *const snake
+)
+
+{
+    SDL_Rect snakeSegmentRect;
+    snakeSegmentRect.w = SNAKE_SEGMENT_SIZE;
+    snakeSegmentRect.h = SNAKE_SEGMENT_SIZE;
+    
+    SnakeSegment *snakeSegment = snake->segment->previous;
+    do
+    {
+        snakeSegmentRect.x = window->rect.board.x + snakeSegment->pos.x * SNAKE_SEGMENT_SIZE;
+        snakeSegmentRect.y = window->rect.board.y + snakeSegment->pos.y * SNAKE_SEGMENT_SIZE;
+        SDL_RenderCopy(window->renderer, window->snakeSkin, NULL, &snakeSegmentRect);
+        snakeSegment = snakeSegment->previous;
+    } while (snakeSegment->next != snake->segment);
+}
+
+void RenderDot(
+    GameWindow *window,
+    const Position pos
+)
+{
+    SDL_Rect dotRect;
+    dotRect.x = window->rect.board.x + pos.x * SNAKE_SEGMENT_SIZE;
+    dotRect.y = window->rect.board.y + pos.y * SNAKE_SEGMENT_SIZE;
+    dotRect.w = SNAKE_SEGMENT_SIZE;
+    dotRect.h = SNAKE_SEGMENT_SIZE;
+    SDL_RenderFillRect(window->renderer, &dotRect);
+}
+
+void RenderBlueDot(
+    GameWindow *window,
+    BlueDot *blueDot
+)
+{
+    SDL_SetRenderDrawColor(window->renderer, 26, 95, 180, 255); // fill with blue color
+    RenderDot(window, blueDot->pos);
+}
+
+void RenderRedDot(
+    GameWindow *window,
+    RedDot *redDot
+)
+{
+    SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
+    RenderDot(window, redDot->pos);
+}
+
 void RenderStatusSection(
     GameWindow *window,
     GameTimer *timer,
