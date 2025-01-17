@@ -187,14 +187,14 @@ void RenderStatusSectionInfo(
 )
 {
     int xOffset;
-    int yOffset = SCREEN_HEIGHT - (STATUS_LINES - line + 1) * STATUS_MARGIN - (STATUS_LINES - line) * CHAR_SIZE;
+    int yOffset = window->rect.statusSection.y + STATUS_SECTION_MARGIN + line * (STATUS_SECTION_MARGIN + CHAR_SIZE);
     switch (alignment)
     {
         case LEFT:
-            xOffset = 2 * STATUS_MARGIN;
+            xOffset = 2 * STATUS_SECTION_MARGIN;
             break;
         case RIGHT:
-            xOffset = SCREEN_WIDTH - strlen(content) * CHAR_SIZE - 2 * STATUS_MARGIN;
+            xOffset = SCREEN_WIDTH - strlen(content) * CHAR_SIZE - 2 * STATUS_SECTION_MARGIN;
             break;
     }
     DrawString(window, xOffset, yOffset, content);
@@ -241,9 +241,9 @@ void RenderRedDotAppearTimeBar(
 )
 {
     SDL_Rect redDotAppearTimeBar;
-    redDotAppearTimeBar.x = 2 * STATUS_MARGIN + descriptionWidth + CHAR_SIZE;
-    redDotAppearTimeBar.y = SCREEN_HEIGHT - 2 * STATUS_MARGIN - CHAR_SIZE;
-    redDotAppearTimeBar.w = (SCREEN_WIDTH - 4 * STATUS_MARGIN - descriptionWidth - CHAR_SIZE) * timeLeft;
+    redDotAppearTimeBar.x = 2 * STATUS_SECTION_MARGIN + descriptionWidth + CHAR_SIZE;
+    redDotAppearTimeBar.y = SCREEN_HEIGHT - 2 * STATUS_SECTION_MARGIN - CHAR_SIZE;
+    redDotAppearTimeBar.w = (SCREEN_WIDTH - 4 * STATUS_SECTION_MARGIN - descriptionWidth - CHAR_SIZE) * timeLeft;
     redDotAppearTimeBar.h = CHAR_SIZE;
     SDL_SetRenderDrawColor(window->renderer, 255, 255, 255, 255); // fill with white color
     SDL_RenderFillRect(window->renderer, &redDotAppearTimeBar);
@@ -259,14 +259,14 @@ void RenderLeaderboard(
     SDL_RenderFillRect(window->renderer, &window->rect.leaderboard);
 
     // render text
-    int lineX = window->rect.leaderboard.x + STATUS_MARGIN;
-    int lineY = window->rect.leaderboard.y + STATUS_MARGIN;
+    int lineX = window->rect.leaderboard.x + STATUS_SECTION_MARGIN;
+    int lineY = window->rect.leaderboard.y + STATUS_SECTION_MARGIN;
     char leaderboardContent[SCREEN_WIDTH];
 
     DrawString(window, lineX, lineY, "LEADERBOARD");
     for (int bestPlayerI = 0; bestPlayerI < BEST_PLAYER_COUNT; bestPlayerI++)
     {
-        lineY += CHAR_SIZE + STATUS_MARGIN;
+        lineY += CHAR_SIZE + STATUS_SECTION_MARGIN;
         
         if (bestPlayers->list[bestPlayerI].playerName != NULL)
         {
