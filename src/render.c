@@ -46,6 +46,7 @@ void RenderGameWindow(
     {
         SDL_SetRenderDrawColor(game->window.renderer, 0, 0, 0, 255); // fill with black color
         SDL_RenderFillRect(game->window.renderer, NULL);
+
         RenderBoard(&game->window);
         RenderBlueDot(&game->window, &game->blueDot);
         if (game->redDot.visible)
@@ -53,12 +54,14 @@ void RenderGameWindow(
             RenderRedDot(&game->window, &game->redDot);
         }
         RenderSnake(&game->window, &game->snake);
+
         RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot, game->bestPlayers.listUpdated);
         if (game->snake.killed)
         {
             RenderLeaderboard(&game->window, &game->bestPlayers);
         }
         SDL_RenderPresent(game->window.renderer);
+        
         game->window.timeSinceLastRender = 0;
     }
     game->window.timeSinceLastRender += game->timer.timeDelta;
@@ -117,28 +120,10 @@ void RenderStatusSection(
 
     if (snakeKillReason != ALIVE)
     {
-        switch (snakeKillReason)
-        {
-            case UNSPECIFIED:
-                sprintf(statusSectionContent, "Snake killed.");
-                break;
-            case HIT_ITSELF:
-                sprintf(statusSectionContent, "Snake hit itself.");
-                break;
-            case HIT_WALL:
-                sprintf(statusSectionContent, "Snake hit the wall.");
-                break;
-        }
+        GetSnakeKillReasonInfo(statusSectionContent, snakeKillReason);
         RenderStatusSectionInfo(window, statusSectionContent, 0, RIGHT);
 
-        if (bestPlayersListUpdated)
-        {
-            sprintf(statusSectionContent, "Press N to retry or ESC to quit.");
-        }
-        else
-        {
-            sprintf(statusSectionContent, "Press ENTER to confirm the name or ESC to refuse.");
-        }
+        GetGameKeyGuide(statusSectionContent, bestPlayersListUpdated);
         RenderStatusSectionInfo(window, statusSectionContent, 1, RIGHT);
     }   
 }
@@ -162,6 +147,40 @@ void RenderStatusSectionInfo(
             break;
     }
     DrawString(window, xOffset, yOffset, content);
+}
+
+void GetSnakeKillReasonInfo(
+    char statusSectionContent[],
+    SnakeKillReason snakeKillReason
+)
+{
+    switch (snakeKillReason)
+    {
+        case UNSPECIFIED:
+            sprintf(statusSectionContent, "Snake killed.");
+            break;
+        case HIT_ITSELF:
+            sprintf(statusSectionContent, "Snake hit itself.");
+            break;
+        case HIT_WALL:
+            sprintf(statusSectionContent, "Snake hit the wall.");
+            break;
+    }
+}
+
+void GetGameKeyGuide(
+    char statusSectionContent[],
+    int bestPlayersListUpdated
+)
+{
+    if (bestPlayersListUpdated)
+    {
+        sprintf(statusSectionContent, "Press N to retry or ESC to quit.");
+    }
+    else
+    {
+        sprintf(statusSectionContent, "Press ENTER to confirm the name or ESC to refuse.");
+    }
 }
 
 void RenderRedDotAppearTimeBar(

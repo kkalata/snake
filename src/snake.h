@@ -152,6 +152,14 @@ void RenderStatusSectionInfo(
     int line,
     StatusSectionAlignment alignment
 );
+void GetSnakeKillReasonInfo(
+    char statusSectionContent[],
+    SnakeKillReason snakeKillReason
+);
+void GetGameKeyGuide(
+    char statusSectionContent[],
+    int bestPlayersListUpdated
+);
 void RenderRedDotAppearTimeBar(
     GameWindow *window,
     const int descriptionWidth,
