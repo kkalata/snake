@@ -5,10 +5,13 @@
 #define GAME_TITLE "Snake" // displayed in the title bar
 
 #define FONT_FILEPATH "./font.bmp"
-#define FONT_ROW_SIZE 16
-#define CHAR_SIZE 8 // width and height
+#define FONT_ROW_SIZE 16 // chars in one row
+#define CHAR_SIZE 8 // width and height in pixels
 
 #define SNAKE_SKIN_FILEPATH "./snakeskin.bmp"
+
+#define BOARD_SECTION_WIDTH 30 // squares
+#define BOARD_SECTION_HEIGHT 20 // squares
 
 #define STATUS_SECTION_MARGIN 8 // margin between window border and status section border in pixels
 #define STATUS_SECTION_LINES 2
@@ -16,31 +19,27 @@
 #define IMPLEMENTED_REQUIREMENTS_HEADER "Implemented requirements:"
 #define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-F)"
 
-#define BOARD_SECTION_WIDTH 30
-#define BOARD_SECTION_HEIGHT 20
-
-#define SNAKE_INIT_POS_X 10
-#define SNAKE_INIT_POS_Y 10
+#define SNAKE_INIT_POS_X 10 // square
+#define SNAKE_INIT_POS_Y 10 // square
 #define SNAKE_INIT_DIRECTION 'l' // which direction snake moves just after the game starts
-#define SNAKE_INIT_LENGTH 3
-#define SNAKE_SEGMENT_SIZE 20
+#define SNAKE_INIT_LENGTH 3 // segments
+#define SNAKE_SEGMENT_SIZE 20 // pixels
 #define SNAKE_INIT_COOLDOWN 200 // milliseconds
 #define SNAKE_SPEEDUP_INTERVAL 60000 // milliseconds
 #define SNAKE_COOLDOWN_CHANGE_RATE 0.8 // 20% faster
 
+#define BLUE_DOT_POINTS 100
+
 #define RED_DOT_MIN_APPEAR_DELAY 30000 // milliseconds
 #define RED_DOT_MAX_APPEAR_DELAY 60000 // milliseconds
-
 #define RED_DOT_DISPLAY_TIME 15000 // milliseconds
-#define RED_DOT_SNAKE_SEGMENT_DETACH_COUNT 3
-
-#define BLUE_DOT_POINTS 100
+#define RED_DOT_SNAKE_SEGMENT_DETACH_COUNT 3 // how much segments are detached when the snake eats the red dot
 #define RED_DOT_POINTS 300
 
 #define SAVE_FILENAME "save.txt"
 
 #define BEST_PLAYERS_FILEPATH "bestplayers.txt"
-#define BEST_PLAYER_COUNT 3
-#define BEST_PLAYER_NAME_MAX_LENGTH 640
+#define BEST_PLAYER_COUNT 3 // how much players are listed
+#define BEST_PLAYER_NAME_MAX_LENGTH 640 // chars (-1 for \0)
 
 #define TEXT_CURSOR "_"
