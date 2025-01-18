@@ -1,19 +1,5 @@
 #include "snake.h"
 
-SDL_Rect GetTextRect(
-    const int x,
-    const int y,
-    const int textWidth
-)
-{
-    SDL_Rect textRect;
-    textRect.x = x;
-    textRect.y = y;
-    textRect.w = textWidth;
-    textRect.h = CHAR_SIZE;
-    return textRect;
-}
-
 void DrawString(
     GameWindow *window,
     const int x,
@@ -24,32 +10,21 @@ void DrawString(
     int textWidth = strlen(text) * CHAR_SIZE; 
 
     SDL_Rect charSourceRect, charDestRect;
-    charDestRect.x = charDestRect.y = 0;
-    charSourceRect.w = charDestRect.w = CHAR_SIZE;
-    charSourceRect.h = charDestRect.w = CHAR_SIZE;
-
-    SDL_Surface *textSubscreenCPU = SDL_CreateRGBSurface(
-        0,
-        textWidth, CHAR_SIZE,
-        32,
-        0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000
-    );
+    
+    charSourceRect.w = charSourceRect.h = CHAR_SIZE;
+    charDestRect.x = x;
+    charDestRect.y = y;
+    charDestRect.w = charDestRect.h = CHAR_SIZE;
 
     while (*text) // copy char by char
     {
         int charCode = *text & 255; // ASCII has max char code of 255
         charSourceRect.x = (charCode % FONT_ROW_SIZE) * CHAR_SIZE; // find row of the char
         charSourceRect.y = (charCode / FONT_ROW_SIZE) * CHAR_SIZE; // find column of the char
-        SDL_BlitSurface(window->font, &charSourceRect, textSubscreenCPU, &charDestRect);
+        SDL_RenderCopy(window->renderer, window->font, &charSourceRect, &charDestRect);
         charDestRect.x += CHAR_SIZE;
         text++;
     }
-
-    SDL_Texture *textSubscreenGPU = SDL_CreateTextureFromSurface(window->renderer, textSubscreenCPU);
-    SDL_Rect textDestRect = GetTextRect(x, y, textWidth);
-    SDL_RenderCopy(window->renderer, textSubscreenGPU, NULL, &textDestRect);
-    SDL_FreeSurface(textSubscreenCPU);
-    SDL_DestroyTexture(textSubscreenGPU);
 }
 
 void RenderGameWindow(

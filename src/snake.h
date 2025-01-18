@@ -11,7 +11,7 @@ typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Uint32 timeSinceLastRender;
-    SDL_Surface *font;
+    SDL_Texture *font;
     struct {
         SDL_Texture *head;
         SDL_Texture *body;
@@ -141,11 +141,6 @@ void CloseGameWindow(
     GameWindow *window
 );
 
-SDL_Rect GetTextRect(
-    const int x,
-    const int y,
-    const int textWidth
-);
 void DrawString(
     GameWindow *window,
     const int x,

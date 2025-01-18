@@ -22,35 +22,35 @@ int CreateGameWindow(
 
     SDL_SetWindowTitle(window->window, GAME_TITLE);
 
-    window->font = SDL_LoadBMP(FONT_FILEPATH);
-    if (window->font == NULL)
+    SDL_Surface *tmpSurface;
+    tmpSurface = SDL_LoadBMP(FONT_FILEPATH);
+    if (tmpSurface == NULL)
     {
         return 0;
     }
-    SDL_SetColorKey(window->font, 1, 0x000000);
-
-    SDL_Surface *snakeSkinCPU;
-    snakeSkinCPU = SDL_LoadBMP(SNAKE_SKIN_FILEPATH);
-    if (snakeSkinCPU == NULL)
+    SDL_SetColorKey(tmpSurface, 1, 0x000000);
+    window->font = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);    
+    tmpSurface = SDL_LoadBMP(SNAKE_SKIN_FILEPATH);
+    if (tmpSurface == NULL)
     {
         return 0;
     }
-    window->snakeSkin.body = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
-    snakeSkinCPU = SDL_LoadBMP(SNAKE_HEAD_FILEPATH);
-    if (snakeSkinCPU == NULL)
+    window->snakeSkin.body = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
+    tmpSurface = SDL_LoadBMP(SNAKE_HEAD_FILEPATH);
+    if (tmpSurface == NULL)
     {
         return 0;
     }
-    SDL_SetColorKey(snakeSkinCPU, 1, 0x000000);
-    window->snakeSkin.head = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
-    snakeSkinCPU = SDL_LoadBMP(SNAKE_TAIL_FILEPATH);
-    if (snakeSkinCPU == NULL)
+    SDL_SetColorKey(tmpSurface, 1, 0x000000);
+    window->snakeSkin.head = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
+    tmpSurface = SDL_LoadBMP(SNAKE_TAIL_FILEPATH);
+    if (tmpSurface == NULL)
     {
         return 0;
     }
-    SDL_SetColorKey(snakeSkinCPU, 1, 0x000000);
-    window->snakeSkin.tail = SDL_CreateTextureFromSurface(window->renderer, snakeSkinCPU);
-    SDL_FreeSurface(snakeSkinCPU);
+    SDL_SetColorKey(tmpSurface, 1, 0x000000);
+    window->snakeSkin.tail = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
+    SDL_FreeSurface(tmpSurface);
 
     SetSectionRects(window);
 
@@ -259,7 +259,7 @@ void CloseGameWindow(
     GameWindow *window
 )
 {
-    SDL_FreeSurface(window->font);
+    SDL_DestroyTexture(window->font);
     SDL_DestroyTexture(window->snakeSkin.body);
     SDL_DestroyRenderer(window->renderer);
     SDL_DestroyWindow(window->window);
