@@ -13,6 +13,7 @@
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    SDL_Event event;
     Uint32 timeSinceLastRender;
     SDL_Texture *font;
     struct {

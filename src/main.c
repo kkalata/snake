@@ -101,29 +101,28 @@ int GameLoop(
     Game *game
 )
 {
-    SDL_Event event;
     int quitRequested = 0;
     
     RenderGameWindow(game);
 
-    while (SDL_PollEvent(&event))
+    while (SDL_PollEvent(&game->window.event))
     {
-        switch (event.type)
+        switch (game->window.event.type)
         {
             case SDL_TEXTINPUT:
                 if (game->window.textInputActive)
                 {
-                    AppendNewBestPlayerName(&game->bestPlayers, event.text.text);
+                    AppendNewBestPlayerName(&game->bestPlayers, game->window.event.text.text);
                 }
                 break;
             case SDL_KEYDOWN:
                 if (!game->window.textInputActive)
                 {
-                    quitRequested = ProcessGameKeydowns(game, event.key.keysym.sym);
+                    quitRequested = ProcessGameKeydowns(game, game->window.event.key.keysym.sym);
                 }
                 else
                 {
-                    ConfirmNewBestPlayerName(&game->bestPlayers, event.key.keysym.sym);
+                    ConfirmNewBestPlayerName(&game->bestPlayers, game->window.event.key.keysym.sym);
                 }
                 break;
             case SDL_QUIT:
