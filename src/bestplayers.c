@@ -77,6 +77,7 @@ void SaveBestPlayers(
     fclose(bestPlayersFile);
 }
 
+// Move the players by 1 position and unset duplicate position
 void PrepareNewBestPlayer(
     BestPlayers *const bestPlayers,
     const Uint32 pointsScored
@@ -111,6 +112,7 @@ void PrepareNewBestPlayer(
     newBestPlayer->pointsScored = pointsScored;
 }
 
+// Append entered input to the player name
 void AppendNewBestPlayerName(
     BestPlayers *const bestPlayers,
     const char *text

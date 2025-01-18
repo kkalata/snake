@@ -171,7 +171,7 @@ SDL_Texture *GetSnakeSkinFragment(
     const SnakeSegment *const snakeSegment,
     const SnakeSegment *const firstSnakeSegment
 );
-SDL_Rect GetSnakeSegmentCenterRect(
+SDL_Rect GetSnakeSegmentMainRect(
     const SnakeSegment *const snakeSegment,
     const int isSmallSnakeSegment
 );

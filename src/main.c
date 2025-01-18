@@ -1,5 +1,6 @@
 #include "snake.h"
 
+// Init, set and load all the things related to the window itself and rendering
 int CreateGameWindow(
     GameWindow *const window
 )
@@ -64,6 +65,7 @@ int LoadBitmap(
     return 1;
 }
 
+// Set bounding boxes for window sections
 void SetSectionRects(
     GameWindow *const window
 )
@@ -84,6 +86,7 @@ void SetSectionRects(
     window->rect.leaderboard.y = window->rect.board.y + (window->rect.board.h - window->rect.leaderboard.h) / 2;
 }
 
+// Set game params (related to its logic)
 void CreateGame(
     Game *const game
 )
@@ -140,6 +143,7 @@ int GameLoop(
     return !quitRequested;
 }
 
+// Process pressed keys when game is pending
 int ProcessGameKeydowns(
     Game *const game,
     const SDL_Keycode pressedKey
@@ -180,6 +184,7 @@ int ProcessGameKeydowns(
     return quitRequested;
 }
 
+// Process Enter, Escape and Backspace in leaderboard edit mode
 void ConfirmNewBestPlayerName(
     BestPlayers *const bestPlayers,
     const SDL_Keycode pressedKey
@@ -206,6 +211,7 @@ void ConfirmNewBestPlayerName(
     }
 }
 
+// Advance the game, enter and exit leaderboard edit mode
 void ProcessGameLogic(
     Game *const game
 )

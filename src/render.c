@@ -80,7 +80,7 @@ void RenderSnake(
             && snakeSegment != snake->segment // isn't first (head)
             && snakeSegment != snake->segment->previous; // isn't last (tail)
         
-        snakeSegmentSrcRect = GetSnakeSegmentCenterRect(snakeSegment, isSmallSnakeSegment);
+        snakeSegmentSrcRect = GetSnakeSegmentMainRect(snakeSegment, isSmallSnakeSegment);
         snakeSegmentDestRect = GetSnakeSegmentDestRect(snakeSegmentSrcRect, window->rect.board, snakeSegment->pos);
 
         if (snakeSegment == snake->segment || snakeSegment == snake->segment->previous)
@@ -114,6 +114,7 @@ void RenderSnake(
     } while (snakeSegment->next != snake->segment);
 }
 
+// Get texture for specific snake segment
 SDL_Texture *GetSnakeSkinFragment(
     const GameWindow *const window,
     const SnakeSegment *const snakeSegment,
@@ -134,7 +135,8 @@ SDL_Texture *GetSnakeSkinFragment(
     }
 }
 
-SDL_Rect GetSnakeSegmentCenterRect(
+// Get bounding box of snake segment (without gap fills)
+SDL_Rect GetSnakeSegmentMainRect(
     const SnakeSegment *const snakeSegment,
     const int isSmallSnakeSegment
 )
@@ -153,6 +155,7 @@ SDL_Rect GetSnakeSegmentCenterRect(
     return snakeSegmentRect;
 }
 
+// Get bounding box of snake small segment gap fill
 SDL_Rect GetSnakeSmallSegmentFillRect(
     const SnakeSegment *const snakeSegment,
     const int front
@@ -190,6 +193,7 @@ SDL_Rect GetSnakeSmallSegmentFillRect(
     return snakeSegmentRect;
 }
 
+// Get bounding box of snake segment relative to the whole window
 SDL_Rect GetSnakeSegmentDestRect(
     const SDL_Rect snakeSegmentSrcRect,
     const SDL_Rect boardRect,
@@ -291,6 +295,7 @@ void RenderStatusSection(
     }   
 }
 
+// Render text in status section in given line and align it to left or right
 void RenderStatusSectionInfo(
     GameWindow *const window,
     const char *const content,
@@ -312,6 +317,7 @@ void RenderStatusSectionInfo(
     DrawString(window, xOffset, yOffset, content);
 }
 
+// Get description of how has the snake got killed
 void GetSnakeKillReasonInfo(
     char statusSectionContent[],
     const SnakeKillReason snakeKillReason
@@ -331,6 +337,7 @@ void GetSnakeKillReasonInfo(
     }
 }
 
+// Get specific instruction of what key should the player press
 void GetGameKeyGuide(
     char statusSectionContent[],
     const int bestPlayersListUpdated

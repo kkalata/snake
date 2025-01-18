@@ -299,6 +299,7 @@ int EatRedDot(
     return 0;
 }
 
+// Move the snake, (auto)turn it, kill it and eat the dots
 Uint32 AdvanceSnake(
     Snake *const snake,
     BlueDot *const blueDot,
