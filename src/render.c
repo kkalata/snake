@@ -44,7 +44,7 @@ void RenderGameWindow(
         }
         RenderSnake(&game->window, &game->snake);
 
-        RenderStatusSection(&game->window, &game->timer, game->pointsScored, game->snake.killed, &game->redDot, game->bestPlayers.listUpdated);
+        RenderStatusSection(&game->window, game);
         if (game->snake.killed)
         {
             RenderLeaderboard(&game->window, &game->bestPlayers);
@@ -244,11 +244,7 @@ void RenderRedDot(
 
 void RenderStatusSection(
     GameWindow *const window,
-    const GameTimer *const timer,
-    const Uint32 pointsScored,
-    const SnakeKillReason snakeKillReason,
-    const RedDot *const redDot,
-    const int bestPlayersListUpdated
+    const Game *const game
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
@@ -256,16 +252,16 @@ void RenderStatusSection(
 
     char statusSectionContent[SCREEN_WIDTH];
     
-    sprintf(statusSectionContent, "%.1f s elapsed", timer->timeElapsed / 1000.0);
+    sprintf(statusSectionContent, "%.1f s elapsed", game->timer.timeElapsed / 1000.0);
     RenderStatusSectionInfo(window, statusSectionContent, 0, ALIGN_LEFT);
 
-    if (snakeKillReason != ALIVE || !redDot->visible)
+    if (game->snake.killed != ALIVE || !game->redDot.visible)
     {
-        sprintf(statusSectionContent, "Points: %u", pointsScored);
+        sprintf(statusSectionContent, "Points: %u", game->pointsScored);
         RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_LEFT);
     }
 
-    if (snakeKillReason == ALIVE && !redDot->visible)
+    if (game->snake.killed == ALIVE && !game->redDot.visible)
     {
         sprintf(statusSectionContent, IMPLEMENTED_REQUIREMENTS_HEADER);
         RenderStatusSectionInfo(window, statusSectionContent, 0, ALIGN_RIGHT);
@@ -274,23 +270,23 @@ void RenderStatusSection(
         RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_RIGHT);
     }
 
-    if (snakeKillReason == ALIVE && redDot->visible)
+    if (game->snake.killed == ALIVE && game->redDot.visible)
     {
         sprintf(statusSectionContent, RED_DOT_APPEAR_BAR_DESCRIPTION);
         RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_LEFT);
         RenderRedDotAppearTimeBar(
             window,
             strlen(statusSectionContent) * CHAR_SIZE,
-            (float)(redDot->appearTime + RED_DOT_DISPLAY_TIME - timer->timeElapsed) / RED_DOT_DISPLAY_TIME
+            (float)(game->redDot.appearTime + RED_DOT_DISPLAY_TIME - game->timer.timeElapsed) / RED_DOT_DISPLAY_TIME
         );
     } 
 
-    if (snakeKillReason != ALIVE)
+    if (game->snake.killed != ALIVE)
     {
-        GetSnakeKillReasonInfo(statusSectionContent, snakeKillReason);
+        GetSnakeKillReasonInfo(statusSectionContent, game->snake.killed);
         RenderStatusSectionInfo(window, statusSectionContent, 0, ALIGN_RIGHT);
 
-        GetGameKeyGuide(statusSectionContent, bestPlayersListUpdated);
+        GetGameKeyGuide(statusSectionContent, game->bestPlayers.listUpdated);
         RenderStatusSectionInfo(window, statusSectionContent, 1, ALIGN_RIGHT);
     }   
 }

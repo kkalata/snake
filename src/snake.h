@@ -201,11 +201,7 @@ void RenderRedDot(
 );
 void RenderStatusSection(
     GameWindow *const window,
-    const GameTimer *const timer,
-    const Uint32 pointsScored,
-    const SnakeKillReason snakeKillReason,    
-    const RedDot *const redDot,
-    const int bestPlayersListUpdated
+    const Game *const game
 );
 void RenderStatusSectionInfo(
     GameWindow *const window,
