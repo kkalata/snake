@@ -1,3 +1,6 @@
+#ifndef SNAKE
+#define SNAKE
+
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -113,6 +116,12 @@ typedef struct {
 
 int CreateGameWindow(
     GameWindow *window
+);
+int LoadBitmap(
+    GameWindow *window,
+    SDL_Texture **texture,
+    const char *filePath,
+    int transparent
 );
 void SetSectionRects(
     GameWindow *window
@@ -337,3 +346,5 @@ void SetRedDotParams(
     RedDot *redDot,
     GameTimer timer
 );
+
+#endif

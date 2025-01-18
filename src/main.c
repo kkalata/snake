@@ -22,41 +22,41 @@ int CreateGameWindow(
 
     SDL_SetWindowTitle(window->window, GAME_TITLE);
 
-    SDL_Surface *tmpSurface;
-    tmpSurface = SDL_LoadBMP(FONT_FILEPATH);
-    if (tmpSurface == NULL)
-    {
-        return 0;
-    }
-    SDL_SetColorKey(tmpSurface, 1, 0x000000);
-    window->font = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);    
-    tmpSurface = SDL_LoadBMP(SNAKE_SKIN_FILEPATH);
-    if (tmpSurface == NULL)
-    {
-        return 0;
-    }
-    window->snakeSkin.body = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
-    tmpSurface = SDL_LoadBMP(SNAKE_HEAD_FILEPATH);
-    if (tmpSurface == NULL)
-    {
-        return 0;
-    }
-    SDL_SetColorKey(tmpSurface, 1, 0x000000);
-    window->snakeSkin.head = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
-    tmpSurface = SDL_LoadBMP(SNAKE_TAIL_FILEPATH);
-    if (tmpSurface == NULL)
-    {
-        return 0;
-    }
-    SDL_SetColorKey(tmpSurface, 1, 0x000000);
-    window->snakeSkin.tail = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
-    SDL_FreeSurface(tmpSurface);
+    if (!LoadBitmap(window, &window->font, FONT_FILEPATH, 1)) return 0;
+    if (!LoadBitmap(window, &window->snakeSkin.head, SNAKE_HEAD_FILEPATH, 1)) return 0;
+    if (!LoadBitmap(window, &window->snakeSkin.body, SNAKE_SKIN_FILEPATH, 0)) return 0;
+    if (!LoadBitmap(window, &window->snakeSkin.tail, SNAKE_TAIL_FILEPATH, 1)) return 0;
 
     SetSectionRects(window);
 
     SDL_StopTextInput(); // it appears that the text input is enabled by default
     window->textInputActive = 0;
 
+    return 1;
+}
+
+int LoadBitmap(
+    GameWindow *window,
+    SDL_Texture **texture,
+    const char *filePath,
+    int transparent
+)
+{
+    SDL_Surface *tmpSurface;
+
+    tmpSurface = SDL_LoadBMP(filePath);
+    if (tmpSurface == NULL)
+    {
+        SDL_FreeSurface(tmpSurface);
+        return 0;
+    }
+    if (transparent)
+    {
+        SDL_SetColorKey(tmpSurface, 1, 0x000000);
+    }
+    *texture = SDL_CreateTextureFromSurface(window->renderer, tmpSurface);
+
+    SDL_FreeSurface(tmpSurface);
     return 1;
 }
 
