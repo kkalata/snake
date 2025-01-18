@@ -273,7 +273,8 @@ void PlaceDot(
 );
 void RenderDot(
     GameWindow *window,
-    const Position pos
+    const Position pos,
+    const GameTimer timer
 );
 
 void PlaceBlueDot(
@@ -283,7 +284,8 @@ void PlaceBlueDot(
 );
 void RenderBlueDot(
     GameWindow *window,
-    BlueDot *blueDot
+    BlueDot *blueDot,
+    GameTimer timer
 );
 
 void PlaceRedDot(
@@ -298,7 +300,8 @@ void SetRedDotParams(
 );
 void RenderRedDot(
     GameWindow *window,
-    RedDot *redDot
+    RedDot *redDot,
+    GameTimer timer
 );
 
 GameTimer InitGameTimer();

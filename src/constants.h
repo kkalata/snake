@@ -40,6 +40,9 @@
 #define SNAKE_SPEEDUP_INTERVAL 60000 // milliseconds
 #define SNAKE_COOLDOWN_CHANGE_RATE 0.8 // 20% faster
 
+#define DOT_BLINK_INTERVAL 500 // milliseconds
+#define SMALL_DOT_MARGIN 3 // pixels
+
 #define BLUE_DOT_POINTS 100
 
 #define RED_DOT_MIN_APPEAR_DELAY 30000 // milliseconds

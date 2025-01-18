@@ -48,10 +48,10 @@ void RenderGameWindow(
         SDL_RenderFillRect(game->window.renderer, NULL);
 
         RenderBoard(&game->window);
-        RenderBlueDot(&game->window, &game->blueDot);
+        RenderBlueDot(&game->window, &game->blueDot, game->timer);
         if (game->redDot.visible)
         {
-            RenderRedDot(&game->window, &game->redDot);
+            RenderRedDot(&game->window, &game->redDot, game->timer);
         }
         RenderSnake(&game->window, &game->snake);
 
@@ -214,33 +214,41 @@ SDL_Rect GetSnakeSegmentDestRect(
 
 void RenderDot(
     GameWindow *window,
-    const Position pos
+    const Position pos,
+    const GameTimer timer
 )
 {
+    int dotMargin = 0;
+    if ((timer.timeElapsed / DOT_BLINK_INTERVAL) % 2)
+    {
+        dotMargin = SMALL_DOT_MARGIN;
+    }
     SDL_Rect dotRect;
-    dotRect.x = window->rect.board.x + pos.x * SNAKE_SEGMENT_SIZE;
-    dotRect.y = window->rect.board.y + pos.y * SNAKE_SEGMENT_SIZE;
-    dotRect.w = SNAKE_SEGMENT_SIZE;
-    dotRect.h = SNAKE_SEGMENT_SIZE;
+    dotRect.x = window->rect.board.x + pos.x * SNAKE_SEGMENT_SIZE + dotMargin;
+    dotRect.y = window->rect.board.y + pos.y * SNAKE_SEGMENT_SIZE + dotMargin;
+    dotRect.w = SNAKE_SEGMENT_SIZE - 2 * dotMargin;
+    dotRect.h = SNAKE_SEGMENT_SIZE - 2 * dotMargin;
     SDL_RenderFillRect(window->renderer, &dotRect);
 }
 
 void RenderBlueDot(
     GameWindow *window,
-    BlueDot *blueDot
+    BlueDot *blueDot,
+    GameTimer timer
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 26, 95, 180, 255); // fill with blue color
-    RenderDot(window, blueDot->pos);
+    RenderDot(window, blueDot->pos, timer);
 }
 
 void RenderRedDot(
     GameWindow *window,
-    RedDot *redDot
+    RedDot *redDot,
+    GameTimer timer
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
-    RenderDot(window, redDot->pos);
+    RenderDot(window, redDot->pos, timer);
 }
 
 void RenderStatusSection(
