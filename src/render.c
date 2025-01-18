@@ -79,7 +79,6 @@ void RenderSnake(
     GameWindow *window,
     const Snake *const snake
 )
-
 {
     SDL_Rect snakeSegmentSrcRect;
     SDL_Rect snakeSegmentDestRect;
@@ -87,48 +86,130 @@ void RenderSnake(
     SnakeSegment *snakeSegment = snake->segment->previous;
     do
     {
-        if (
-            ((snakeSegment->pos.x % 2) ^ (snakeSegment->pos.y % 2)) // compare with checker pattern
+        int isSmallSnakeSegment = ((snakeSegment->pos.x % 2) ^ (snakeSegment->pos.y % 2)) // compare with checker pattern
             && snakeSegment != snake->segment // isn't first (head)
-            && snakeSegment != snake->segment->previous // isn't last (tail)
-        )
-        {
-            snakeSegmentSrcRect.x = snakeSegmentSrcRect.y = SNAKE_SMALL_SEGMENT_MARGIN;
-            snakeSegmentSrcRect.w = snakeSegmentSrcRect.h = SNAKE_SEGMENT_SIZE - 2 * SNAKE_SMALL_SEGMENT_MARGIN;
-        }
-        else
-        {
-            snakeSegmentSrcRect.x = snakeSegmentSrcRect.y = 0;
-            snakeSegmentSrcRect.w = snakeSegmentSrcRect.h = SNAKE_SEGMENT_SIZE;
-        }
-        snakeSegmentDestRect = snakeSegmentSrcRect;
-        snakeSegmentDestRect.x += window->rect.board.x + snakeSegment->pos.x * SNAKE_SEGMENT_SIZE;
-        snakeSegmentDestRect.y += window->rect.board.y + snakeSegment->pos.y * SNAKE_SEGMENT_SIZE;
+            && snakeSegment != snake->segment->previous; // isn't last (tail)
         
-        SDL_Texture *snakeSkinFragment;
-        if (snakeSegment == snake->segment)
+        snakeSegmentSrcRect = GetSnakeSegmentCenterRect(snakeSegment, isSmallSnakeSegment);
+        snakeSegmentDestRect = GetSnakeSegmentDestRect(snakeSegmentSrcRect, window->rect.board, snakeSegment->pos);
+
+        if (snakeSegment == snake->segment || snakeSegment == snake->segment->previous)
         {
-            snakeSkinFragment = window->snakeSkin.head;
-        }
-        else if (snakeSegment == snake->segment->previous)
-        {
-            snakeSkinFragment = window->snakeSkin.tail;
+            SDL_RenderCopyEx(
+                window->renderer,
+                GetSnakeSkinFragment(window, snakeSegment, snake->segment),
+                &snakeSegmentSrcRect,
+                &snakeSegmentDestRect,
+                90 * snakeSegment->direction,
+                NULL,
+                SDL_FLIP_NONE
+            );
         }
         else
         {
-            snakeSkinFragment = window->snakeSkin.body;
+            SDL_RenderCopy(window->renderer, window->snakeSkin.body, &snakeSegmentSrcRect, &snakeSegmentDestRect);
         }
-        SDL_RenderCopyEx(
-            window->renderer,
-            snakeSkinFragment,
-            &snakeSegmentSrcRect,
-            &snakeSegmentDestRect,
-            90 * snakeSegment->direction,
-            NULL,
-            SDL_FLIP_NONE
-        );
+        if (isSmallSnakeSegment)
+        {
+            snakeSegmentSrcRect = GetSnakeSmallSegmentFillRect(snakeSegment, 1);
+            snakeSegmentDestRect = GetSnakeSegmentDestRect(snakeSegmentSrcRect, window->rect.board, snakeSegment->pos);
+            SDL_RenderCopy(window->renderer, window->snakeSkin.body, &snakeSegmentSrcRect, &snakeSegmentDestRect);
+
+            snakeSegmentSrcRect = GetSnakeSmallSegmentFillRect(snakeSegment->next, 0);
+            snakeSegmentDestRect = GetSnakeSegmentDestRect(snakeSegmentSrcRect, window->rect.board, snakeSegment->pos);
+            SDL_RenderCopy(window->renderer, window->snakeSkin.body, &snakeSegmentSrcRect, &snakeSegmentDestRect);
+        }
         snakeSegment = snakeSegment->previous;
     } while (snakeSegment->next != snake->segment);
+}
+
+SDL_Texture *GetSnakeSkinFragment(
+    GameWindow *window,
+    SnakeSegment *snakeSegment,
+    SnakeSegment *firstSnakeSegment
+)
+{
+    if (snakeSegment == firstSnakeSegment)
+    {
+        return window->snakeSkin.head;
+    }
+    else if (snakeSegment == firstSnakeSegment->previous)
+    {
+        return window->snakeSkin.tail;
+    }
+    else
+    {
+        return window->snakeSkin.body;
+    }
+}
+
+SDL_Rect GetSnakeSegmentCenterRect(
+    SnakeSegment *snakeSegment,
+    int isSmallSnakeSegment
+)
+{
+    SDL_Rect snakeSegmentRect;
+    if (isSmallSnakeSegment)
+    {
+        snakeSegmentRect.x = snakeSegmentRect.y = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.w = snakeSegmentRect.h = SNAKE_SEGMENT_SIZE - 2 * SNAKE_SMALL_SEGMENT_MARGIN;
+    }
+    else
+    {
+        snakeSegmentRect.x = snakeSegmentRect.y = 0;
+        snakeSegmentRect.w = snakeSegmentRect.h = SNAKE_SEGMENT_SIZE;
+    }
+    return snakeSegmentRect;
+}
+
+SDL_Rect GetSnakeSmallSegmentFillRect(
+    SnakeSegment *snakeSegment,
+    int front
+)
+{
+    SDL_Rect snakeSegmentRect;
+    if ((front && snakeSegment->direction == SNAKE_UP) || (!front && snakeSegment->direction == SNAKE_DOWN))
+    {
+        snakeSegmentRect.x = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.y = 0;
+        snakeSegmentRect.w = SNAKE_SEGMENT_SIZE - 2 * SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.h = SNAKE_SMALL_SEGMENT_MARGIN;
+    }
+    else if ((front && snakeSegment->direction == SNAKE_DOWN) || (!front && snakeSegment->direction == SNAKE_UP))
+    {
+        snakeSegmentRect.x = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.y = SNAKE_SEGMENT_SIZE - SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.w = SNAKE_SEGMENT_SIZE - 2 * SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.h = SNAKE_SMALL_SEGMENT_MARGIN;
+    }
+    else if ((front && snakeSegment->direction == SNAKE_LEFT) || (!front && snakeSegment->direction == SNAKE_RIGHT))
+    {
+        snakeSegmentRect.x = 0;
+        snakeSegmentRect.y = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.w = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.h = SNAKE_SEGMENT_SIZE - 2 * SNAKE_SMALL_SEGMENT_MARGIN;
+    }
+    else if ((front && snakeSegment->direction == SNAKE_RIGHT) || (!front && snakeSegment->direction == SNAKE_LEFT))
+    {
+        snakeSegmentRect.x = SNAKE_SEGMENT_SIZE - SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.y = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.w = SNAKE_SMALL_SEGMENT_MARGIN;
+        snakeSegmentRect.h = SNAKE_SEGMENT_SIZE - 2 * SNAKE_SMALL_SEGMENT_MARGIN;
+    }
+    return snakeSegmentRect;
+}
+
+SDL_Rect GetSnakeSegmentDestRect(
+    SDL_Rect snakeSegmentSrcRect,
+    SDL_Rect boardRect,
+    Position snakePosition
+)
+{
+    SDL_Rect snakeSegmentDestRect;
+    snakeSegmentDestRect = snakeSegmentSrcRect;
+    snakeSegmentDestRect.x += boardRect.x + snakePosition.x * SNAKE_SEGMENT_SIZE;
+    snakeSegmentDestRect.y += boardRect.y + snakePosition.y * SNAKE_SEGMENT_SIZE;
+    return snakeSegmentDestRect;
 }
 
 void RenderDot(

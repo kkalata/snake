@@ -205,6 +205,24 @@ void RenderSnake(
     GameWindow *window,
     const Snake *const snake
 );
+SDL_Texture *GetSnakeSkinFragment(
+    GameWindow *window,
+    SnakeSegment *snakeSegment,
+    SnakeSegment *firstSnakeSegment
+);
+SDL_Rect GetSnakeSegmentCenterRect(
+    SnakeSegment *snakeSegment,
+    int isSmallSnakeSegment
+);
+SDL_Rect GetSnakeSmallSegmentFillRect(
+    SnakeSegment *snakeSegment,
+    int front
+);
+SDL_Rect GetSnakeSegmentDestRect(
+    SDL_Rect snakeSegmentSrcRect,
+    SDL_Rect boardRect,
+    Position snakePosition
+);
 void MoveSnake(
     Snake *snake
 );
