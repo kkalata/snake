@@ -16,9 +16,10 @@ int CreateGameWindow(
     }
     window->timeSinceLastRender = 0;
 
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     SDL_RenderSetLogicalSize(window->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
+    SDL_ShowCursor(SDL_DISABLE);
 
     SDL_SetWindowTitle(window->window, GAME_TITLE);
 
