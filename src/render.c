@@ -90,7 +90,28 @@ void RenderSnake(
     {
         snakeSegmentRect.x = window->rect.board.x + snakeSegment->pos.x * SNAKE_SEGMENT_SIZE;
         snakeSegmentRect.y = window->rect.board.y + snakeSegment->pos.y * SNAKE_SEGMENT_SIZE;
-        SDL_RenderCopy(window->renderer, window->snakeSkin, NULL, &snakeSegmentRect);
+        SDL_Texture *snakeSkinFragment;
+        if (snakeSegment == snake->segment)
+        {
+            snakeSkinFragment = window->snakeSkin.head;
+        }
+        else if (snakeSegment == snake->segment->previous)
+        {
+            snakeSkinFragment = window->snakeSkin.tail;
+        }
+        else
+        {
+            snakeSkinFragment = window->snakeSkin.body;
+        }
+        SDL_RenderCopyEx(
+            window->renderer,
+            snakeSkinFragment,
+            NULL,
+            &snakeSegmentRect,
+            90 * snakeSegment->direction,
+            NULL,
+            SDL_FLIP_NONE
+        );
         snakeSegment = snakeSegment->previous;
     } while (snakeSegment->next != snake->segment);
 }

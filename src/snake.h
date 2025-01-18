@@ -12,7 +12,11 @@ typedef struct {
     SDL_Renderer *renderer;
     Uint32 timeSinceLastRender;
     SDL_Surface *font;
-    SDL_Texture *snakeSkin;
+    struct {
+        SDL_Texture *head;
+        SDL_Texture *body;
+        SDL_Texture *tail;
+    } snakeSkin;
     struct {
         SDL_Rect board;
         SDL_Rect statusSection;

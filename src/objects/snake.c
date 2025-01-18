@@ -6,6 +6,7 @@ void CreateSnake(
 {
     snake->segment = NULL;
     snake->killed = ALIVE;
+    snake->turn = SNAKE_NO_TURN;
     snake->timeSinceLastMove = 0;
     snake->timeSinceLastSpeedup = 0;
     snake->cooldown = SNAKE_INIT_COOLDOWN;

@@ -8,7 +8,9 @@
 #define FONT_ROW_SIZE 16 // chars in one row
 #define CHAR_SIZE 8 // width and height in pixels
 
-#define SNAKE_SKIN_FILEPATH "./snakeskin.bmp"
+#define SNAKE_SKIN_FILEPATH "./snakebody.bmp"
+#define SNAKE_HEAD_FILEPATH "./snakehead.bmp"
+#define SNAKE_TAIL_FILEPATH "./snaketail.bmp"
 
 #define BOARD_SECTION_WIDTH 30 // squares
 #define BOARD_SECTION_HEIGHT 20 // squares
