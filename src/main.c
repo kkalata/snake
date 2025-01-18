@@ -6,11 +6,13 @@ int CreateGameWindow(
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
+        fprintf(stderr, "%s\n", SDL_INIT_FAILED);
         return 0;
     }
 
     if (SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window->window, &window->renderer) != 0)
     {
+        fprintf(stderr, "%s\n", SDL_CREATE_WINDOW_AND_RENDERER_FAILED);
         SDL_Quit();
         return 0;
     }
@@ -48,6 +50,7 @@ int LoadBitmap(
     tmpSurface = SDL_LoadBMP(filePath);
     if (tmpSurface == NULL)
     {
+        fprintf(stderr, "No bitmap: %s\n", filePath);
         SDL_FreeSurface(tmpSurface);
         return 0;
     }

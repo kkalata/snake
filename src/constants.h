@@ -4,6 +4,9 @@
 
 #define GAME_TITLE "Snake" // displayed in the title bar
 
+#define SDL_INIT_FAILED "SDL init failed"
+#define SDL_CREATE_WINDOW_AND_RENDERER_FAILED "SDL window and renderer create failed"
+
 #define FONT_FILEPATH "./font.bmp"
 #define FONT_ROW_SIZE 16 // chars in one row
 #define CHAR_SIZE 8 // width and height in pixels
