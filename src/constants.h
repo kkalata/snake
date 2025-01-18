@@ -4,6 +4,7 @@
 
 #define GAME_TITLE "Snake" // displayed in the title bar
 
+// These messages are displayed in the terminal
 #define SDL_INIT_FAILED "SDL init failed"
 #define SDL_CREATE_WINDOW_AND_RENDERER_FAILED "SDL window and renderer create failed"
 
@@ -58,7 +59,7 @@
 
 #define BEST_PLAYERS_FILEPATH "bestplayers.txt"
 #define BEST_PLAYER_COUNT 3 // how much players are listed
-#define BEST_PLAYER_NAME_MAX_LENGTH 640 // chars (-1 for \0)
+#define BEST_PLAYER_NAME_MAX_LENGTH 128 // chars (-1 for \0)
 #define BEST_PLAYER_DEFAULT_NAME "Player" // passed when the player refuses to enter their name
 
 #define TEXT_CURSOR "_"
