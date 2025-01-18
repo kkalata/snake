@@ -25,11 +25,27 @@ typedef struct {
     int textInputActive;
 } GameWindow;
 
+typedef enum {
+    ALIGN_LEFT,
+    ALIGN_RIGHT
+} StatusSectionAlignment;
+
 typedef struct {
     Uint32 lastTimeMeasure;
     Uint32 timeElapsed;
     Uint32 timeDelta;
 } GameTimer;
+
+typedef struct {
+    Uint32 pointsScored;
+    char *playerName;
+} BestPlayer;
+
+typedef struct {
+    BestPlayer list[BEST_PLAYER_COUNT];
+    int newBestPlayerI;
+    int listUpdated;
+} BestPlayers;
 
 typedef struct {
     int x;
@@ -57,6 +73,7 @@ typedef enum {
     HIT_ITSELF,
     HIT_WALL
 } SnakeKillReason;
+
 typedef struct {
     SnakeSegment *segment;
     Uint32 timeSinceLastMove;
@@ -83,22 +100,6 @@ typedef struct {
     SnakeBehavior snakeBehavior;
 } RedDot;
 
-typedef enum {
-    ALIGN_LEFT,
-    ALIGN_RIGHT
-} StatusSectionAlignment;
-
-typedef struct {
-    Uint32 pointsScored;
-    char *playerName;
-} BestPlayer;
-
-typedef struct {
-    BestPlayer list[BEST_PLAYER_COUNT];
-    int newBestPlayerI;
-    int listUpdated;
-} BestPlayers;
-
 typedef struct {
     GameWindow window;
     GameTimer timer;
@@ -110,17 +111,6 @@ typedef struct {
     RedDot redDot;
 } Game;
 
-SDL_Rect GetTextRect(
-    const int x,
-    const int y,
-    const int textWidth
-);
-void DrawString(
-    GameWindow *window,
-    const int x,
-    const int y,
-    const char *text
-);
 int CreateGameWindow(
     GameWindow *window
 );
@@ -144,11 +134,66 @@ void ConfirmNewBestPlayerName(
 void ProcessGameLogic(
     Game *game
 );
+void DestroyGame(
+    Game *game
+);
+void CloseGameWindow(
+    GameWindow *window
+);
+
+SDL_Rect GetTextRect(
+    const int x,
+    const int y,
+    const int textWidth
+);
+void DrawString(
+    GameWindow *window,
+    const int x,
+    const int y,
+    const char *text
+);
 void RenderGameWindow(
     Game *game
 );
 void RenderBoard(
     GameWindow *window
+);
+void RenderSnake(
+    GameWindow *window,
+    const Snake *const snake
+);
+SDL_Texture *GetSnakeSkinFragment(
+    GameWindow *window,
+    SnakeSegment *snakeSegment,
+    SnakeSegment *firstSnakeSegment
+);
+SDL_Rect GetSnakeSegmentCenterRect(
+    SnakeSegment *snakeSegment,
+    int isSmallSnakeSegment
+);
+SDL_Rect GetSnakeSmallSegmentFillRect(
+    SnakeSegment *snakeSegment,
+    int front
+);
+SDL_Rect GetSnakeSegmentDestRect(
+    SDL_Rect snakeSegmentSrcRect,
+    SDL_Rect boardRect,
+    Position snakePosition
+);
+void RenderDot(
+    GameWindow *window,
+    const Position pos,
+    const GameTimer timer
+);
+void RenderBlueDot(
+    GameWindow *window,
+    BlueDot *blueDot,
+    GameTimer timer
+);
+void RenderRedDot(
+    GameWindow *window,
+    RedDot *redDot,
+    GameTimer timer
 );
 void RenderStatusSection(
     GameWindow *window,
@@ -181,11 +226,38 @@ void RenderLeaderboard(
     GameWindow *window,
     BestPlayers *bestPlayers
 );
-void DestroyGame(
+
+GameTimer InitGameTimer();
+Uint32 GetTimeDelta(
+    GameTimer *timer
+);
+
+void SaveGame(
     Game *game
 );
-void CloseGameWindow(
-    GameWindow *window
+void LoadGame(
+    Game *game
+);
+
+void UnsetBestPlayers(
+    BestPlayers *bestPlayers
+);
+void LoadBestPlayers(
+    BestPlayers *bestPlayers
+);
+void SaveBestPlayers(
+    BestPlayer bestPlayers[]
+);
+void PrepareNewBestPlayer(
+    BestPlayers *bestPlayers,
+    Uint32 pointsScored
+);
+void AppendNewBestPlayerName(
+    BestPlayers *bestPlayers,
+    char *text
+);
+void DestroyBestPlayersList(
+    BestPlayer bestPlayers[]
 );
 
 void CreateSnake(
@@ -201,52 +273,28 @@ void AttachSnakeSegment(
     Snake *const snake,
     SnakeSegment *snakeSegment
 );
-void RenderSnake(
-    GameWindow *window,
-    const Snake *const snake
-);
-SDL_Texture *GetSnakeSkinFragment(
-    GameWindow *window,
-    SnakeSegment *snakeSegment,
-    SnakeSegment *firstSnakeSegment
-);
-SDL_Rect GetSnakeSegmentCenterRect(
-    SnakeSegment *snakeSegment,
-    int isSmallSnakeSegment
-);
-SDL_Rect GetSnakeSmallSegmentFillRect(
-    SnakeSegment *snakeSegment,
-    int front
-);
-SDL_Rect GetSnakeSegmentDestRect(
-    SDL_Rect snakeSegmentSrcRect,
-    SDL_Rect boardRect,
-    Position snakePosition
-);
-void MoveSnake(
-    Snake *snake
-);
-Uint32 AdvanceSnake(
-    Snake *snake,
-    BlueDot *blueDot,
-    RedDot *redDot,
-    GameTimer timer
-);
-void TurnSnake(
-    Snake *snake,
-    Uint32 direction
-);
 int IsSnakeHere(
     Snake *snake,
     Position pos
-);
-void AutoTurnSnake(
-    Snake *snake
 );
 SnakeSegment *GetSnakeSegment(
     SnakeSegment *snakeSegment,
     int moveSnakeSegment,
     SnakeDirection snakeTurn
+);
+void TurnSnake(
+    Snake *snake,
+    Uint32 direction
+);
+void AutoTurnSnake(
+    Snake *snake
+);
+void MoveSnakeSegment(
+    SnakeSegment *snakeSegment,
+    SnakeDirection snakeTurn
+);
+void MoveSnake(
+    Snake *snake
 );
 int EatBlueDot(
     Snake *snake,
@@ -255,6 +303,12 @@ int EatBlueDot(
 int EatRedDot(
     Snake *snake,
     RedDot *redDot
+);
+Uint32 AdvanceSnake(
+    Snake *snake,
+    BlueDot *blueDot,
+    RedDot *redDot,
+    GameTimer timer
 );
 void KillSnake(
     Snake *snake
@@ -271,21 +325,11 @@ void PlaceDot(
     Snake *snake,
     Position otherDotPos
 );
-void RenderDot(
-    GameWindow *window,
-    const Position pos,
-    const GameTimer timer
-);
 
 void PlaceBlueDot(
     BlueDot *blueDot,
     Snake *snake,
     RedDot *redDot
-);
-void RenderBlueDot(
-    GameWindow *window,
-    BlueDot *blueDot,
-    GameTimer timer
 );
 
 void PlaceRedDot(
@@ -297,42 +341,4 @@ void PlaceRedDot(
 void SetRedDotParams(
     RedDot *redDot,
     GameTimer timer
-);
-void RenderRedDot(
-    GameWindow *window,
-    RedDot *redDot,
-    GameTimer timer
-);
-
-GameTimer InitGameTimer();
-Uint32 GetTimeDelta(
-    GameTimer *timer
-);
-
-void SaveGame(
-    Game *game
-);
-void SaveBestPlayers(
-    BestPlayer bestPlayers[]
-);
-void LoadGame(
-    Game *game
-);
-void UnsetBestPlayers(
-    BestPlayers *bestPlayers
-);
-void LoadBestPlayers(
-    BestPlayers *bestPlayers
-);
-
-void PrepareNewBestPlayer(
-    BestPlayers *bestPlayers,
-    Uint32 pointsScored
-);
-void AppendNewBestPlayerName(
-    BestPlayers *bestPlayers,
-    char *text
-);
-void DestroyBestPlayersList(
-    BestPlayer bestPlayers[]
 );

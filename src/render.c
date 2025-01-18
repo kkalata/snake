@@ -1,5 +1,19 @@
 #include "snake.h"
 
+SDL_Rect GetTextRect(
+    const int x,
+    const int y,
+    const int textWidth
+)
+{
+    SDL_Rect textRect;
+    textRect.x = x;
+    textRect.y = y;
+    textRect.w = textWidth;
+    textRect.h = CHAR_SIZE;
+    return textRect;
+}
+
 void DrawString(
     GameWindow *window,
     const int x,

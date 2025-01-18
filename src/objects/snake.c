@@ -58,6 +58,38 @@ void AttachSnakeSegment(
     }
 }
 
+int IsSnakeHere(
+    Snake *snake,
+    Position pos
+)
+{
+    SnakeSegment *snakeSegment = snake->segment;
+    do
+    {
+        if (snakeSegment->pos.x == pos.x && snakeSegment->pos.y == pos.y)
+        {
+            return 1;
+        }
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != snake->segment);
+    return 0;
+}
+
+SnakeSegment *GetSnakeSegment(
+    SnakeSegment *snakeSegment,
+    int moveSnakeSegment,
+    SnakeDirection snakeTurn
+)
+{
+    SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
+    memcpy(movedSnakeSegment, snakeSegment, sizeof(SnakeSegment));
+    if (moveSnakeSegment)
+    {
+        MoveSnakeSegment(movedSnakeSegment, snakeTurn);
+    }
+    return movedSnakeSegment;
+}
+
 void TurnSnake(
     Snake *snake,
     Uint32 direction
@@ -90,23 +122,6 @@ void TurnSnake(
             }
             break;
     }
-}
-
-int IsSnakeHere(
-    Snake *snake,
-    Position pos
-)
-{
-    SnakeSegment *snakeSegment = snake->segment;
-    do
-    {
-        if (snakeSegment->pos.x == pos.x && snakeSegment->pos.y == pos.y)
-        {
-            return 1;
-        }
-        snakeSegment = snakeSegment->next;
-    } while (snakeSegment != snake->segment);
-    return 0;
 }
 
 void AutoTurnSnake(
@@ -217,56 +232,6 @@ void MoveSnake(
     }
 }
 
-Uint32 AdvanceSnake(
-    Snake *snake,
-    BlueDot *blueDot,
-    RedDot *redDot,
-    GameTimer timer
-)
-{
-    Uint32 pointsScored = 0;
-
-    snake->timeSinceLastMove += timer.timeDelta;
-    snake->timeSinceLastSpeedup += timer.timeDelta;
-    while (snake->timeSinceLastMove >= snake->cooldown)
-    {
-        snake->timeSinceLastMove -= snake->cooldown;
-        int blueDotEaten = EatBlueDot(snake, blueDot);
-        if (blueDotEaten)
-        {
-            pointsScored += BLUE_DOT_POINTS;
-            PlaceBlueDot(blueDot, snake, redDot);
-        }
-        int redDotEaten = EatRedDot(snake, redDot);
-        if (redDotEaten)
-        {
-            pointsScored += RED_DOT_POINTS;
-            SetRedDotParams(redDot, timer);
-        }
-        AutoTurnSnake(snake);
-        KillSnake(snake);
-        if (!snake->killed)
-        {
-            MoveSnake(snake);
-
-            if (snake->timeSinceLastSpeedup >= SNAKE_SPEEDUP_INTERVAL)
-            {
-                snake->cooldown *= SNAKE_COOLDOWN_CHANGE_RATE;
-                snake->timeSinceLastSpeedup -= SNAKE_SPEEDUP_INTERVAL;
-            }
-        }
-        else
-        {
-            if (blueDotEaten)
-            {
-                DetachLastSnakeSegment(snake);
-            }
-            break;
-        }
-    }
-    return pointsScored;
-}
-
 int EatBlueDot(
     Snake *snake,
     BlueDot *blueDot
@@ -334,19 +299,54 @@ int EatRedDot(
     return 0;
 }
 
-SnakeSegment *GetSnakeSegment(
-    SnakeSegment *snakeSegment,
-    int moveSnakeSegment,
-    SnakeDirection snakeTurn
+Uint32 AdvanceSnake(
+    Snake *snake,
+    BlueDot *blueDot,
+    RedDot *redDot,
+    GameTimer timer
 )
 {
-    SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
-    memcpy(movedSnakeSegment, snakeSegment, sizeof(SnakeSegment));
-    if (moveSnakeSegment)
+    Uint32 pointsScored = 0;
+
+    snake->timeSinceLastMove += timer.timeDelta;
+    snake->timeSinceLastSpeedup += timer.timeDelta;
+    while (snake->timeSinceLastMove >= snake->cooldown)
     {
-        MoveSnakeSegment(movedSnakeSegment, snakeTurn);
+        snake->timeSinceLastMove -= snake->cooldown;
+        int blueDotEaten = EatBlueDot(snake, blueDot);
+        if (blueDotEaten)
+        {
+            pointsScored += BLUE_DOT_POINTS;
+            PlaceBlueDot(blueDot, snake, redDot);
+        }
+        int redDotEaten = EatRedDot(snake, redDot);
+        if (redDotEaten)
+        {
+            pointsScored += RED_DOT_POINTS;
+            SetRedDotParams(redDot, timer);
+        }
+        AutoTurnSnake(snake);
+        KillSnake(snake);
+        if (!snake->killed)
+        {
+            MoveSnake(snake);
+
+            if (snake->timeSinceLastSpeedup >= SNAKE_SPEEDUP_INTERVAL)
+            {
+                snake->cooldown *= SNAKE_COOLDOWN_CHANGE_RATE;
+                snake->timeSinceLastSpeedup -= SNAKE_SPEEDUP_INTERVAL;
+            }
+        }
+        else
+        {
+            if (blueDotEaten)
+            {
+                DetachLastSnakeSegment(snake);
+            }
+            break;
+        }
     }
-    return movedSnakeSegment;
+    return pointsScored;
 }
 
 void KillSnake(
