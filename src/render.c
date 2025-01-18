@@ -82,11 +82,12 @@ void RenderSnake(
 {
     SDL_Rect snakeSegmentSrcRect;
     SDL_Rect snakeSegmentDestRect;
+    int snakeSegmentI = 0;
     
     SnakeSegment *snakeSegment = snake->segment->previous;
     do
     {
-        int isSmallSnakeSegment = ((snakeSegment->pos.x % 2) ^ (snakeSegment->pos.y % 2)) // compare with checker pattern
+        int isSmallSnakeSegment = (snakeSegmentI % 2 == 0) // isn't even
             && snakeSegment != snake->segment // isn't first (head)
             && snakeSegment != snake->segment->previous; // isn't last (tail)
         
@@ -119,7 +120,8 @@ void RenderSnake(
             snakeSegmentDestRect = GetSnakeSegmentDestRect(snakeSegmentSrcRect, window->rect.board, snakeSegment->pos);
             SDL_RenderCopy(window->renderer, window->snakeSkin.body, &snakeSegmentSrcRect, &snakeSegmentDestRect);
         }
-        snakeSegment = snakeSegment->previous;
+        snakeSegmentI++;
+        snakeSegment = snakeSegment->next;
     } while (snakeSegment->next != snake->segment);
 }
 
