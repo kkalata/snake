@@ -16,7 +16,7 @@ The game is being written as a part of basics of computer programming classes at
     - [x] D. Points (1 pt, requires A-C)
     - [x] E. Saving and loading the game (2 pts, requires A-D)
     - [x] F. Best scores (1 pt, requires A-D)
-    - [ ] G. Fancy graphics effects (1 pt, requires A-C)
+    - [x] G. Fancy graphics effects (1 pt, requires A-C)
     - [ ] H. Teleportation (1 pt, requires A-G)
     - [ ] I. Game configurator (1 pt, requires A-H)
 3. Extra

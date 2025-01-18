@@ -20,7 +20,7 @@
 
 // these strings are displayed in the status section
 #define IMPLEMENTED_REQUIREMENTS_HEADER "Implemented requirements:"
-#define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-F)"
+#define IMPLEMENTED_REQUIREMENTS "all mandatory, some optional (A-G)"
 #define RED_DOT_APPEAR_BAR_DESCRIPTION "RED DOT"
 #define SNAKE_DEATH_UNSPECIFIED_INFO "Snake killed."
 #define SNAKE_HIT_ITSELF_INFO "Snake hit itself."
