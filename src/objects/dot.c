@@ -1,9 +1,9 @@
 #include "../snake.h"
 
 void PlaceDot(
-    Position *dotPos,
-    Snake *snake,
-    Position otherDotPos
+    Position *const dotPos,
+    const Snake *const snake,
+    const Position otherDotPos
 )
 {
     int dotUnderSomeObject;

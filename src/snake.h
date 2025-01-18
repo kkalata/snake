@@ -115,150 +115,150 @@ typedef struct {
 } Game;
 
 int CreateGameWindow(
-    GameWindow *window
+    GameWindow *const window
 );
 int LoadBitmap(
-    GameWindow *window,
+    GameWindow *const window,
     SDL_Texture **texture,
-    const char *filePath,
-    int transparent
+    const char *const filePath,
+    const int transparent
 );
 void SetSectionRects(
-    GameWindow *window
+    GameWindow *const window
 );
 void CreateGame(
-    Game *game
+    Game *const game
 );
 int GameLoop(
-    Game *game
+    Game *const game
 );
 int ProcessGameKeydowns(
-    Game *game,
-    SDL_Keycode pressedKey
+    Game *const game,
+    const SDL_Keycode pressedKey
 );
 void ConfirmNewBestPlayerName(
-    BestPlayers *bestPlayers,
-    SDL_Keycode pressedKey
+    BestPlayers *const bestPlayers,
+    const SDL_Keycode pressedKey
 );
 void ProcessGameLogic(
-    Game *game
+    Game *const game
 );
 void DestroyGame(
-    Game *game
+    Game *const game
 );
 void CloseGameWindow(
-    GameWindow *window
+    GameWindow *const window
 );
 
 void DrawString(
-    GameWindow *window,
+    GameWindow *const window,
     const int x,
     const int y,
     const char *text
 );
 void RenderGameWindow(
-    Game *game
+    Game *const game
 );
 void RenderBoard(
-    GameWindow *window
+    GameWindow *const window
 );
 void RenderSnake(
-    GameWindow *window,
+    GameWindow *const window,
     const Snake *const snake
 );
 SDL_Texture *GetSnakeSkinFragment(
-    GameWindow *window,
-    SnakeSegment *snakeSegment,
-    SnakeSegment *firstSnakeSegment
+    const GameWindow *const window,
+    const SnakeSegment *const snakeSegment,
+    const SnakeSegment *const firstSnakeSegment
 );
 SDL_Rect GetSnakeSegmentCenterRect(
-    SnakeSegment *snakeSegment,
-    int isSmallSnakeSegment
+    const SnakeSegment *const snakeSegment,
+    const int isSmallSnakeSegment
 );
 SDL_Rect GetSnakeSmallSegmentFillRect(
-    SnakeSegment *snakeSegment,
-    int front
+    const SnakeSegment *const snakeSegment,
+    const int front
 );
 SDL_Rect GetSnakeSegmentDestRect(
-    SDL_Rect snakeSegmentSrcRect,
-    SDL_Rect boardRect,
-    Position snakePosition
+    const SDL_Rect snakeSegmentSrcRect,
+    const SDL_Rect boardRect,
+    const Position snakePosition
 );
 void RenderDot(
-    GameWindow *window,
+    GameWindow *const window,
     const Position pos,
     const GameTimer timer
 );
 void RenderBlueDot(
-    GameWindow *window,
-    BlueDot *blueDot,
-    GameTimer timer
+    GameWindow *const window,
+    const BlueDot *const blueDot,
+    const GameTimer timer
 );
 void RenderRedDot(
-    GameWindow *window,
-    RedDot *redDot,
-    GameTimer timer
+    GameWindow *const window,
+    const RedDot *const redDot,
+    const GameTimer timer
 );
 void RenderStatusSection(
-    GameWindow *window,
-    GameTimer *timer,
-    Uint32 pointsScored,
-    SnakeKillReason snakeKillReason,    
-    const RedDot *redDot,
+    GameWindow *const window,
+    const GameTimer *const timer,
+    const Uint32 pointsScored,
+    const SnakeKillReason snakeKillReason,    
+    const RedDot *const redDot,
     const int bestPlayersListUpdated
 );
 void RenderStatusSectionInfo(
-    GameWindow *window,
-    char *content,
-    int line,
-    StatusSectionAlignment alignment
+    GameWindow *const window,
+    const char *const content,
+    const int line,
+    const StatusSectionAlignment alignment
 );
 void GetSnakeKillReasonInfo(
     char statusSectionContent[],
-    SnakeKillReason snakeKillReason
+    const SnakeKillReason snakeKillReason
 );
 void GetGameKeyGuide(
     char statusSectionContent[],
-    int bestPlayersListUpdated
+    const int bestPlayersListUpdated
 );
 void RenderRedDotAppearTimeBar(
-    GameWindow *window,
+    GameWindow *const window,
     const int descriptionWidth,
     const float timeLeft
 );
 void RenderLeaderboard(
-    GameWindow *window,
-    BestPlayers *bestPlayers
+    GameWindow *const window,
+    const BestPlayers *const bestPlayers
 );
 
 GameTimer InitGameTimer();
 Uint32 GetTimeDelta(
-    GameTimer *timer
+    GameTimer *const timer
 );
 
 void SaveGame(
-    Game *game
+    Game *const game
 );
 void LoadGame(
-    Game *game
+    Game *const game
 );
 
 void UnsetBestPlayers(
-    BestPlayers *bestPlayers
+    BestPlayers *const bestPlayers
 );
 void LoadBestPlayers(
-    BestPlayers *bestPlayers
+    BestPlayers *const bestPlayers
 );
 void SaveBestPlayers(
-    BestPlayer bestPlayers[]
+    const BestPlayer bestPlayers[]
 );
 void PrepareNewBestPlayer(
-    BestPlayers *bestPlayers,
-    Uint32 pointsScored
+    BestPlayers *const bestPlayers,
+    const Uint32 pointsScored
 );
 void AppendNewBestPlayerName(
-    BestPlayers *bestPlayers,
-    char *text
+    BestPlayers *const bestPlayers,
+    const char *text
 );
 void DestroyBestPlayersList(
     BestPlayer bestPlayers[]
@@ -278,73 +278,73 @@ void AttachSnakeSegment(
     SnakeSegment *snakeSegment
 );
 int IsSnakeHere(
-    Snake *snake,
-    Position pos
+    const Snake *const snake,
+    const Position pos
 );
 SnakeSegment *GetSnakeSegment(
-    SnakeSegment *snakeSegment,
-    int moveSnakeSegment,
-    SnakeDirection snakeTurn
+    const SnakeSegment *const snakeSegment,
+    const int moveSnakeSegment,
+    const SnakeDirection snakeTurn
 );
 void TurnSnake(
-    Snake *snake,
-    Uint32 direction
+    Snake *const snake,
+    const Uint32 direction
 );
 void AutoTurnSnake(
-    Snake *snake
+    Snake *const snake
 );
 void MoveSnakeSegment(
-    SnakeSegment *snakeSegment,
-    SnakeDirection snakeTurn
+    SnakeSegment *const snakeSegment,
+    const SnakeDirection snakeTurn
 );
 void MoveSnake(
-    Snake *snake
+    Snake *const snake
 );
 int EatBlueDot(
-    Snake *snake,
-    BlueDot *blueDot
+    Snake *const snake,
+    const BlueDot *const blueDot
 );
 int EatRedDot(
-    Snake *snake,
-    RedDot *redDot
+    Snake *const snake,
+    const RedDot *const redDot
 );
 Uint32 AdvanceSnake(
-    Snake *snake,
-    BlueDot *blueDot,
-    RedDot *redDot,
-    GameTimer timer
+    Snake *const snake,
+    BlueDot *const blueDot,
+    RedDot *const redDot,
+    const GameTimer timer
 );
 void KillSnake(
-    Snake *snake
+    Snake *const snake
 );
 void DetachLastSnakeSegment(
-    Snake *snake
+    Snake *const snake
 );
 void DestroySnake(
-    Snake *snake
+    Snake *const snake
 );
 
 void PlaceDot(
-    Position *dotPos,
-    Snake *snake,
-    Position otherDotPos
+    Position *const dotPos,
+    const Snake *const snake,
+    const Position otherDotPos
 );
 
 void PlaceBlueDot(
-    BlueDot *blueDot,
-    Snake *snake,
-    RedDot *redDot
+    BlueDot *const blueDot,
+    const Snake *const snake,
+    const RedDot *const redDot
 );
 
 void PlaceRedDot(
-    RedDot *redDot,
-    Snake *snake,
-    BlueDot *blueDot,
-    GameTimer timer
+    RedDot *const redDot,
+    const Snake *const snake,
+    const BlueDot *const blueDot,
+    const GameTimer timer
 );
 void SetRedDotParams(
-    RedDot *redDot,
-    GameTimer timer
+    RedDot *const redDot,
+    const GameTimer timer
 );
 
 #endif

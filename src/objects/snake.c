@@ -59,8 +59,8 @@ void AttachSnakeSegment(
 }
 
 int IsSnakeHere(
-    Snake *snake,
-    Position pos
+    const Snake *const snake,
+    const Position pos
 )
 {
     SnakeSegment *snakeSegment = snake->segment;
@@ -76,9 +76,9 @@ int IsSnakeHere(
 }
 
 SnakeSegment *GetSnakeSegment(
-    SnakeSegment *snakeSegment,
-    int moveSnakeSegment,
-    SnakeDirection snakeTurn
+    const SnakeSegment *const snakeSegment,
+    const int moveSnakeSegment,
+    const SnakeDirection snakeTurn
 )
 {
     SnakeSegment *movedSnakeSegment = (SnakeSegment *) malloc(sizeof(SnakeSegment));
@@ -91,8 +91,8 @@ SnakeSegment *GetSnakeSegment(
 }
 
 void TurnSnake(
-    Snake *snake,
-    Uint32 direction
+    Snake *const snake,
+    const Uint32 direction
 )
 {
     switch (direction)
@@ -125,7 +125,7 @@ void TurnSnake(
 }
 
 void AutoTurnSnake(
-    Snake *snake
+    Snake *const snake
 )
 {
     if (snake->turn)
@@ -187,8 +187,8 @@ void AutoTurnSnake(
 }
 
 void MoveSnakeSegment(
-    SnakeSegment *snakeSegment,
-    SnakeDirection snakeTurn
+    SnakeSegment *const snakeSegment,
+    const SnakeDirection snakeTurn
 )
 {
     if (snakeTurn)
@@ -213,7 +213,7 @@ void MoveSnakeSegment(
 }
 
 void MoveSnake(
-    Snake *snake
+    Snake *const snake
 )
 {
     SnakeSegment *snakeSegment = snake->segment;
@@ -233,8 +233,8 @@ void MoveSnake(
 }
 
 int EatBlueDot(
-    Snake *snake,
-    BlueDot *blueDot
+    Snake *const snake,
+    const BlueDot *const blueDot
 )
 {
     if (snake->segment->pos.x == blueDot->pos.x && snake->segment->pos.y == blueDot->pos.y)
@@ -262,8 +262,8 @@ int EatBlueDot(
 }
 
 int EatRedDot(
-    Snake *snake,
-    RedDot *redDot
+    Snake *const snake,
+    const RedDot *const redDot
 )
 {
     if (redDot->visible && snake->segment->pos.x == redDot->pos.x && snake->segment->pos.y == redDot->pos.y)
@@ -300,10 +300,10 @@ int EatRedDot(
 }
 
 Uint32 AdvanceSnake(
-    Snake *snake,
-    BlueDot *blueDot,
-    RedDot *redDot,
-    GameTimer timer
+    Snake *const snake,
+    BlueDot *const blueDot,
+    RedDot *const redDot,
+    const GameTimer timer
 )
 {
     Uint32 pointsScored = 0;
@@ -350,7 +350,7 @@ Uint32 AdvanceSnake(
 }
 
 void KillSnake(
-    Snake *snake
+    Snake *const snake
 )
 {
     // The kill conditions are checked prospectively,
@@ -401,7 +401,7 @@ void KillSnake(
 }
 
 void DetachLastSnakeSegment(
-    Snake *snake
+    Snake *const snake
 )
 {
     SnakeSegment *lastSnakeSegment = snake->segment->previous;
@@ -411,7 +411,7 @@ void DetachLastSnakeSegment(
 }
 
 void DestroySnake(
-    Snake *snake
+    Snake *const snake
 )
 {
     do

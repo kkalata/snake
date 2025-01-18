@@ -10,7 +10,7 @@ GameTimer InitGameTimer()
 }
 
 Uint32 GetTimeDelta(
-    GameTimer *timer
+    GameTimer *const timer
 )
 {
     Uint32 currentTimeMeasure = SDL_GetTicks();

@@ -6,10 +6,10 @@ Uint32 RedDotAppearDelay()
 }
 
 void PlaceRedDot(
-    RedDot *redDot,
-    Snake *snake,
-    BlueDot *blueDot,
-    GameTimer timer
+    RedDot *const redDot,
+    const Snake *const snake,
+    const BlueDot *const blueDot,
+    const GameTimer timer
 )
 {
     if (!redDot->visible)
@@ -30,8 +30,8 @@ void PlaceRedDot(
 }
 
 void SetRedDotParams(
-    RedDot *redDot,
-    GameTimer timer
+    RedDot *const redDot,
+    const GameTimer timer
 )
 {
     redDot->appearTime = timer.timeElapsed + RedDotAppearDelay();;

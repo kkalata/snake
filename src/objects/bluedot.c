@@ -1,9 +1,9 @@
 #include "../snake.h"
 
 void PlaceBlueDot(
-    BlueDot *blueDot,
-    Snake *snake,
-    RedDot *redDot
+    BlueDot *const blueDot,
+    const Snake *const snake,
+    const RedDot *const redDot
 )
 {
     PlaceDot(&blueDot->pos, snake, redDot->pos);

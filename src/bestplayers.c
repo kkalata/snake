@@ -1,7 +1,7 @@
 #include "snake.h"
 
 void UnsetBestPlayers(
-    BestPlayers *bestPlayers
+    BestPlayers *const bestPlayers
 )
 {
     bestPlayers->newBestPlayerI = BEST_PLAYER_COUNT;
@@ -14,7 +14,7 @@ void UnsetBestPlayers(
 }
 
 void LoadBestPlayers(
-    BestPlayers *bestPlayers
+    BestPlayers *const bestPlayers
 )
 {
     UnsetBestPlayers(bestPlayers);
@@ -51,7 +51,7 @@ void LoadBestPlayers(
 }
 
 void SaveBestPlayers(
-    BestPlayer bestPlayers[]
+    const BestPlayer bestPlayers[]
 )
 {
     FILE *bestPlayersFile = fopen(BEST_PLAYERS_FILEPATH, "w");
@@ -78,8 +78,8 @@ void SaveBestPlayers(
 }
 
 void PrepareNewBestPlayer(
-    BestPlayers *bestPlayers,
-    Uint32 pointsScored
+    BestPlayers *const bestPlayers,
+    const Uint32 pointsScored
 )
 {
     int newBestPlayerI = 0;
@@ -112,8 +112,8 @@ void PrepareNewBestPlayer(
 }
 
 void AppendNewBestPlayerName(
-    BestPlayers *bestPlayers,
-    char *text
+    BestPlayers *const bestPlayers,
+    const char *text
 )
 {
     strcat(

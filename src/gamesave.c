@@ -1,7 +1,7 @@
 #include "snake.h"
 
 void SaveGame(
-    Game *game
+    Game *const game
 )
 {
     FILE *saveFile = fopen(SAVE_FILENAME, "w");
@@ -62,7 +62,7 @@ void SaveGame(
 }
 
 void LoadGame(
-    Game *game
+    Game *const game
 )
 {
     FILE *saveFile = fopen(SAVE_FILENAME, "r");

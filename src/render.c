@@ -1,7 +1,7 @@
 #include "snake.h"
 
 void DrawString(
-    GameWindow *window,
+    GameWindow *const window,
     const int x,
     const int y,
     const char *text
@@ -28,7 +28,7 @@ void DrawString(
 }
 
 void RenderGameWindow(
-    Game *game
+    Game *const game
 )
 {
     if (game->window.timeSinceLastRender > 1000 / FRAMES_PER_SECOND || game->window.timeSinceLastRender == 0)
@@ -57,7 +57,7 @@ void RenderGameWindow(
 }
 
 void RenderBoard(
-    GameWindow *window
+    GameWindow *const window
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 46, 194, 126, 255); // fill with green color
@@ -65,7 +65,7 @@ void RenderBoard(
 }
 
 void RenderSnake(
-    GameWindow *window,
+    GameWindow *const window,
     const Snake *const snake
 )
 {
@@ -115,9 +115,9 @@ void RenderSnake(
 }
 
 SDL_Texture *GetSnakeSkinFragment(
-    GameWindow *window,
-    SnakeSegment *snakeSegment,
-    SnakeSegment *firstSnakeSegment
+    const GameWindow *const window,
+    const SnakeSegment *const snakeSegment,
+    const SnakeSegment *const firstSnakeSegment
 )
 {
     if (snakeSegment == firstSnakeSegment)
@@ -135,8 +135,8 @@ SDL_Texture *GetSnakeSkinFragment(
 }
 
 SDL_Rect GetSnakeSegmentCenterRect(
-    SnakeSegment *snakeSegment,
-    int isSmallSnakeSegment
+    const SnakeSegment *const snakeSegment,
+    const int isSmallSnakeSegment
 )
 {
     SDL_Rect snakeSegmentRect;
@@ -154,8 +154,8 @@ SDL_Rect GetSnakeSegmentCenterRect(
 }
 
 SDL_Rect GetSnakeSmallSegmentFillRect(
-    SnakeSegment *snakeSegment,
-    int front
+    const SnakeSegment *const snakeSegment,
+    const int front
 )
 {
     SDL_Rect snakeSegmentRect;
@@ -191,9 +191,9 @@ SDL_Rect GetSnakeSmallSegmentFillRect(
 }
 
 SDL_Rect GetSnakeSegmentDestRect(
-    SDL_Rect snakeSegmentSrcRect,
-    SDL_Rect boardRect,
-    Position snakePosition
+    const SDL_Rect snakeSegmentSrcRect,
+    const SDL_Rect boardRect,
+    const Position snakePosition
 )
 {
     SDL_Rect snakeSegmentDestRect;
@@ -204,7 +204,7 @@ SDL_Rect GetSnakeSegmentDestRect(
 }
 
 void RenderDot(
-    GameWindow *window,
+    GameWindow *const window,
     const Position pos,
     const GameTimer timer
 )
@@ -223,9 +223,9 @@ void RenderDot(
 }
 
 void RenderBlueDot(
-    GameWindow *window,
-    BlueDot *blueDot,
-    GameTimer timer
+    GameWindow *const window,
+    const BlueDot *const blueDot,
+    const GameTimer timer
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 26, 95, 180, 255); // fill with blue color
@@ -233,9 +233,9 @@ void RenderBlueDot(
 }
 
 void RenderRedDot(
-    GameWindow *window,
-    RedDot *redDot,
-    GameTimer timer
+    GameWindow *const window,
+    const RedDot *const redDot,
+    const GameTimer timer
 )
 {
     SDL_SetRenderDrawColor(window->renderer, 192, 28, 40, 255); // fill with red color
@@ -243,11 +243,11 @@ void RenderRedDot(
 }
 
 void RenderStatusSection(
-    GameWindow *window,
-    GameTimer *timer,
-    Uint32 pointsScored,
-    SnakeKillReason snakeKillReason,
-    const RedDot *redDot,
+    GameWindow *const window,
+    const GameTimer *const timer,
+    const Uint32 pointsScored,
+    const SnakeKillReason snakeKillReason,
+    const RedDot *const redDot,
     const int bestPlayersListUpdated
 )
 {
@@ -296,10 +296,10 @@ void RenderStatusSection(
 }
 
 void RenderStatusSectionInfo(
-    GameWindow *window,
-    char *content,
-    int line,
-    StatusSectionAlignment alignment
+    GameWindow *const window,
+    const char *const content,
+    const int line,
+    const StatusSectionAlignment alignment
 )
 {
     int xOffset;
@@ -318,7 +318,7 @@ void RenderStatusSectionInfo(
 
 void GetSnakeKillReasonInfo(
     char statusSectionContent[],
-    SnakeKillReason snakeKillReason
+    const SnakeKillReason snakeKillReason
 )
 {
     switch (snakeKillReason)
@@ -337,7 +337,7 @@ void GetSnakeKillReasonInfo(
 
 void GetGameKeyGuide(
     char statusSectionContent[],
-    int bestPlayersListUpdated
+    const int bestPlayersListUpdated
 )
 {
     if (bestPlayersListUpdated)
@@ -351,7 +351,7 @@ void GetGameKeyGuide(
 }
 
 void RenderRedDotAppearTimeBar(
-    GameWindow *window,
+    GameWindow *const window,
     const int descriptionWidth,
     const float timeLeft
 )
@@ -366,8 +366,8 @@ void RenderRedDotAppearTimeBar(
 }
 
 void RenderLeaderboard(
-    GameWindow *window,
-    BestPlayers *bestPlayers
+    GameWindow *const window,
+    const BestPlayers *const bestPlayers
 )
 {
     // render background

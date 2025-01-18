@@ -1,7 +1,7 @@
 #include "snake.h"
 
 int CreateGameWindow(
-    GameWindow *window
+    GameWindow *const window
 )
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -39,10 +39,10 @@ int CreateGameWindow(
 }
 
 int LoadBitmap(
-    GameWindow *window,
+    GameWindow *const window,
     SDL_Texture **texture,
-    const char *filePath,
-    int transparent
+    const char *const filePath,
+    const int transparent
 )
 {
     SDL_Surface *tmpSurface;
@@ -65,7 +65,7 @@ int LoadBitmap(
 }
 
 void SetSectionRects(
-    GameWindow *window
+    GameWindow *const window
 )
 {
     window->rect.statusSection.w = SCREEN_WIDTH - 2 * STATUS_SECTION_MARGIN;
@@ -85,7 +85,7 @@ void SetSectionRects(
 }
 
 void CreateGame(
-    Game *game
+    Game *const game
 )
 {
     game->seed = time(NULL);
@@ -101,7 +101,7 @@ void CreateGame(
 }
 
 int GameLoop(
-    Game *game
+    Game *const game
 )
 {
     int quitRequested = 0;
@@ -141,8 +141,8 @@ int GameLoop(
 }
 
 int ProcessGameKeydowns(
-    Game *game,
-    SDL_Keycode pressedKey
+    Game *const game,
+    const SDL_Keycode pressedKey
 )
 {
     int quitRequested = 0;
@@ -181,8 +181,8 @@ int ProcessGameKeydowns(
 }
 
 void ConfirmNewBestPlayerName(
-    BestPlayers *bestPlayers,
-    SDL_Keycode pressedKey
+    BestPlayers *const bestPlayers,
+    const SDL_Keycode pressedKey
 )
 {
     char *bestPlayerName = bestPlayers->list[bestPlayers->newBestPlayerI].playerName;
@@ -207,7 +207,7 @@ void ConfirmNewBestPlayerName(
 }
 
 void ProcessGameLogic(
-    Game *game
+    Game *const game
 )
 {
     if (!game->snake.killed)
@@ -250,7 +250,7 @@ void ProcessGameLogic(
 }
 
 void DestroyGame(
-    Game *game
+    Game *const game
 )
 {
     game->window.timeSinceLastRender = 0;
@@ -259,7 +259,7 @@ void DestroyGame(
 }
 
 void CloseGameWindow(
-    GameWindow *window
+    GameWindow *const window
 )
 {
     SDL_DestroyTexture(window->font);
