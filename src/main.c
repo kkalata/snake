@@ -139,7 +139,7 @@ int GameLoop(
 
     ProcessGameLogic(game);
 
-    SDL_Delay(1);
+    SDL_Delay(1); // the game loop doesn't need to be executed as fast as CPU can
     return !quitRequested;
 }
 
