@@ -1,6 +1,7 @@
 #ifndef SNAKE
 #define SNAKE
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
