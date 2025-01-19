@@ -2,7 +2,7 @@
 
 Game written in C using SDL2 library.
 
-The game is being written as a part of basics of computer programming classes at Gdańsk University of Technology, Faculty of Electronics, Telecommunications and Informatics. The requirements are listed below:
+The game was written as a part of basics of computer programming classes at Gdańsk University of Technology, Faculty of Electronics, Telecommunications and Informatics. The requirements are listed below:
 
 1. Mandatory (5 pts)
     - [x] Graphic design of the game
