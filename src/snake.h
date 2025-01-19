@@ -236,8 +236,16 @@ Uint32 GetTimeDelta(
 void SaveGame(
     Game *const game
 );
+void SaveSnake(
+    FILE *const saveFile,
+    const Snake *const snake
+);
 void LoadGame(
     Game *const game
+);
+void LoadSnake(
+    FILE *const saveFile,
+    Snake *const snake
 );
 
 void UnsetBestPlayers(

@@ -21,26 +21,7 @@ void SaveGame(
         game->snake.turn,
         game->snake.killed
     );
-    SnakeSegment *snakeSegment = game->snake.segment;
-    Uint32 snakeSegmentCount = 0;
-    do
-    {
-        snakeSegmentCount++;
-        snakeSegment = snakeSegment->next;
-    } while (snakeSegment != game->snake.segment);
-    fprintf(saveFile, "%u\n", snakeSegmentCount);
-    do
-    {
-        
-        fprintf(
-            saveFile,
-            "%d %d %d\n",
-            snakeSegment->pos.x,
-            snakeSegment->pos.y,
-            snakeSegment->direction
-        );
-        snakeSegment = snakeSegment->next;
-    } while (snakeSegment != game->snake.segment);
+    SaveSnake(saveFile, &game->snake);
     fprintf(saveFile, "%d %d\n", game->blueDot.pos.x, game->blueDot.pos.y);
     fprintf(
         saveFile,
@@ -59,6 +40,33 @@ void SaveGame(
         );
     }
     fclose(saveFile);
+}
+
+void SaveSnake(
+    FILE *const saveFile,
+    const Snake *const snake
+)
+{
+    SnakeSegment *snakeSegment = snake->segment;
+    Uint32 snakeSegmentCount = 0;
+    do
+    {
+        snakeSegmentCount++;
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != snake->segment);
+    fprintf(saveFile, "%u\n", snakeSegmentCount);
+    do
+    {
+        
+        fprintf(
+            saveFile,
+            "%d %d %d\n",
+            snakeSegment->pos.x,
+            snakeSegment->pos.y,
+            snakeSegment->direction
+        );
+        snakeSegment = snakeSegment->next;
+    } while (snakeSegment != snake->segment);
 }
 
 void LoadGame(
@@ -86,20 +94,7 @@ void LoadGame(
         (int *) &game->snake.turn,
         (int *) &game->snake.killed
     );
-    Uint32 snakeSegmentCount;
-    fscanf(saveFile, "%u\n", &snakeSegmentCount);
-    for (Uint32 snakeSegmentI = 0; snakeSegmentI < snakeSegmentCount; snakeSegmentI++)
-    {
-        CreateSnakeSegment(&game->snake, 0, 0, SNAKE_NO_TURN); // the params will be overwritten soon
-        SnakeSegment *snakeSegment = game->snake.segment->previous;
-        fscanf(
-            saveFile,
-            "%d %d %d\n",
-            &snakeSegment->pos.x,
-            &snakeSegment->pos.y,
-            (int *) &snakeSegment->direction
-        );
-    }
+    LoadSnake(saveFile, &game->snake);
     fscanf(saveFile, "%d %d\n", &game->blueDot.pos.x, &game->blueDot.pos.y);
     fscanf(
         saveFile,
@@ -120,4 +115,25 @@ void LoadGame(
     fclose(saveFile);
 
     LoadBestPlayers(&game->bestPlayers);
+}
+
+void LoadSnake(
+    FILE *const saveFile,
+    Snake *const snake
+)
+{
+    Uint32 snakeSegmentCount;
+    fscanf(saveFile, "%u\n", &snakeSegmentCount);
+    for (Uint32 snakeSegmentI = 0; snakeSegmentI < snakeSegmentCount; snakeSegmentI++)
+    {
+        CreateSnakeSegment(snake, 0, 0, SNAKE_NO_TURN); // the params will be overwritten soon
+        SnakeSegment *snakeSegment = snake->segment->previous;
+        fscanf(
+            saveFile,
+            "%d %d %d\n",
+            &snakeSegment->pos.x,
+            &snakeSegment->pos.y,
+            (int *) &snakeSegment->direction
+        );
+    }
 }
